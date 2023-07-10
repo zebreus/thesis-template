@@ -1,0 +1,29 @@
+// This file should be inserted at the end of your writings.
+// It contains scripts for modifying the results
+// Feel free to modify the included scripts, if you want to change something
+
+include::included/removeTitlePage.adoc[]
+
+include::included/convertNumbersInHeadingsToSpans.adoc[]
+
+include::included/formatBibliography.adoc[]
+
+include::included/linkAbbreviations.adoc[]
+
+include::included/removeWavedromStyles.adoc[]
+
+include::included/markReferences.adoc[]
+
+include::included/createLists.adoc[]
+
+// You can also add your own scripts here
+// Example:
+
+// ++++
+// <script>
+//     // This is executed in the browser
+//     // Everything that works in the console also works here
+//     let firstHeading = document.querySelector("h2")
+//     firstHeading.textContent = "This script rewrote my heading."
+// </script>
+// ++++

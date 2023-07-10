@@ -1,0 +1,9 @@
+// Convert numbers in headings to spans
+// Also removes the trailing dot from the numbers
+++++
+<script>
+    var nodes = document.querySelectorAll("h1,h2,h3,h4,h5,h6,#toc a");
+    [...nodes].forEach(node => {node.innerHTML = node.innerHTML.replace(/^(<a[^/]*[/]a>)?[\s]*((Part )?[0-9.:IV]*[0-9IV])[.:]?\s/, '<span class="section-number">$2</span>'
+    )})
+</script>
+++++

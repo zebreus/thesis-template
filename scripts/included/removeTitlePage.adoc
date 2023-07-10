@@ -1,0 +1,8 @@
+// Remove title page from PDF.
+// This seems to be the only way
+++++
+<script>
+    var titlePageElement = document.getElementById("cover");
+    titlePageElement?.parentNode.removeChild(titlePageElement);
+</script>
+++++

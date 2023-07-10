@@ -1,0 +1,12 @@
+// Remove global css styles from WaveDrom charts
+// 
+// Our stylesheet adds its own styles for them
+++++
+<script>
+    [
+        ...document.querySelectorAll(".WaveDrom")
+    ].forEach(wavedrom => {
+        const style = wavedrom.querySelector("style"); style.remove();
+    })
+</script>
+++++

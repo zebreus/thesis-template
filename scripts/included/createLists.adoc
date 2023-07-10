@@ -1,0 +1,82 @@
+// This script adds an index for figures, listings and tables
+// If you dont want an index for one of these thing, comment the respective block below
+++++
+<script>
+const createTocLookalike = (name, id) => {
+    let node = new DOMParser().parseFromString(`<div class="toc " id="toc">
+<div id="toctitle" class="title">${name}</div>
+<ul class="sectlevel0">
+<li>
+<ul id="${id}">
+</ul>
+</li>
+</ul>
+</div>`, "text/html").body
+    .firstElementChild;
+
+    return node;
+}
+
+const insertTableEntry = ({id,title,number} , type) => {
+    let target = document.querySelector(`#ul-of-${type}s`);
+    let newLi = document.createElement("li")
+    let newA = document.createElement("a")
+    newA.href = "#" + id
+    let newSpan = document.createElement("span")
+    newSpan.classList.add("section-number")
+    newSpan.style="text-transform: none;display: inline-block;width: 5rem;"
+    newSpan.appendChild(document.createTextNode(number))
+    newA.appendChild(newSpan)
+    newA.appendChild(document.createTextNode(title))
+    newLi.appendChild(newA)
+    target.appendChild(newLi)
+}
+
+let toc = document.querySelector("#toc")
+let afterToc = toc.nextSibling
+
+// Generate list of listings
+let listingInfos = [...document.querySelectorAll(".listingblock")].map(listing => {
+    let id = listing.id;
+    let fullTitle = listing.querySelector(".title")?.textContent;
+    let title = fullTitle?.replace(/^Listing [0-9.]+ */,"")
+    let number = fullTitle?.replace(/\. +.*$/,"") + "."
+    return {id, title, number}
+}).filter(({id, title}) => id && title)
+
+if (listingInfos.length) {
+let listOfListings = createTocLookalike("List of Listings", "ul-of-listings")
+toc.parentNode.insertBefore(listOfListings, afterToc)
+listingInfos.forEach(listing => insertTableEntry(listing, "listing"))
+}
+
+// Generate list of figures
+let figureInfos = [...document.querySelectorAll(".imageblock")].map(listing => {
+    let id = listing.id;
+    let fullTitle = listing.querySelector(".title")?.textContent;
+    let title = fullTitle?.replace(/^Figure [0-9.]+ */,"")
+    let number = fullTitle?.replace(/\. +.*$/,"") + "."
+    return {id, title, number}
+}).filter(({id, title}) => id && title)
+
+if (figureInfos.length){
+let listOfFigures = createTocLookalike("List of Figuress", "ul-of-figures")
+toc.parentNode.insertBefore(listOfFigures, afterToc)
+figureInfos.forEach(figure => insertTableEntry(figure, "figure"))
+}
+// Generate list of tables
+let tableInfos = [...document.querySelectorAll(".tableblock")].map(listing => {
+    let id = listing.id;
+    let fullTitle = listing.querySelector(".title")?.textContent;
+    let title = fullTitle?.replace(/^Table [0-9.]+ */,"")
+    let number = fullTitle?.replace(/\. +.*$/,"") + "."
+    return {id, title, number}
+}).filter(({id, title}) => id && title)
+
+if (tableInfos.length){
+let listOfTables = createTocLookalike("List of Tables", "ul-of-tables")
+toc.parentNode.insertBefore(listOfTables, afterToc)
+tableInfos.forEach(table => insertTableEntry(table, "table"))
+}
+</script>
+++++

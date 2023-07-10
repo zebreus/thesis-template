@@ -1,0 +1,89 @@
+
+// Script for reworking the bibliography
+++++
+<script>
+// Select the number for the first reference
+var FIRST_REF_NUMBER = 1
+// "usage" or "bibliography"
+var ORDER_REFS_BY = "usage"
+// Make sure the refs in the bibliography are sorted by id
+var SORT_REFS_BY_NUMBER = true
+// Transform quotations
+var REF_LABEL = ({label, number, parent}) => `${label}`
+// Transform quotations in bibliography
+var BIBLIOGRAPHY_REF_LABEL = ({label, number, parent}) => `[${label}]`;
+// Bibliography entries link to their first usage
+var LINK_TO_FIRST_USAGE = true
+
+var refs = [...document.querySelectorAll("ul.bibliography li p>a:first-of-type")]
+var refIds = refs.map((ref, index) => ref.id)
+var allLinksToRefsSelector = refs.map(ref => `a[href='#${ref.id}']`).join(",");
+var linksToRefs = allLinksToRefsSelector ? [...document.querySelectorAll(allLinksToRefsSelector)] : []
+
+// Add css class to links to refs
+linksToRefs.forEach(linkToRef => linkToRef.classList.add("citation"))
+
+// Number refs by usage
+var orderedRefIds = 
+  ORDER_REFS_BY === "usage"
+  ? [
+      ...linksToRefs.map(linkToRef => linkToRef.href.split("#")[1]),
+      ...refIds
+    ]
+    .filter((value, index, array) => array.indexOf(value) === index)
+  : refs.map(ref => ref.id);
+
+var refNumbers = Object.fromEntries(
+  orderedRefIds.map((ref, index) => [ref, index + FIRST_REF_NUMBER])
+)
+
+var orderedRefs = orderedRefIds.map(refId => refs.find(ref => ref.id == refId));
+
+// 
+linksToRefs.forEach((linkToRef, index) =>{
+    const targetId = linkToRef.href.split("#")[1];
+    linkToRef.setAttribute("data-ref-number", refNumbers[targetId])
+    if(REF_LABEL) {
+        linkToRef.innerHTML = REF_LABEL({number: refNumbers[targetId], label: targetId, parent: linkToRef})
+    }
+    const firstUsageOfRef = linksToRefs.findIndex(otherLink => otherLink.href === linkToRef.href) === index
+    if (firstUsageOfRef){
+        linkToRef.id = `first-usage-of-${targetId}`
+    }
+})
+
+if(SORT_REFS_BY_NUMBER) {
+    const bibliography = document.querySelector("ul.bibliography")
+    while (bibliography?.firstChild) {
+        bibliography.removeChild(bibliography.lastChild);
+    }
+    orderedRefs.forEach(ref => {
+        bibliography.append(ref.parentElement.parentElement)
+    })
+}
+
+refs.forEach(ref => {
+    const listItem = ref.parentElement.parentElement
+    const label = ref.parentElement.textContent.trim().split("]")[0].replace("[","")
+    listItem.setAttribute("data-citation-number", refNumbers[ref.id])
+    listItem.setAttribute("data-citation-label", label)
+
+    let parent = ref.parentElement
+    
+    parent.innerHTML = parent.innerHTML.replace(/\[[^\]]+\]/, "")
+    let newRef = parent.querySelector("a")
+    
+    if(BIBLIOGRAPHY_REF_LABEL) {
+        let displayLabel = BIBLIOGRAPHY_REF_LABEL({number: refNumbers[ref.id], label: label, parent: newRef})
+        newRef.innerHTML = displayLabel
+    }
+
+    if(LINK_TO_FIRST_USAGE) {
+        let isUsed = document.querySelector(`#first-usage-of-${ref.id}`) != undefined
+        if (isUsed) {
+            newRef.href = `#first-usage-of-${ref.id}`;
+        }
+    }
+})
+</script>
+++++

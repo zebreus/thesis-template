@@ -1,0 +1,134 @@
+// Detect terms that are defined in the glossary and link them to their definitions.
+++++
+<script>
+const testText = `
+11111 FPGA safddsfsa
+22222      FPGA     ljfalsjdf
+333333 (FPGA) sdfdsfasdf
+44444 (FPGA ) sdfdsfasdf
+55555 ( FPGA) sdfdsfasdf
+66666(FPGA) sdfdsfasdf
+77777 FPGAs sdfljdkjf
+88888 FPGA, fjdlksgj
+999999 FPGA. sldajfalj
+1111111 (FPGAs, FPGAs) sjfdlas
+222222 (FPGA, FPGA) sjfdlas
+`
+
+const reworkTextNode = (textNode, glossaryEntries) => {
+    
+    let result = glossaryEntries.reduce((texts, glossaryEntry) => {
+            let regex = glossaryEntry.regex;
+          let newTexts = texts.flatMap((text) => {
+        if (typeof text !== "string") {
+            return [text]
+        }
+        let textParts = text.split(regex)
+        let textPartsWithNodes = textParts.flatMap((text, index) => {
+            if(index === 0){
+                return [text];
+            }
+            let newLink = document.createElement('a');
+            newLink.href = glossaryEntry.href
+            newLink.classList.add("abbreviation")
+
+            let abbreviation = document.createElement('abbr');
+            abbreviation.textContent = glossaryEntry.name
+            if(glossaryEntry.definition){
+            abbreviation.title = glossaryEntry.definition
+            }
+
+            newLink.replaceChildren(abbreviation)
+            
+            return [newLink, text]
+        })
+        
+        return textPartsWithNodes
+        
+        })
+        return newTexts
+    }, [
+        textNode
+    ])
+  
+    return result   
+}
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace("_", "[_ ]"); // $& means the whole matched string
+}
+
+const getGlossaryMap = () => {
+    const glossary = document.querySelector(".dlist.glossary") || undefined
+    if (!glossary) {
+        console.err("No glossary found")
+        return
+    }
+    const glossaryEntriesArray = [...glossary.querySelectorAll("dt")]
+    let glossaryEntries =  glossaryEntriesArray.map((glossaryEntry ) => {
+            const link = glossaryEntry.querySelector("a") || undefined
+        
+            if (!link) {
+                console.err("Found glossary entry without link")
+                return
+            }
+            const abbreviation = link?.nextSibling?.textContent || link.id;
+            const definition = glossaryEntry?.nextElementSibling?.childNodes?.[1]?.childNodes?.[0]?.textContent || abbreviation || undefined;
+            const id = link.id
+            return {
+                id: id,
+                regex: new RegExp("(?<=^|\\s+|[^\\w\\s\\'])" + escapeRegExp(id) +"(?=s?(?:$|\\s+|[^\\w\\s\\']))", "g"),
+                href: "#" + id,
+                name: abbreviation,
+                definition: definition
+            };
+            
+        })
+
+    return glossaryEntries 
+}
+
+const linkAbbreviations = () => {
+    let glossaryEntries = getGlossaryMap();
+    let elements = [...document.querySelectorAll(".sect1")];
+    elements.forEach(element => walkTree(element, glossaryEntries))
+}
+
+const walkTree = (element, glossaryEntries) => {
+    let children = [...element.childNodes];
+    children.forEach((node) => {
+        switch (node.nodeType) {
+            case Node.TEXT_NODE: {
+                let reworked = reworkTextNode(node.textContent, glossaryEntries)
+                node.replaceWith(...reworked)
+                return
+            }
+            case Node.ELEMENT_NODE: {
+                if(node.tagName === "A" && node.classList.contains("abbreviation")){
+                    return
+                }
+                if(node.tagName === "DT"){
+                    return
+                }
+                if(node.tagName === "svg"){
+                    return
+                }
+                if(node.tagName === "DIV" && node.classList.contains("bibliography")){
+                    return
+                }
+                walkTree(node, glossaryEntries)
+                return
+            }
+            default: {
+                return
+            }
+        }
+    })
+
+    return
+    
+}
+
+linkAbbreviations();
+</script>
+++++

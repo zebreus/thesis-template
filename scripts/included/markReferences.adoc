@@ -1,0 +1,68 @@
+// Mark references to figures, tables and listings with a class
+// Also adds a title attribute to them
+[subs="attributes"]
+++++
+<script>
+const getFigureTitle = (id) => {
+    const element = document.querySelector("#" + id)
+    const title = element.querySelector(".title")
+    const textContent = title.textContent
+      .replace(/^{figure-caption} [0-9.]+ */,"")
+      .replace(/^{listing-caption} [0-9.]+ */,"")
+      .replace(/^{table-caption} [0-9.]+ */,"")
+    if (!textContent) {
+        console.error("No title found for figure " + id)
+        throw "No title found for figure " + id
+        return
+    }
+    return textContent
+}
+const getSectionTitle = (id) => {
+    const element = document.querySelector("#" + id)
+    const textContent = element.childNodes[1].textContent
+    if (!textContent) {
+        console.error("No section title found for " + id)
+        throw "No section title found for " + id
+        return
+    }
+    return textContent
+}
+
+    [
+        ...document.querySelectorAll("a")
+    ].forEach(node => {
+        if (node.textContent.match(/{figure-caption} [0-9.]+/)) {
+            node.classList.add("figure-reference")
+            node.classList.add("reference")
+            node.title = getFigureTitle(node.href.split("#").pop())
+        }
+        if (node.textContent.match(/{listing-caption} [0-9.]+/)) {
+            node.classList.add("listing-reference")
+            node.classList.add("reference")
+            node.title = getFigureTitle(node.href.split("#").pop())
+
+        }
+        if (node.textContent.match(/{table-caption} [0-9.]+/)) {
+            node.classList.add("table-reference")
+            node.classList.add("reference")
+            node.title = getFigureTitle(node.href.split("#").pop())
+        }
+        if (node.textContent.match(/{section-refsig} [0-9.]+/)) {
+            node.classList.add("section-reference")
+            node.classList.add("reference")
+            node.title = getSectionTitle(node.href.split("#").pop())
+        }
+        if (node.textContent.match(/{chapter-refsig} [0-9.]+/)) {
+            node.classList.add("chapter-reference")
+            node.classList.add("reference")
+            node.title = getSectionTitle(node.href.split("#").pop())
+
+        }
+        if (node.textContent.match(/{part-refsig} [0-9.]+/)) {
+            node.classList.add("part-reference")
+            node.classList.add("reference")
+            node.title = getSectionTitle(node.href.split("#").pop())
+        }
+    })
+</script>
+++++

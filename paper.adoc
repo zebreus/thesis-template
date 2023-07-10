@@ -1,0 +1,2151 @@
+:doctype: book
+:imagesdir: images
+:stylesheet: paper.css
+// Disable generating an update label at the bottom of the doc.
+:last-update-label!:
+// Setup highlight.js to use a local version with a local stylesheet
+:source-highlighter: highlight.js
+:highlightjs-theme: thesis
+:highlightjsdir: highlightjs
+// Enable rendering mathequations
+:stem:
+// Generate table of contents at the toc macro
+// Also disableing section numbers for now, as we only start numbering after the toc. See the macros there
+:toc: macro
+:toclevels: 3
+:sectanchors:
+
+// Disable title page
+// We will build the title page manually for maximum flexibility
+:notitle:
+:title-page: false
+
+:kroki-fetch-diagram: true
+:kroki-default-options: inline
+:xrefstyle: short
+ifdef::env-web-pdf[]
+:docinfo: shared-footer
+endif::env-web-pdf[]
+
+image::logo_hda.svg[role=logo]
+
+[.university.text-center]
+Darmstadt University of Applied Sciences
+
+[.faculty.text-center]
+Faculty of Computer Science
+
+[discrete#main-title]
+= Is high-level synthesis from Rust possible using existing tools?
+
+[.description.text-center]
+Submitted in partial fulfillment of the requirements for the degree of +
+Bachelor of Science (B.Sc.)
+
+[.presented-by.text-center]
+by +
+*Zebreus* +
+[small]+Matriculation number: XXXXXX+ +
+
+
+[.other-people]
+First Examiner:: Prof. Dr. Some Person
+Second Examiner:: Prof. Dr. Another Person
+
+<<<
+
+
+
+<<<
+
+[discrete]
+== Declaration
+
+If you are writing a thesis you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class which add a nice line where you can write your name.
+
+If you are not writing a thesis, just delete it.
+
+_Darmstadt, 5.7.2023_
+
+[.signature-required]
+Zebreus
+
+<<<
+
+[discrete]
+== Abstract
+// A summary of the contents in English of about one page. The following
+// points should be addressed in particular:
+
+// * Motivation: Why did this work come about? Why is the topic of the
+// work interesting (for the general public)? The motivation should be
+// abstracted as far as possible from the specific tasks that may be given
+// by a company.
+// * Content: What is the content of this thesis? What exactly is covered in
+// the thesis? The methodology and working method should be briefly
+// discussed here.
+// * Results: What are the results of this work? A brief overview of the
+// Most actual results as a teaser to read the complete thesis.
+
+
+// Motivation
+This thesis explores generating digital circuits from Rust functions.
+Synthesis of these low-level hardware descriptions from specifications written in high-level languages is known as high-level synthesis (HLS). Existing HLS tools primarily focus on older systems programming languages or custom languages for their input specifications. Regarding productivity and useability, Rust provides various benefits over these older systems programming languages. This research uses an existing HLS tool, PandA Bambu, to synthesize specifications written in Rust.  Bambu is an open-source research framework for HLS. The present study takes advantage of the fact that the Rust compiler and Bambu share the same intermediate representations, as they are based on the LLVM compiler infrastructure. No prior study has investigated using existing HLS tools with Rust. 
+
+// Results
+A library for using HLS in RustHDL, a Rust-based hardware definition language, was developed. It was used to generate and test designs from different Rust specifications. In most cases, these designs achieved similar results in terms of size and performance than designs generated from equivalent {cpp} specifications. Most Rust language features are supported for high-level synthesis with Bambu, with the most notable restriction being the disallowance of undefined behavior resulting in program termination (panic). Additionally, this research found that the rust ecosystem can be leveraged and that it is possible to synthesize specifications with dependencies on other crates.
+
+
+// The table of contents gets inserted here.
+toc::[]
+
+// This generates the tables for listings, figures, and tables
+// If you do not need all of them, just modiy that file.
+
+<<<
+
+// Start with section and part numbering
+:sectnums:
+:part-signifier: Part
+:listing-caption: Listing
+:partnums:
+
+= Thesis
+
+== Introduction
+
+The popularity of the Rust programming language is rising, and it is one of the most admired programming languages <<Sta16>> <<Sta20>> <<Sta23>> <<Bug22>>. It integrates modern tooling like standardized dependency management, testing, documentation generation, formatting, and building. In the future, adoption will probably increase further, and it could replace {cpp} as the most common systems programming language <<Bug22>>.
+Rust also provides benefits in domains other than systems programming. It has been shown that Rust can be used for other fields such as GPU programming, web development, or logic programming <<Sah22>> <<Byc22>> <<Kyr22>>. These fields profit from some of the benefits of Rust, like guaranteed memory safety and improved productivity  <<Bug22>> <<Cos19>>.
+
+This paper explores how Rust can be used in FPGA firmware development. Usually, FPGA firmware is developed in a hardware description language (HDL) such as Verilog or VHDL. In these languages, the programmer has to describe the hardware in detail. This low-level approach can lead to efficient designs but is quite time-consuming <<Mil20>>. The RustHDL project facilitates expressing hardware descriptions in Rust similar to traditional HDLs <<Smi21>>. In addition to manually designing hardware in an HDL, it is also possible to use high-level synthesis (HLS) to generate hardware descriptions in HDLs from an algorithmic description written in high-level programming languages. Typically systems programming languages are used for writing these specifications. This increases productivity at the cost of slightly less optimized designs <<Mil20>>. There are multiple HLS tools available that can synthesize HDL descriptions from {cpp} code. Some of these tools are based on the LLVM compiler infrastructure <<Nan16>>. The only previous report on using Rust as an HLS language focuses on a limited subset of Rust and its formal verification <<Har22>>. 
+
+// As Rust is also based on LLVM, it can be used with these tools too. 
+
+// To determine the feasibility of utilizing Rust as a source language for High-Level Synthesis (HLS).
+An investigation to identify HLS tools compatible with Rust was conducted. A modular approach was developed to seamlessly integrate HLS tools with RustHDL. By employing this approach, a proof-of-concept integration with the PandA Bambu HLS framework was achieved, demonstrating the feasibility of using Rust as a source language for HLS. The performance of designs generated from various algorithms was compared with that of designs generated from algorithmically equivalent {cpp} code. The evaluation showed that, in most cases, the Rust-based workflow produced designs with similar characteristics to those derived from {cpp}-based workflows.
+
+// CAUTION: Rework the start of this section
+
+== State of the art
+
+It is assumed that the reader has some knowledge of systems programming and the Rust programming language. This section provides an overview of the topics that are relevant to this paper.
+
+// // TODO: Write a section on that.
+// // It also provides an overview of the related work that has been done for HLS from Rust.
+
+// // === Related work
+
+// // The only previous report on using Rust as an HLS language focuses on a limited subset of Rust and its formal verification <<Har22>>.
+
+// // === Target platforms
+
+// // TODO: Maybe custom IC instead of ASIC
+
+
+// ==== Short refresher on CPUs
+// CPUs process their instructions one by one. They are purpose-built machines that are carefully designed for processing lots of instructions in sequence. Traditional programming languages reflect this design for the most part. They are designed to make it easy to write programs that can be executed sequentially, one instruction at a time <<Nan16>>.
+
+// Two common approaches to parallelism on CPUs include multithreading and vector instructions.
+// TODO 
+// There are approaches to parallelism, but they are either limited to having multiple threads of execution that run from top to bottom simultaneously. Or they have some instructions that perform the same operation on a fixed amount of data elements at the same time.
+
+=== Design using traditional hardware description languages
+// What are common HDLs, and what are they used for
+// TODO: Systema verilog is most common nowadays
+Traditionally, logic design is done in hardware description languages (HDL). The two historically relevant ones are Verilog and VHDL. VHDL has a slightly higher level of abstraction and some features that make it easier to manage bigger projects. Both can be used to model the structure of hardware equally efficiently, so the choice is mostly a matter of personal preference <<Smi96>> <<Soz22>>.
+
+SystemVerilog is a superset of Verilog which merges Verilog with many of the features found in VHDL. In some ways, the relation between Verilog and SystemVerilog is comparable to the relation between C and {cpp} in terms of features and abstraction. It is the de facto standard HDL nowadays <<Fos15>> <<Soz22>>.
+
+// What do you describe in HDLs
+// TODO: Citation needed
+HDLs are used to describe circuits in a register-transfer level (RTL) abstraction. On RTL, these languages describe registers that can hold state and the combinational (time-independent) logic that connects them. In HDLs, the registers and combinational logic can be bundled into a module to make it reusable. These modules can then be connected to form a larger circuit. This is the basic structure of an HDL design <<Soz22>>.
+
+// What distinguishes them from programming languages
+
+// What is a typical HDL design flow
+A typical HDL workflow comprises four phases, design, verification, synthesis, and implementation. In the design phase, the circuit is designed in an HDL. The design is then verified in various ways. For verifying the behavior of a design, test benches are defined. These test benches (usually also written in HDL) instantiate the module of the design under test (DUT), exercise the inputs, and verify that the outputs behave as expected. A logic simulator is used to execute the test benches. This is comparable to unit testing in programming languages. After the design is verified, a logic synthesis tool is used to synthesize the design into an optimized gate-level logic description (netlist). A formal equivalence tool can verify that the netlist is equivalent to the original design. In the implementation phase, the netlist is mapped to the target hardware <<Fla20>>. Additional verification can take place in any of these phases.
+ 
+// What are the problems with HDLs
+// The use of HDLs is mostly limited to hardware engineers,
+
+// What are the possible solutions
+
+
+=== What is a field-programmable gate arrays
+
+There are two main target platforms for logic design: field-programmable gate arrays (FPGA) and application-specific integrated circuits (ASIC). FPGAs are off-the-shelf components capable of implementing any digital circuit <<Bot21>>. As the name field programmable gate array implies, they consist of programmable logic gates with programmable connections between them. ASICs are custom integrated circuits designed for a specific purpose. Design costs and time when targeting FPGAs are much lower than for custom circuits. Another benefit of using FPGAs is that the circuit can be upgraded after deployment. The downsides of using FPGAs are lower performance and higher power consumption compared to custom circuits. They are considered compelling options for small to medium-sized projects, as they do not have the high upfront cost of application-specific integrated circuits (ASIC) <<Bot21>><<Nan16>>.
+
+// FPGA as a prototyping platform
+So instead of producing the circuit into a chip, it is possible to program an FPGA that emulates the circuit <<Bot21>>. For example, a design describing the logic gates and connections that make up a CPU can be programmed to the FPGA, so it will behave exactly like the CPU and can process the same instructions. This can be used for prototyping because the CPU design can be verified in hardware with external peripherals, like memory and I/O devices. If the design is not specially designed to run well on an FPGA, a 'soft' CPU will perform worse on an FPGA than as an ASIC because of the additional overhead caused by programmable logic instead of fixed logic <<Bal07>>.
+
+In the past, FPGAs were mostly used for prototyping hardware development. This is still the most common use case for FPGAs, but it is not the only one. In recent years the usage of FPGAs as pseudo-general-purpose computational accelerators has become more relevant <<Nan16>>.
+
+
+//  Hardware designers designed a circuit in a hardware description language (HDL) and simulated it as the first stage of verification. If that works, it can be deployed to an FPGA and tested there.
+
+// // FPGA as computational accelerators
+
+// Here you do not use them to prototype circuits that will eventually be taped out but as the final platform. FPGAs used in this context are known as _computational FPGAs_. It is somewhat comparable to the use of GPUs as computing accelerators. But where GPUs excel at tasks that perform the same operations in parallel on massive amounts of data, FPGAs can be used for some kind of computations with irregular parallelism with static structure. In opposition to GPUs, it is not yet clear what an appropriate abstraction for the computational pattern used with computational FPGAs is 
+
+
+// What is an ASIC / Custom accelerator
+// TODO: This is a stub
+// Another solution is to produce a custom chip that implements the operations in hardware.
+
+// What is an FPGA
+// Instead of producing the circuit into a chip, it is possible to program the FPGA to emulate the circuit. FPGAs are off-the-shelf reconfigurable ICs capable of implementing any digital circuit.  Design cost and time with FPGAs are much lower than for custom chips. Another benefit of using FPGAs is that the circuit can be upgraded after deployment. The downsides of using FPGAs are lower performance and higher power consumption compared to custom chips. They are considered compelling options for small to medium-sized projects. Because FPGAs are off-the-shelf components, they don't have the high upfront cost of ASICs <<Bot21>>.
+
+
+// CN: FPGAs are suitable for small to medium-sized projects because they don't have the high upfront cost of ASICs.
+// CN: They use up more space than ASICs, so they are more expensive than the same ASIC produced at high volume.
+
+// TODO: Early FPGA diagram
+// TODO: improve note
+
+
+
+
+// How do basic FPGAs work?
+FPGAs consist of many programmable logic elements (LE) that can represent a simple boolean logic function. Logic elements usually have between 4-6 input bits; the exact number depends on the manufacturer and the model of FPGA. The inputs are used to address a programmable lookup table (LUT). The LUT contains the truth table of the boolean logic function. The output of the LUT is coupled with an output register of the logic element. This way, the LE can also act as a flip-flop (FF) <<Bot21>>.
+
+Multiple logic elements are grouped into a logic block (LB). A logic block provides a local interconnect between the logic elements. This programmable local interconnect can be used to define connections between the inputs of the logic block and the inputs and outputs of the logic elements. The local interconnect is usually realized as a programmable crossbar interconnect <<Bot21>>.
+
+An FPGA is made up of multiple LBs that are connected by global routing. There are multiple ways in which global routing can be realized, but island-style architecture is the most popular. This architecture is based on a two-dimensional grid of horizontal and vertical wires with logic blocks in between. Each logic block has programmable connections to the wires beside it. The horizontal and vertical wires can get connected by programmable switches at their crossings <<Bot21>>.
+
+// TODO: If there is much time left: Insert a figure on island-style architecture
+
+// FPGAs consist of configurable logic blocks (CLB) that are connected by programmable interconnects. The CLBs consist of multiple basic logic elements (BLE) and a local interconnect. At the core of each BLE is a Lookup table (LUT)<<Lah19>> <<Bot21>> 
+
+// How are FPGAs programmed
+// TODO: Citation needed
+All the programmable components are controlled by configuration stored in static RAM (SRAM) cells. FPGAs are programmed with a bitstream that contains the individual bits for every SRAM cell in the correct order <<Bot21>>. They usually have a serial interface where the FPGA can accept the bitstream and program itself. 
+
+// The logic blocks are connected by a network of programmable interconnects. The logic blocks and interconnects are programmed by a bitstream. The bitstream is a binary file that configures the FPGA. The bitstream is generated from a hardware description language (HDL) design <<Bot21>>.
+
+// Explain the concept of the critical path
+Every path that the data takes through the circuit needs a certain amount of time. The longer the path and the more things are in it, the longer it takes to take it. A critical path is a path that must meet certain timing requirements for the design to function properly <<Mic95>>. If the circuit, for example, is clocked, then some actions should probably be finished before the next clock cycle. If they do not finish in time, the clock needs to be slowed down, or the circuit will behave in unexpected ways. For this reason, the slowest critical path limits the maximum frequency <<Bot21>> <<Mic95>>.
+
+// What is the difference in modern FPGAs
+Modern FPGAs improve critical path delay by hardening certain features. Hardening means that a feature is implemented in a fixed way instead of being programmable. Which features are hardened depends on the FPGA model. All modern FPGAs include hardened circuitry for arithmetic operations in their logic blocks. The exact details of the hardening depend on the FPGA model, but it usually involves a fast path for the carry bit between LUTs. This is at least three times faster than an implementation based on pure LUTs <<Bot21>>.
+
+Digital signal processing (DSP) blocks are another common feature of modern FPGAs. They minimize the number of soft logic operations needed to implement common DSP algorithms. Like LBs, they are connected to programmable routing. Depending on the FPGA model, they can be configured to perform operations like multiplication, addition, subtraction, accumulation, and/or multiplication-accumulation in various sizes <<Bot21>> <<Lah19>>.
+
+Bigger hardware designs almost always require a memory buffer. Building a memory buffer out of logic blocks is possible but not very efficient. Modern FPGAs include hardened memory blocks that can be used as memory buffers. They are called block random access memory (BRAM). BRAMs are over 100 times denser than soft memory made from LUTs. BRAMs are about 25% of the area of modern FPGAs <<Bot21>> <<Lah19>>.
+
+// What are the steps to convert an RTL design to an FPGA
+// TODO: Mapping the netlist to the FPGA architecture is called technology mapping. Citation needed
+// T
+
+Converting a register-transfer level (RTL) design to a bitstream is a multi-step process. The first step is synthesis. The RTL design is converted to a structural gate-level description. This is called the netlist.
+The next step consists of mapping the netlist to the block types available on the specific FPGA model. A series of optimizations can also be performed at this stage. After that, the blocks are placed on specific blocks on the FPGA, and the connections between them are routed. Minimizing the routing distance between logic blocks is crucial because routing accounts for over 50% of the critical path delay. The last step is producing a bitstream. At this point, it is known how every part of the FPGA should behave, so the bitstream for the specific FPGA can be generated <<Bot21>>. 
+
+All these steps are performed by a computer-aided design (CAD) tool usually provided by the FPGA vendor. Nearly all FPGA manufacturers integrated these tools into their respective integrated development environments (IDE). Recent developments in the open-source community have led to the development of open-source tools that can perform these steps <<Bar23>>.
+
+NOTE: Different FPGA vendors use different names for the same things <<Lah19>>. This paper uses LB, made of LEs, made of LUTs, and FFs.
+
+// TODO: Mention timing analyzers and shit
+
+
+// How do they compare to ASICs
+
+// Notable FPGA vendors?
+
+// Context of this paper
+
+// === Other types of hardware
+
+// // TODO: This is a stub
+// All hardware design approaches generate a structural gate-level description called netlist, typically in a subset of SystemVerilog. This netlist is then used to generate the actual hardware design in a mostly automated fashion. For different targets, FPGAs, ASICs or 
+
+// How this step actually works depends on what kind of Hardware is targeted, e.g., FPGA, ASIC, or fully custom chips.
+
+// This step is basically manufacturing a design. The focus of this paper is only on design and not on manufacturing; it is not going to go into detail about this step. It is just important to know that a netlist is something that can be manufactured/deployed to an FPGA.
+
+
+=== SystemVerilog
+
+In SystemVerilog, units of logic can be encapsulated into modules. Modules can have inputs, outputs, and internal states. <<verilog-blinker-listing>> shows a simple module that implements a blinker. The blinker has a clock input and a blinker output. At every rising edge of the clock, an internal counter is incremented by one. Once the counter reaches 10, the blinker output is toggled, and the counter is reset to zero.
+
+// .Simple blinker module in SystemVerilog
+// [source.linenums#verilog-blinker-listing.small_code,verilog]
+// ----
+// include::systemverilog-blinker/blinker.sv[]
+// ----
+
+Verification in SystemVerilog can be achieved by using test benches that instantiate the design under test (DUT) and exercise its inputs. <<blinker-testbench-listing>> shows a testbench for the blinker module. The testbench instantiates the blinker module and connects it to a clock signal. It also asserts that the blinker output toggles every ten clock cycles.
+
+// .Testbench for the blinker module in SystemVerilog
+// [source.linenums#blinker-testbench-listing.small_code,verilog]
+// ----
+// include::systemverilog-blinker/blinker_tb.sv[]
+// ----
+
+// TODO: citations? 
+// TODO: More detail?
+
+=== Alternative Hardware description languages
+
+// TODO: This is a stub
+There are multiple modern HDLs that try to improve on the shortcomings of Verilog and VHDL. Most of them were created to improve productivity and increase the speed of development. Besides structural improvements, they try to bring some features from modern programming languages to hardware design.
+This includes linting, formatting, dependency management, namespaces/scoping, and better support for large projects. Usually, alternative HDLs are transpiled to Verilog and synthesized with the normal Verilog toolchain for the target FPGA <<Soz22>>.
+
+// TODO: List of alternative HDLs
+
+// TODO: Mention timing somewhere
+
+==== RustHDL
+
+RustHDL is a Rust-based HDL that allows describing RTL logic in Rust. The logic can then be transpiled to Verilog. RustHDL also includes tools for simulation and verification. Because a RustHDL-based design is just a Rust program, it can use most of the Rust ecosystem features. This includes the Rust testing framework for verification and simulation. It also makes it possible to easily reuse and share designs using the Rust package manager cargo. The Rust compiler can verify the validity of a design at compile time <<Smi21>>.
+
+In RustHDL, modules are defined as structs that implement the `LogicBlock` trait. The fields of these structs correspond to the external ports of the module. These ports are defined as `Signal` with a direction and a data type. If the module uses another module, it is also defined as a field. RustHDL provides basic modules for common functions like D flip-flops (DFF) or constants. It also contains a library of more complex modules like an i2c controller or memory blocks <<Smi21>>.
+
+<<rusthdl-blinker-struct-listing>> shows the struct for a module that has the same functionality as the SystemVerilog blinker module in <<verilog-blinker-listing>>. 
+
+// .Simple blinker module in RustHDL
+// [source.linenums#rusthdl-blinker-struct-listing.small_code,rust]
+// ----
+// include::rusthdl-blinker/src/blinker.rs[tag=rust-hdl-struct]
+// ----
+
+The struct only defines input and output signals and submodules of a module. The combinational logic that connects these signals is described in the update function. Every RustHDL signal has a `.next` field that determines the value of the signal after the update function. The update function must assign a value to all the `.next` fields. If there are multiple assignments to the .next fields, the last one is valid, like in normal Rust <<Smi21>>.
+
+Rust can express much more than just combinational logic, so RustHDL only allows a limited synthesizable subset of Rust inside the update function. Local variables are not allowed, and assignments can only be made to the `.next` fields of signals. Function and method calls are limited to a small subset of library functions, and only range-based for loops are allowed <<Smi21>>.
+
+RustHDL also enforces an additional set of semantic rules about what the update function has to do. For example, the update function must always assign a value to the `.next` field of signals declared as outputs. It also must always assign a value to the `.next` fields of the inputs of its submodules. This ensures that every signal always has a well-defined value. RustHDL also forbids to use of the `.next` value on the right side of an expression, so the result of the update function can only depend on the state from the previous cycle. RustHDL enforces these rules at run-time and generates somewhat helpful error messages. SystemVerilog does not apply these restrictions, which can be a source of bugs <<Smi21>>. The RustHDL update function for the blinker module is shown in <<rusthdl-blinker-update-listing>>.
+
+// .Testbench for the blinker module in RustHDL
+// [source.linenums#rusthdl-blinker-update-listing,rust]
+// ----
+// include::rusthdl-blinker/src/blinker.rs[tag=rust-hdl-logic]
+// ----
+
+The Rust unit testing framework can be used to simulate and verify RustHDL modules. <<rusthdl-blinker-simulate-listing>> shows a testbench for the blinker module. The testbench instantiates the blinker module and connects it to a clock signal. It also asserts that the blinker output toggles every ten clock cycles. The test case can be run with `cargo test` like any other Rust unit test.
+
+// .Simulating and verifying the blinker
+// [source.linenums#rusthdl-blinker-simulate-listing,rust]
+// ----
+// include::rusthdl-blinker/src/blinker.rs[tag=rust-hdl-test]
+// ----
+
+The `generate_verilog` function can generate a Verilog description of the module, as shown in <<rusthdl-blinker-generate-listing>>. The generated Verilog code can then be used with any Verilog toolchain to deploy the design to an FPGA <<Smi21>>.
+
+// .Generating verilog from the RustHDL blinker
+// [source.linenums#rusthdl-blinker-generate-listing.small_code,rust]
+// ----
+// include::rusthdl-blinker/src/main.rs[tag=generate-verilog]
+// ----
+
+
+
+// Justify why RustHDL is a good choice even though it is more verbose
+// TODO: Compare LoC
+RustHDL code is more verbose than a Verilog description, primarily because of the additional type annotations and the need to explicitly assign every signal's `.next` value. Rust macros can be used significantly reduce the amount of code. RustHDL includes macros for common tasks like setting up test benches or connecting clocks of submodules <<Smi21>>. To showcase RustHDL more explicitly, the above examples did not use these macros.
+
+=== Design using high-level synthesis
+// What is HLS
+High-level synthesis (HLS) is a process that can generate an RTL specification of a circuit from a description in a high-level programming language. This is a more productive approach than writing RTL code by hand, but the resulting designs are usually less efficient. The generated RTL code can then be used in the same way as manually written RTL code <<Mil20>> <<Nan16>> <<Lah19>> <<Cou09>>.
+
+// Performance of HLS compared to RTL
+// TODO: Weirdly written (which experiments?)
+The main advantages of HLS are reduced design time and lower development cost. On average, the development time of HLS designs is only a third of that of equivalent RTL designs. The lower development time comes with the tradeoff that HLS designs, on average, take up around 40% more basic FPGA resources than RTL designs. The performance of HLS designs is around two-thirds of that of an RTL design. These metrics generalize over many different HLS tools and input languages. In addition, there is a lot of variance between different studies. In about 40% of designs, the HLS design was actually more performant than the RTL design. In about 30%, it was more resource efficient. However, for development time, the results are conclusive; in 90% of the experiments, the HLS design required less development time than the RTL design <<Lah19>>.
+
+==== How high-level synthesis works
+// Intro
+// TODO: Remove?
+High-level synthesis tools generate a timed RTL implementation of a circuit from a functional specification. A functional specification is an untimed description of the desired behavior of the circuit <<Cou09>>.
+
+// What are the tasks that HLS performs
+Usually, HLS tools separate HLS into seven tasks <<Cou09>>. They can be separated into three stages.
+
+// Compilation of the functional specification
+First, the functional specification is compiled into a formal model. The formal model is usually a control and data flow graph (CDFG). In the CDFG, every node (called a basic block) represents a static sequence of statements. The edges between the nodes represent conditional data flow. Opposed to a normal data flow graph (DFG), the edges can be conditional <<Cou09>>. In this step, transformations can be applied to the functional specification. These transformations can include loop unrolling, inlining, dead code elimination, and other common software compilation optimizations <<Cou09>>. 
+
+// TODO: I don't have a citation, but say this: While these hardware resources can be real hardware resources, at this stage, they are more comparable to Verilog modules. They are not (necessarily) real FPGA hardware resources, but they can also be arbitrary soft logic. ???
+
+// What are the hardware resources
+The resulting formal model then has to be mapped onto hardware resources. The types of resources are functional units, storage elements, and connection units. HLS tools include RTL descriptions for all of their supported resource types. Functional units carry out the actual data processing. They can be multipliers, arithmetic logic units, or other custom functions. Storage elements store values over multiple cycles. They include registers, memories, or other custom storage elements. Connection units represent the connections between functional units and storage elements. This category includes resources like multiplexers and buses <<Cou09>>.
+
+// Scheduling, allocation, binding
+// TODO:  This binding process does not determine the placement of the resources on the FPGA. (maybe it takes it into account, but not necessary.)
+Allocation determines the kinds and number of resources that are needed to satisfy the design constraints. Scheduling then schedules the operations into cycles based on the available resource types. Operations that have no data dependencies on each other can be scheduled in parallel. The next step after scheduling is called binding. During binding operations, get assigned to specific functional units. Variables that carry a value over multiple cycles must be bound to storage elements. Finally, connection units are assigned to specific connections between functional units and storage elements. Scheduling information can be used to bind multiple variables with non-overlapping lifetimes to the same storage elements <<Cou09>>. 
+
+// How does the resulting RTL look
+The final step of HLS is to generate the RTL architecture for the design. Classically the architecture consists of a controller and a datapath. The datapath consists of the allocated hardware resources. The controller is responsible for driving the datapath <<Cou09>>. 
+
+// Datapath
+The datapath contains all storage elements, functional units, and connection units. These components can be connected arbitrarily by buses. The datapath inputs are data inputs from external sources and control inputs from the controller. The outputs of the datapath can be data outputs or control outputs. In addition to the data inputs, the datapath also receives control signals from the controller. The control signals determine how the components are connected. They orchestrate the data flow through the datapath <<Cou09>>. 
+
+// Controller
+The controller is usually a finite state machine (FSM) consisting of three parts. The state register contains the id of the current state. The output logic generates the control signals that drive the datapath based on the current state. The output logic also generates control outputs that can act as inputs for the datapath. The next state logic computes the next state of the FSM based on inputs and the current state <<Cou09>>. 
+
+// Disclaimer
+// While this is the typical architecture, different HLS tools can also do it differently. An alternative approach is to generate a processor with a hardcoded program and instruction set optimized for the task at hand. <<citation-needed>>
+
+// TODO: Diagram for typical HLS architecture from Cou09
+
+// TODO: IP Core
+
+
+==== High-level synthesis tools
+// Available HLS tools
+HLS tools can be distinguished into two major categories. Those that accept a general-purpose language and those that accept a domain-specific language (DSL) as input. Using a DSL as input can lead to better-performing designs, but it also raises challenges for adoption. A general-purpose language makes it easier for the algorithm designer, who is usually a software developer, to write code <<Nan16>>. The most common input languages for HLS are C based, including C, {cpp}, and SystemC <<Lah19>>. 
+
+// What HLS tools are there
+// TODO: Add citation for usually.
+// TODO: Add citation for Bambu is the biggest. 
+// <<intel-hls>>
+HLS tools are usually available as a part of the IDE provided by the FPGA vendors. For example, AMD Xilinx provides the Vivado HLS tool as part of its IDE, and Intel Altera includes the Intel HLS Compiler in its Quartus Prime IDE. The most popular HLS tool in academia is Vivado HLS <<Lah19>>. There are also a few open-source HLS tools available. The most relevant open-source HLS tool that is currently actively maintained is PandA Bambu <<Nan16>>. 
+
+
+
+// What are the problems with those languages
+
+
+// ==== Languages used for High-level synthesis
+
+// TODO Explain systems programming language
+
+=== LLVM
+
+// What is LLVM
+// TODO: Find the source and describe how LLVM is used today
+LLVM is a modular compiler framework that can be used to build compilers for many different programming languages. It defines a low-level code representation called LLVM intermediate representation (LLVM IR) <<Lat04>>.
+
+// What is LLVM IR
+LLVM IR is a strongly typed, static single assignment (SSA) based intermediate representation. It is designed to be easy to compile to machine code and easy to optimize. The IR has a low-level, language-independent type system. This type system captures enough type information to safely perform a number of aggressive transformations that would traditionally be attempted only in source-level compilers of type-safe languages. LLVM IR is not intended to be a universal compiler IR, so it does not capture all of the language-specific type information. Some concepts not represented in LLVM IR are classes, inheritance, or exception-handling semantics. Language-specific transformations have to be performed by compilers before converting the code to LLVM IR <<Lat04>>.
+
+// How is LLVM used in compilers
+Because of this, compilers based on LLVM need to implement their own front end that processes input in their source language. The compiler front end emits LLVM IR, which is passed to the LLVM backend. The backend performs a variety of transformations and optimizations. The processed LLVM IR is then passed to a code generator backend which translates it into native code <<Lat04>>. The LLVM project includes code generator backends for many targets, including all common CPU architectures <<Lat04>> <<Rus18>>.
+
+=== Systems programming languages
+
+Systems programming languages are programming languages that can deal with low-level details of memory management, data representation, and concurrency. They are often designed for use in resource-constrained, performance-critical, or close-to-hardware programs. They are used to implement operating systems, embedded systems, device drivers, and other software that interacts with hardware. Common systems programming languages include C, {cpp}, and Rust <<Kla23>> <<Str12>>.
+
+=== The Rust programming language
+
+// What is Rust
+Rust is a modern systems programming language aiming to replace C and {cpp} as the industry standard systems programming language. It offers zero-cost memory safety, a robust type system, and a standardized build system. Rust surpasses all other common memory-safe languages in terms of performance while offering many built-in features that more established systems programming languages tend to lack. For these reasons, it has been voted the most-loved programming language every year since 2016 <<Bug22>> <<Cos19>> <<Kla23>>.
+
+// TODO: Insert rust performance diagram
+// TODO: Explain how the rust compiler uses LLVM
+// Details for this are already summarized at <<Rus18>>
+
+// Explain the borrow checker and memory safety
+
+
+
+// Alternative
+// Rust overcomes the longstanding trade-off between control over resource management and guaranteed memory safety. It is the first industry-supported programming language to do so. The control over resource management is typically only provided by lower-level languages for systems programming. Guaranteed memory safety is associated with higher-level languages.
+
+// TODO: Ask about the first sentence being an exact quote
+Rust overcomes the longstanding trade-off between the control over resource management of systems programming languages and the safety guarantees of higher-level languages. It is the first industry-supported programming language to do so <<Bug22>> <<Jun17>>. 
+
+Rust achieves this by enforcing that every variable is always owned by a single owning scope. When that scope ends, the variable is destroyed. The time between creation and destruction of a variable is called its lifetime. Rust provides semantics for moving ownership between scopes <<Kla23>>. This model of scope-based resource management is called RAII. It is used by many systems programming languages, including {cpp}. While {cpp} encourages the programmer to break out of that system by using pointers to variables that are not owned by the current scope or its parents, <<Str12>> Rust does not allow this.
+
+Instead of pointers, Rust uses a type of reference with attached lifetime information called a borrow. The lifetime of a borrow ends when the lifetime of its owner ends. A borrow to a local variable of a function ends at the end of the function's scope. The borrow checker statically guarantees at compile-time that every borrow always points to a valid thing in memory. It does so by ensuring that the lifetime of every borrow accessible in a given scope ends at or after the lifetime of the current scope. Doing this also ensures that no borrows can be used in contexts that would outlive their scope. This makes it impossible for a reference to outlive the thing it points to <<Kla23>>.
+
+The compiler also makes sure that there exists only either one mutable borrow or multiple immutable borrows to a value at the same time. This ensures that the values of borrows do not change unexpectedly. It also enables some optimizations that would be difficult to perform otherwise. The programmer can opt out of the borrow checker by annotating code as `unsafe`. This allows the developer to use raw pointers and perform other inherently unsafe operations. Unsafe code is sometimes necessary to implement low-level data structures, such as smart pointers (`Box`, `Vec`, `String`) or types with internal mutability (`RefCell`). The standard library safely encapsulates these constructs, so most Rust programs do not need to use unsafe code <<Kla23>> <<Bug22>>. There is ongoing work on formally verifying that the unsafe code in the standard library is safely encapsulated by its types <<Jun17>>.
+
+// Overview of how the compiler processes Rust code
+// TODO: Explain desugaring (the word)
+Rust is a compiled language. The Rust compiler (rustc) can compile Rust code to native code for many different platforms. It accomplishes this by compiling Rust to LLVM IR and then using LLVM for code generation. This allows Rust to support many different platforms without having to implement a backend for every platform. It also enables Rust to utilize the large suite of advanced optimizations collected by the LLVM project. The compiler does not generate LLVM IR directly from the input Rust code. Instead, the input code gets passed through multiple intermediate representations (IRs); HIR, THIR, and MIR. HIR and THIR still resemble Rust code, but some constructs are desugared. The rust compiler uses these stages to perform type checking and verification. Verified THIR is converted into MIR, which is a control-flow graph (CFG) based representation of the code. rustc performs flow-sensitive safety checks like borrow-checking on this level. The MIR is also used to apply various Rust-specific optimizations to the code. The Rust compiler can be configured to output the various intermediate representations instead of generating machine code <<Rus18>>.
+
+// Overview of the tooling-related features of Rust
+An important part of what makes the people using the Rust ecosystem so productive is that Rust offers standardized tooling. Every Rust project (also called crate) contains a `Cargo.toml` file specifying the project metadata and dependencies. The `cargo` tool can perform all standard tasks like building, executing, unit testing, integration testing, formatting the code, generating documentation, downloading dependencies, building dependencies, managing dependencies, publishing the crate, benchmarking, setting up projects, and more. The official community crate registry crates.io can be used to find dependencies easily. It also links to the automatically generated documentation for every crate. The tooling alone makes Rust a much better development experience than most systems languages <<Bug22>> <<Kla23>>.
+
+// The tooling alone makes Rust a much better development experience than most systems languages.
+// exact quote from Bug22
+
+=== PandA Bambu
+// Bambu intro
+Bambu is an open-source academic HLS tool <<Fer21>> <<Nan16>>. Its architecture is designed to make it easy to experiment with new ideas across high-level synthesis and related topics. It supports input specifications in standard C/{cpp} or the intermediate representations of GCC or Clang/LLVM <<Fer21>>.
+
+// Bambu compared to commercial offerings
+// TODO: Nan16 has benchmarks
+
+// Bambu architecture overview
+Bambu is based on a three-stage design. The front end is used to convert input specifications in various formats into a static single assignment (SSA) IR. The middle end performs various transformations and analyses on the SSA IR. The backend performs the actual architectural synthesis <<Fer21>>.
+
+// Frontend
+The front end utilizes a custom GCC or Clang plugin to process an input specification in any of the formats supported by these two compilers. Notably, this includes support for LLVM IR through Clang. Bambu then generates its own SSA IR from the call graph and control flow information provided by GCC or Clang <<Fer21>>.
+
+
+// Middleend
+// TODO: The last sentence is shit
+The middle end applies a set of analyses and transformations to the specification. This includes common software compilation optimizations such as loop optimizations and dead code elimination. It also includes more HLS-specific optimizations. For example, multiplications and division with constants are replaced with shift and add operations because real multiplication is expensive in hardware. Bitwidth and range analysis optimizations are also performed to find the ideal width for the data path <<Fer21>>.
+
+// Backend
+The backend performs the actual architectural synthesis. This is mostly done as described in <<_how_high_level_synthesis_works>>. The most significant difference in Bambu is that the synthesis process acts on every function individually. Each function gets its own controller and datapath. If it calls into another function, the generated logic for the other function is instantiated as a submodule. Bambu is able to optimize submodules that are shared between multiple modules. Bambu provides hardcoded optimized modules for functions from common libraries such as `libc` or `libm`. It also offers more advanced optimizations like pipelining individual functions. The resulting architecture can be translated to VHDL or Verilog <<Fer21>>.
+
+
+// === Design using accelerator design languages
+
+// Accelerator design languages (ADL) are a family of programming languages that are specifically designed to be synthesized to HDL. They are mostly similar to programming languages but offer many features that are usually only found in HDLs, like more fine-grained control over timing and memories memory access. <<hdl-to-adl>>
+
+
+
+== Concept, implementation, and architecture
+
+// Short overview of the solution and this section
+The goal of this paper is to use Rust as a source language for HLS using an existing HLS tool. First, a suitable toolchain is devised. Then a concept for integrating the toolchain with RustHDL is developed. Finally, a proof-of-concept implementation shows that the process works and enables the evaluation of the resulting solution.
+
+// TODO: Maybe define some criteria for our solution
+// * Can synthesize a simple Rust program
+// * Can synthesize our MD5 implementation
+// * Can synthesize most stateless Rust function
+// * The synthesized function can use Rust crates from crates.io
+// * The existing Rust tooling (linter, formatter, etc.) works with our function
+
+=== Basic toolchain for synthesizing Rust
+
+
+As no tool can currently synthesize Rust directly, the toolchain needs to convert the Rust code into a language that can be used by an existing HLS tool. The Rust compiler can be used to generate LLVM IR instead of machine code, as its backend is based on LLVM. It is frequently updated, and the generated LLVM IR usually uses the latest LLVM version. This means that a suited HLS tool also needs to be actively maintained to support the generated LLVM IR. The HLS tool should also be open-source, as it could become necessary to adjust the tool for Rust support.
+
+Three HLS tools are based on LLVM IR, namely PandA Bambu, SmartHLS (formerly known as LegUp), and Vivado HLS. All of them seem to use LLVM primarily to process C and {cpp} input. PandA Bambu is the only one of these three tools that is open-source and actively maintained <<Nan16>>. 
+
+In the first step, the Rust compiler is used to convert a Rust function to an LLVM IR function. The second step passes the generated LLVM IR function to Bambu, which converts it to Verilog. <<basic-toolchain>> depicts that toolchain. 
+
+.A toolchain for high-level synthesis from Rust
+[pikchr,id=basic-toolchain]
+....
+   arrow right 150% "Rust" "function"
+   box rad 10px "Rust Compiler" fit
+   arrow right 190% "LLVM IR" "function"
+   box rad 10px "PandA Bambu" fit
+   arrow right 130% "Verilog" "RTL"
+....
+
+
+==== Toolchain proof of concept
+
+// Intro
+// TODO: Add a short section on keccak
+This section will demonstrate how the toolchain can be used to synthesize Rust functions and which additional restrictions apply. 
+
+The `minmax` function shown in <<minmax-rust-listing>> finds the minimum and maximum in an array of integers. The implementation is kept in a C-like style so that it can be compared to an algorithmically identical {cpp} implementation later on. The function takes a pointer to an array of integers (`numbers`), the number of elements in the array (`numbers_length`), and two pointers to integers (`out_max` and `out_min`). It finds the smallest and largest value of the array and writes them to the memory locations pointed to by `out_max` and `out_min`.
+
+// .`minmax` implementation     in Rust
+// [source#minmax-rust-listing.linenums,rust]
+// ----
+// include::../rust-minmax/src/minmax.rs[tag=function]
+// ----
+
+
+
+
+// TODO: Explain that a Rust slice is just a pointer to an array with a length
+// TODO: Specify: Bambu does not support the LLVM that is generated by slices or smth like that
+The function needs to be annotated with `#[no_mangle]` to instruct the Rust compiler to preserve the function name in LLVM IR. This is required because Bambu uses the function name to generate the name of the Verilog module. The function is also marked as `extern "C"` to instruct the Rust compiler to generate LLVM IR that is compatible with the standard C ABI. `extern "C"` functions only allow data types in their signatures that have C representations. This does not include Rust slices and tuples. While these things can be represented in LLVM IR, Bambu only supports C-compatible function signatures. This is the reason for the arguments of the function containing a pointer and its length instead of a slice, which is basically the same thing. Finally, the interface of the function is marked as `unsafe` because it uses raw pointers, which are inherently unsafe.
+
+// Inside the function, the pointer and size are converted to a slice (`input`). 
+
+// Is trivial; I explain it anyway
+The algorithm performed by the function is simple. The local variables `local_min` and `local_max` store the current minimum and maximum values. They are initialized to the smallest and largest 32-bit integer, respectively. The function then iterates over the memory area containing the input numbers. For each input number, the local minimum or maximum values is updated if the current number is smaller or larger. Finally, the local minimum and maximum values are written to the output memory locations `out_max` and `out_min`. 
+
+.Compiling Rust to LLVM IR with the flags for HLS
+[source#rust-to-llvmir-listing,shell]
+----
+rustc \
+  src/minmax.rs -o minmax.ll \
+  --crate-type=lib \ # The output is a library
+  --emit=llvm-ir \ # Emit LLVM IR instead of machine code
+  -C llvm-args=--opaque-pointers=false \ # Disable opaque pointers
+  -C no-vectorize-loops \
+  -C panic=abort \
+  -C overflow-checks=off \
+  -C opt-level=3 \
+  -C linker-plugin-lto=on \
+  -C embed-bitcode=on \
+  -C lto=fat
+----
+
+The first step is to compile the function to LLVM IR using the Rust compiler. The command shown in <<rust-to-llvmir-listing>> contains the options that are required or recommended to generate LLVM IR that can be used by Bambu.
+
+`src/keccak.rs -o keccak.ll` specifies the filenames. The following argument, `--crate-type=lib`, tells the Rust compiler that it should generate a library. The most important option is `--emit=llvm-ir`, which tells the compiler to emit LLVM IR instead of machine code.
+
+Recent versions of the Rust compiler will generate LLVM IR with https://llvm.org/docs/OpaquePointers.html[opaque pointers^,role=hide-in-print](`ptr` instead of `i32*`) by default. Bambu does not support this. Opaque pointers can be turned off by passing `-C llvm-args="--opaque-pointers=false"` to rustc.
+// TODO: Explain LLVM bitcode
+
+// TODO: Does Bambu support cpp exceptions?
+// TODO: Does Bambu support c exit?
+// TODO: Describe Rust panic
+// The generated LLVM IR will also have an `exception-handling personality function` added to every function in LLVM IR.
+In Rust, panicking is a core part of the language. Panics are caused when unrecoverable errors occur. The Rust compiler generates code that unwinds the stack on panic by default. Bambu can currently not synthesize this behavior. The `-C panic=abort` instructs rustc to terminate the program on panic. This is also not synthesizable, but Bambu seems to compile the code if the panics are unreachable. It may be possible to use the code anyway by linking a dummy implementation for the panic function, but this would result in undefined behavior.
+
+The `-C no-vectorize-loops` option turns off loop vectorization. This prevents rustc from generating vector instructions, which are currently not supported by Bambu.
+
+By default, integer overflows are forbidden in Rust and will result in a panic. Disabling overflow checks for arithmetic operations reduces the number of places where a function can cause a panic significantly. This is safe because integer overflow is well-defined in Rust. The `-C overflow-checks=off` option disables overflow checks. The Rust compiler can also generate additional debug assertions, which can make finding and fixing bugs easier. Failing these assertions manifests in a panic at runtime. To avoid this, the `-C debug-assertions=off` option can be used to disable debug assertions. On every optimization level other than `0`, they are automatically disabled. This option is not required in the example.
+
+The final set of parameters enables various Rust compiler optimizations. They serve three purposes. First, the Rust compiler can perform more optimizations than Bambu because it has more information about the code. The second purpose is to reduce the amount of code that Bambu has to synthesize. The third and probably most crucial purpose is eliminating dead code that could cause panic. For this reason, it is basically always required to set the optimization level to a level higher than `1`.
+
+.High-level synthesize LLVM IR into Verilog
+[source#llvmir-to-verilog-listing,shell]
+----
+bambu minmax.ll \
+  --compiler=I386_CLANG16 \
+  --top-fname=minmax \
+  -O5
+----
+
+The LLVM IR can then be used with Bambu to generate Verilog. The command shown in <<llvmir-to-verilog-listing>> instructs Bambu to generate a Verilog module named `minmax` from the LLVM IR file `minmax.ll`.
+
+The `--compiler=I386_CLANG16` flag instructs Bambu to its Clang 16 front end for processing input. The `--top-fname=minmax` option specifies the name of the top-level function. The top-level function will be used as the entry point in the hardware design, comparable to the `main` function in a C program. `--top-fname` also sets the name of the generated Verilog module. The `-O5` option instructs Bambu to perform optimizations that increase the performance at the cost of a bigger design. 
+
+==== Interface of the generated Verilog module
+
+The interface of the generated `minmax` module is shown in <<minmax-generated-interface>>. It can be split into three categories. The first section contains clocking and control signals, including `clock`, `reset`, `start_port`, and `done_port`. It will also contain a `return_port` if the function has a return type. <<control-signals-table>> describes what each of these signals does.
+
+.Interface of the synthesized module
+[symbolator#minmax-generated-interface]
+....
+module minmax(
+  //# {{control|Control}}
+  input clk;
+  input reset;
+  input start_port;
+  output done_port;
+  //# {{data|Parameters}}
+  input [31:0] Pd5;
+  input [31:0] Pd6;
+  input [31:0] Pd7;
+  input [31:0] Pd8;
+  //# {{power|Memory}}
+  input [63:0] M_Rdata_ram;
+  input [1:0] M_DataRdy;
+  output [1:0] Mout_oe_ram;
+  output [1:0] Mout_we_ram;
+  output [63:0] Mout_addr_ram;
+  output [63:0] Mout_Wdata_ram;
+  output [11:0] Mout_data_ram_size;
+);
+
+endmodule
+....
+
+.The control signals of modules generated by Bambu
+[#control-signals-table,cols="1,4"]
+|===
+|Port |Description
+
+|`clock`
+|The clock signal is used to clock the module.
+
+|`reset`f
+|Resets the module if set to low.
+
+|`start_port`
+|The module will start executing if this is high and the function is not already running. Pinning this to high will cause the function to repeat.
+
+|`done_port`
+|Pulses high for one cycle when the module is done.
+
+|`return_port`
+|Does only exist if the function has a return value. Contains the return value while `done_port` is high. It can contain random values during function execution.
+
+|===
+
+The second section contains the function parameters. When LLVM IR is used as input for Bambu, the real names of the function parameters get lost, they are replaced with numbered names like `Pd5`. The order of the signals stays the same as the order of the inputs to the original function. Bambu always numbers the parameters in order of appearance in the source. The original names can be mapped to the numbered names based on their order. In this case, `Pd5` is `numbers_length`, `Pd6` is `numbers`, `Pd7` is `out_max`, and `Pd8` is `out_min`. Memory pointers got converted to 32-bit values, but Bambu can also be configured to generate other address sizes. 
+
+// TODO: Ask if this kind of memory interface has a name
+The original function takes a pointer to memory as input, so the generated module needs to be able to access that memory. Bambu generates a memory interface for the module, which needs to be connected to memory. During function execution, the module will use this memory interface to retrieve and modify the input values. Because Bambu generates a two-channel memory interface by default, the memory signals are twice the size expected. For all generated modules in the remainder of this paper, Bambu will be configured to generate only a single channel. The address size is 32-bit without additional configuration, and the data width gets automatically selected based on the design. In this case, the data width is 32-bit. Because the module has two channels, all memory signals are double the size. Their first half corresponds to the first channel, and their second half to the second channel. <<memory-interface-table>> describes the signals of the memory interface in more detail.
+
+// TODO: Make tables wider than text if necessary
+.The memory interface of modules generated by Bambu
+[#memory-interface-table,cols="1,1,3"]
+|===
+|Port |Size per channel in bits |Description
+
+|`Mout_oe_ram`
+|stem:[1]
+|Set to 1 to read from the channel.
+
+|`Mout_we_ram`
+|stem:[1]
+|Set to 1 to write to the channel.
+
+|`Mout_data_ram_size`
+|stem:[log_2("dataWidth") + 1]
+|Set the width of bits that should be written to the memory. It can be a value between 0 and the width of your data.
+
+|`Mout_addr_ram`
+|stem:["addressWidth"]
+|Select the address this channel should operate on.
+
+|`M_Wdata_ram`
+|stem:["dataWidth"]
+|Contains the data that will be written to memory if `Mout_we_ram` is set.
+
+|`M_Rdata_ram`
+|stem:["dataWidth"]
+|Contains the data that was read from memory if `Mout_oe_ram` was set in the last cycle.
+
+|`M_DataRdy`
+|stem:[1]
+|Nonzero if the memory is not ready.
+
+|===
+
+=== Integrating the toolchain with RustHDL
+
+//TODO: Verilator background section
+// With rust macros, it is possible to execute arbitrary code transformations at compile-time. This can be used 
+As shown in the previous section, using the toolchain requires a few manual steps. Especially the numbered parameter names are challenging to work with because they change after every modification to the input. RustHLS, a library for integrating the toolchain with RustHDL, was created to solve this issue. It tries to make the toolchain easier to use. The library makes it possible to create a single Rust crate containing both RTL and HLS descriptions. 
+// RustHLS can synthesize multiple marked functions from a Rust project, wrap the synthesized Verilog in a RustHDL struct, highlight errors in the functions marked for HLS, and link simulations generated with Verilator.
+
+// TODO: Move to the background
+Cargo provides a way to hook into the build process using build scripts. These are small Rust programs that can modify the Source code before it is passed to the Rust compiler. The Rust compiler also allows custom code transformations at compile-time using procedural macros. Procedural macros are Rust functions that run at compile-time and can modify the code they are applied to.
+
+RustHLS provides a `+#[hls]+` macro that can be used to mark Rust modules for HLS. The macro is evaluated two times. Before compilation, a build script finds all modules marked with `+#[hls]+`. It extracts every marked module into a separate temporary crate. These crates are synthesized to Verilog using an automated version of the toolchain described in <<_basic_toolchain_for_synthesizing_rust>>. A Rust module containing a RustHDL struct that wraps the synthesized Verilog is generated for each Verilog file. That Rust module is then placed alongside the original source code. During compilation, the `+#[hls]+` macro is evaluated by the Rust compiler. The macro then emits import directives for the module that were synthesized during the build script. It also evaluates if the macro is used in a valid context and emits helpful error messages if it is not. <<macro-evaluation-overview>> shows all steps performed by RustHLS.
+
+.The steps performed by the RustHLS
+[nomnoml.completly-oversized-content#macro-evaluation-overview,opts=inline,width=18cm]
+....
+#gutter: 10
+#fontSize: 18
+#leading: 1.25
+#lineWidth: 2
+#padding: 14
+#spacing: 40
+#stroke: #000000
+#font: Spectral
+#direction: right
+#fill: #f7f8f7; #ffffff; #f7f8f7; #ffffff; #f7f8f7; #ffffff
+#.downwards: direction=down
+[cargo build|
+[<downwards> Build Script|
+  [parse rust crate]->[find marked modules]
+  [find marked modules]->[extract crate]
+  [extract crate]->[compile to LLVM IR]
+  [compile to LLVM IR]->[synthesize with Bambu]
+  [synthesize with Bambu]->[parse result]
+  [parse result]->[fix parameter names]
+  [fix parameter names]->[generate RustHDL interface]
+  [generate RustHDL interface]->[create RustHDL module]
+  [parse result]->[create C++ library]
+  [create C++ library]->[create RustHDL module]
+  [create RustHDL module]->[place new rust file in original crate]
+  [place new rust file in original crate]->[instruct cargo to link C++ library]
+]
+
+[<downwards>Rust compiler|
+[<downwards> HLS macro evaluation|
+  [parse rust macro]->[check for errors]
+  [check for errors]->[emit import directives for synthesized module]
+]
+[<downwards> Compilation]
+[HLS macro evaluation]->[Compilation]
+]
+
+[Build Script]->[Rust compiler]
+]
+....
+
+RustHDL is not able to simulate embedded Verilog. Verilator, a SystemVerilog simulator, can create a {cpp} library from Verilog that simulates a single component. For every synthesized module, such a library is created. The RustHDL structs generated by RustHLS contain the glue code necessary to call into the simulation library. The build script emits the directives necessary to compile and link the generated libraries. Cargo will follow these directives to build and link the libraries into the final binary.
+
+Using RustHLS makes it possible to use the toolchain in a RustHDL project. The modules can be used, simulated, and tested like regular RustHDL modules. This enables behavioral verification directly in Rust unit tests.
+
+=== Using RustHLS to synthesize and test a module
+
+As part of this thesis, an integration of the toolchain with RustHDL was developed. It enables the use of the toolchain in a RustHDL project. The integration is implemented as a rust library, RustHLS. It provides a `+#[hls]+` macro that can be used to mark Rust modules for HLS. <<rust-hls-example-listing>> shows how it can be used to annotate a module for HLS.
+
+.Using RustHLS for synthesis of a Rust function
+[source#rust-hls-example-listing.linenums,rust]
+----
+use rust_hdl::prelude::*;
+use rust_hls_macro::hls;
+
+#[rust_hls_macro::hls]
+pub mod minmax_hls {
+
+    #[hls(
+        bambu_flag = "--channels-type=MEM_ACC_11 --channels-number=1 -Os",
+        rust_flag = "-C opt-level=z"
+    )]
+    pub unsafe extern "C" fn minmax(
+        elements: *const i32,
+        num_elements: i32,
+    ) -> rust_minmax::MinmaxResult {
+      let slice = std::slice::from_raw_parts(numbers, numbers_length as usize);
+
+      slice.iter().fold(
+          MinmaxResult {
+              max: i32::MIN,
+              min: i32::MAX,
+          },
+          |mut acc, &x| {
+              if x > acc.max {
+                  acc.max = x;
+              }
+              if x < acc.min {
+                  acc.min = x;
+              }
+              acc
+          },
+      )
+    }
+
+    #[repr(C)]
+    pub struct MinmaxResult {
+        pub max: i32,
+        pub min: i32,
+    }
+
+}
+----
+
+Lines 8 and 9 show how the `+#[hls]+` how the macro can be used to configure rustc and Bambu for this specific function. The example above will result in a `minmax_hls_synthesized.rs` file placed beside the source file. It will contain the synthesized RustHDL module. A shortened version of this file is shown in <<rust-hls-synthesized-listing>>. It defines a RustHDL struct that wraps the Verilog generated by Bambu. The struct also contains an update function that calls the simulation library generated by Verilator. When the HLS macro gets expanded during compilation, it will emit the import statements necessary to use the synthesized module.
+
+Rust's integrated testing framework can be used to test both the specification and the synthesized design. <<rust-hls-test-listing>> shows how to do that. The tests can be run with `cargo test` like any other Rust tests.
+
+.Verifying the synthesized module with RustHDL
+[source#rust-hls-test-listing.linenums.hundred_max,rust]
+----
+#[cfg(test)]
+mod tests {
+    /// The original specification
+    use super::minmax_hls::{minmax, MinmaxResult};
+    /// The generated component
+    use super::Minmax;
+
+    const TEST_INPUT: &[i32; 25] = [
+            0x21258F79, 0x34D5CCF9, 0x3598261E, 0x7D154730, 0x5B284E05,
+            0x5F97A42D, 0x10FEE5A0, 0x2C5BDA0C, 0x4D30A6F7, 0x30935AB7,
+            0x4B5AA93F, 0x49A6E626, 0x61A57C16, 0x43B831CD, 0x01F22F1A,
+            0x05E5635A, 0x64BEFEF2, 0x61367095, 0x787C5A55, 0x3C3EE88A,
+            0x040C7922, 0x1841F924, 0x16F53526, 0x75F644E9, 0x3AF1FF7B,
+        ];
+
+    #[test]
+    fn verify_behavioural_specification() {
+        let result = unsafe { minmax(&numbers[0], 25) };
+
+        assert_eq!(result.max, 0x7D154730);
+        assert_eq!(result.min, 0x01F22F1A);
+    }
+
+    #[test]
+    fn verify_hls_design() {
+        /// The hls_test macro is provided by the RustHLS library
+        /// It will generate a simple testbench for the module that runs until done_port goes high
+        /// It will also connect the module to a memory containing the test input
+        hls_test!(
+            Minmax,
+            minmax,
+            memory = TEST_INPUT.clone(),
+            u32,
+            {
+                /// Setup
+                minmax.elements.next = 0u32.to_bits();
+                minmax.num_elements.next = input_length.to_bits();
+            },
+            {
+                /// Verification
+                // println!("Memory: {:X?}", memory);
+                let result = minmax.return_port.val().to_u64()
+                let result = unsafe {
+                    std::mem::transmute::<_, MinmaxResult>(result);
+                };
+                assert_eq!(result.min, 0x7D154730);
+                assert_eq!(result.max, 0x01F22F1A);
+            },
+            /// , "trace_test.vcd"
+        );
+    }
+}
+----
+
+The first test verifies that the specification is correct. The second test verifies that the generated design is correct.
+
+The `hls_test!` macro is provided by the RustHLS library. It will expand to a test bench that runs the module until it indicates it is finished. It will also connect the module to a memory containing the test input. A regular software debugger can debug the design like in any other Rust program. Alternatively, the macro also provides a way to store a trace of a test run by specifying a filename. This trace can be used to debug the design. Of course, the module can also be tested without the macro, but mocking the memory takes about 20 lines of code, so the macro is a lot more convenient. If the module does not need memory, then testing the module is the same as testing any other RustHDL module.
+
+In this example, the design is verified against predefined constants. It is also possible to call the specification and assert that the result is the same as the result of the design. This can be used to verify that the design is equivalent to the specification.
+
+RustHLS was used to synthesize and run all tests in <<_experiments_and_results>>.
+
+== Experiments and Results
+
+// This section will compare the hardware designs resulting
+
+
+// Hypothesis: HLS from Rust is as performant as HLS from {cpp}
+// Hypothesis: Using packages makes development faster
+// Hypothesis: With rust, we can easily use packages
+
+// === Experimental setup
+// Algorithm -(implementation)> implementation -(synthesis)> design
+
+// TODO: I think there is probably a better word for `equivalent Rust implementation`. Maybe `algorithmically identical Rust implementation`?
+A set of algorithms will be compared to evaluate how HLS from Rust compares to HLS from {cpp}. Every algorithm will have a _{cpp}_ and equivalent Rust implementation. The equivalent _Rust_ implementation is algorithmically as close to the {cpp} implementation as possible. A more Rust-like implementation, using Rust features like slices or iterators, is evaluated for some algorithms. It will be referred to as the _idiomatic Rust_ implementation. The goal of the equivalent Rust implementation is to compare the performance of the toolchain and compiler. Comparing the idiomatic Rust implementation can show whether the toolchain is able to synthesize idiomatic Rust code. An implementation using a dependency from the Rust community crate registry crates.io is also compared for one algorithm. This shows that it is possible to use already existing crates for HLS. It will be referred to as the _crates.io Rust_ implementation. 
+
+// If an implementation for a specific algorithm is available on crates.io, that implementation will also be added to the comparison. This shows whether we can use the Rust ecosystem. It will be referred to as the _crates_ implementation. 
+
+// TODO: Criticize that the GCC version is outdated af
+Each {cpp} implementation was synthesized and tested under four configurations: compiled with either Bambu's GCC (Version 8) or Clang (Version 16) frontend and optimized for either speed (`-O5`) or size (`-Os`). Rust implementations were synthesized and tested using RustHLS as described in <<_using_rusthls_to_synthesize_and_test_a_module>>. When optimizing a Rust implementation for speed, the Rust compiler was set to `-C opt-level=3` and Bambu to `-O5`. When optimizing for size, the Rust compiler was set to `-C opt-level=z` and Bambu to `-Os`. 
+
+Different designs were evaluated for the area of an FPGA they take up, their clock maximum frequency, and the number of clock cycles they take for a single function execution. Their average was used if a design had varying clock cycles between its test cases. The area and maximum frequency of a design were taken from the placement report of nextpnr. nextpnr was configured to target a Lattice ECP5 FPGA with 44k LUT and a speed grade of 6 (LFE5U-45F-6BG381C) for all tests. Bambu was configured to generate only a single memory channel memory interface instead of the default two-channel memory interface. This makes it easier to compare the traces of different designs. The sum of the number of LUTs, FFs, BRAMs, and DSP blocks was used to measure the area of a design. The number of clock cycles was measured using the simulations generated with RustHLS for Rust designs and Bambu's built-in testbench generator for {cpp} designs. The results of these two ways of simulating the designs are comparable as both internally use Verilator to generate the actual simulation for the designs.
+ 
+The evaluation focuses mostly on the behavior of the synthesized hardware designs and not on their exact implementation details. Because of this, the synthesized Verilog files will be treated as black boxes.
+
+=== Tested algorithms
+//TODO: Stop using algorithms and function interchangeably
+
+The three functions that were compared are minmax, latexmath:[\keccakf], and MD5.
+
+The minmax function finds the minimum and maximum values in an array of signed 32-bit integers. This algorithm is chosen because it is simple and can be implemented in a single short function. This should make it easier to understand the differences between the different designs.
+
+// TODO: A background section on keccak
+To assess the toolchain's optimization capabilities, the latexmath:[\keccakf] function was chosen. This cryptographic function serves as the foundation for SHA-3 and is widely employed in various applications. The implementations take a pointer to 25 64-bit numbers and perform in-place permutations on these numbers. If a design performs all permutations directly on the input array, it will take many cycles to complete because every memory access takes one cycle.
+
+The MD5 hash function was selected as an additional algorithm for evaluation. It is similar to latexmath:[\keccak] in that it contains a long sequence of non-branching logic operations while accessing an array of constants. MD5 does not permute its inputs but instead generates a 128-bit state based on the previous state and a 512-bit data block. It is well known that MD5 suffers from extensive vulnerabilities. The tested implementation takes two pointers as input, one to the previous state and one to the data block.
+
+// TODO: This is not good. Rewrite
+// The md5 hash function is another hash function. It was also chosen because it is a common algorithm. While MD5 is no longer considered secure, it is also reasonably easy to implement.
+
+// TODO: Find better functions. At least not two hash functions
+
+// TODO: If there is time, add an FIR filter: https://www.hackster.io/michi_michi/fpga-fir-filter-hls-kria-kv260-pynq-2eec35
+
+// TODO: === Show limitations of the synthesizable subset of Rust
+// Show the limitations of the toolchain. Limitations of the synthesizable subset of Rust.
+// Somewhere but not here
+
+// Already included in the previous section
+// Each {cpp} implementation was tested in four configurations. Either compiled with Bambu's GCC or Clang frontend, once with optimization profiles for speed (`-O5`) and once for size (`-Os`). The equivalent Rust implementations were also tested once with optimization profiles for speed and size. When optimizing a Rust implementation for speed, rustc is set to `-C opt-level=3` and Bambu to `-O5`. When optimizing for size, rustc is set to `-C opt-level=z` and Bambu to `-Os`.
+
+
+
+// TODO:  === Show how the Rust ecosystem can be used
+// not here
+// TODO:  === Generated modules
+// not here
+
+=== Results for the minmax designs
+
+Three implementations of a minmax function were tested. The Rust implementation was already shown above in <<minmax-rust-listing>>. It is based on the {cpp} implementation shown in <<minmax-cpp-listing>>. The idiomatic Rust implementation is shown in <<minmax-idiom-listing>>. 
+
+// .Idiomatic `minmax` implementation in Rust
+// [source#minmax-idiom-listing.linenums,rust]
+// ----
+// include::../rust-minmax/src/minmax_idiomatic.rs[tag=function]
+// ----
+
+The Rust compiler should be able to compile the idiomatic Rust implementation to nearly the same LLVM IR as the equivalent Rust implementation. The most significant difference is that the idiomatic function returns a struct instead of writing its result to memory. The expectation is that the idiomatic Rust design always performs better than the C-like Rust design, as it does not have to access memory for writing the result. It has a `return_port` that contains the result.
+
+
+// TODO: Replace this with the blog post's text, as that is better.
+<<minmax-area>> shows that The Rust, idiomatic Rust, and Clang designs optimized for speed occupy approximately three times as much space as the size-optimized designs. When using the same optimization settings, all designs relying on LLVM toolchains require a similar amount of space. However, the GCC designs deviate from this trend. The speed-optimized design from GCC is only 1.2 times larger than its size-optimized design. The size-optimized design is also the smallest design overall. Interestingly, even the GCC design optimized for speed ranks as the third smallest design. Moreover, both designs based on the idiomatic Rust implementation occupy slightly less space than their counterparts using the C-like Rust implementation.
+
+LLVM may incorporate optimizations that result in a notable increase in the required area when prioritizing speed. In contrast, GCC does not seem to employ such optimizations.
+
+// .Area of the minmax designs
+// :chart-id: id=minmax-area
+// :vega-lite-filename: processed-charts/minmax_overview_area.vl.json
+// include::vega-chart.adoc[]
+
+Each design underwent testing using test cases ranging from 0 to 50 elements. <<minmax-average-cycles>> illustrates each design's average number of cycles.
+
+// .Average clock cycles of the minmax designs
+// :chart-id: id=minmax-average-cycles
+// :vega-lite-filename: processed-charts/minmax_average_cycles.vl.json
+// include::vega-chart.adoc[]
+
+Three distinct performance classes can be observed. The first class comprises the LLVM designs optimized for speed, the second class includes the LLVM designs optimized for size and the GCC design optimized for speed, and the slowest class encompasses the GCC design optimized for size.
+
+Within the two fastest classes, their respective idiomatic Rust design stands out as the fastest, followed by the equivalent Rust design. The {cpp} designs come after them.
+
+Notably, the fastest class exclusively consists of the big designs, whereas the smaller designs occupy the slower two classes. This observation suggests that the LLVM speed optimizations have indeed increased performance at the expense of area.
+
+The GCC designs are both significantly slower. Each of them needs approximately 30% more cycles than the LLVM designs with the same optimization goal.
+
+<<minmax-detailed-cycles>> provides precise cycle counts for each test case, illustrating the three distinct performance classes. The line for `C++ gcc -O3` overlaps with the line for `C++ clang -Os`
+
+// .Clock cycles vs input length of the minmax designs
+// :chart-id: id=minmax-detailed-cycles
+// :vega-lite-filename: processed-charts/minmax_detailed_cycles.vl.json
+// include::vega-chart.adoc[]
+
+The slowest class takes stem:[3] cycles per additional input. The second fastest class takes stem:[2] cycles per additional input.
+
+Interestingly the fastest designs require three cycles per input, except for every fourth input, where it requires three cycles less. This averages out to stem:[1.5] cycles per additional input. It should be noted again that these designs are also the largest in size.
+
+The LLVM designs optimized for speed have evidently unrolled the loop by a factor of four. This can be seen in the LLVM IR control-flow graph (CFG) depicted in <<minmax-speed-cfg>>. The functions process a batch of 4 elements until less than four elements remain. Then they process the remaining elements individually. Bambu seems to preserve this structure in the generated designs. It explains why the big designs are also the fastest ones, as the additional size most likely contains the 4x operation. The small designs save area by only having the 1x operation.
+
+The idiomatic Rust design is consistently the fastest design taking one cycle less than the next fastest design. It probably has this constant advantage because it does not have to write its results to memory after processing all elements. The C-like Rust designs are two cycles faster than the equivalent {cpp} designs compiled with Clang. 
+
+The GCC designs are all slower than the LLVM designs, potentially representing a trade-off for their reduced design size.
+
+Another factor for design performance is the maximum frequency at which it can operate. <<minmax-max-frequency>>  provides an overview of the maximum frequency for each design.
+
+// .Maximum frequency of the minmax designs
+// :chart-id: id=minmax-max-frequency
+// :vega-lite-filename: processed-charts/minmax_max_frequency.vl.json
+// include::vega-chart.adoc[]
+
+Most notably, the LLVM designs optimized for speed are the ones that clock the slowest. The two Rust designs optimized for speed can clock slightly higher than the {cpp}/Clang design optimized for speed. This is to be expected as they are also the designs that take up the most space, which most likely results in longer critical paths.
+
+The five smaller designs all clock around 2x faster than the big designs. Their maximum frequency seems to be roughly ordered by the size of the design.
+
+The small designs can run at much higher frequencies but require more clock cycles. The relevant metric for comparing the performance is the execution time. It is calculated by multiplying the number of cycles with the inverse of the maximum frequency. <<minmax-execution-time>> shows the average execution time for each design.
+
+// .Average execution of the minmax designs
+// :chart-id: id=minmax-execution-time
+// :vega-lite-filename: processed-charts/minmax_performance.vl.json
+// include::vega-chart.adoc[]
+
+The LLVM designs optimized for speed perform between 25-30% better than those optimized for size. They still seem to split into two groups, although the divide is not as big as with the other measurements.
+
+As expected, the significantly slower frequency of the big designs is more than enough to cancel out the advantage they gained by requiring fewer cycles. 
+
+The GCC designs clocked at nearly the same frequency. The lower cycle count of the design optimized for speed makes it perform better than the one optimized for size. It performs comparably to the LLVM-based designs optimized for size, while the one optimized for size performs comparably to the LLVM-based designs optimized for speed. 
+
+// TODO: Look into specifying how big things are getting parallelized
+
+
+
+// .Area to performance of the minmax designs
+// :chart-id: id=minmax-area-performance
+// :vega-lite-filename: processed-charts/minmax_area_performance.vl.json
+// include::vega-chart.adoc[]
+
+The big designs perform worse and take up more area than the small designs. The idiomatic Rust design (size) is better in size and performance than nearly every other design. The only exception is the GCC design optimized for size, which is slightly smaller but performs significantly worse. These results can be seen in <<minmax-area-performance>> and <<minmax-space-efficiency>>.
+
+// The task of computing the minimum and maximum can be easily parallelized. The input can be split over multiple instances of the function, and the results of each can be processed by another minmax function afterward. 
+
+
+// .Space efficiency of the minmax designs
+// :chart-id: id=minmax-space-efficiency
+// :vega-lite-filename: processed-charts/minmax_space_efficiency.vl.json
+// include::vega-chart.adoc[]
+
+The idiomatic Rust design (size) is the most space-efficient design. The two GCC designs are second and third. The GCC design optimized for speed is a bit faster but also a bit bigger than the one optimized for size. This trade-off equalizes again in this metric, as their performance per area is nearly identical.
+
+The big designs perform poorly in this metric because they are slower and take up more area than the small designs.
+
+These measurements reveal several observations and trends:
+
+* All designs generated by LLVM-based toolchains with the same optimization goal exhibit similar performance.
+* The small designs perform better across all metrics except cycle count.
+* Rust designs demonstrate slightly better performance.
+* The idiomatic Rust design holds a slight advantage over the equivalent Rust design. Its slightly different interface probably causes this.
+* For GCC, the optimization goal aligns with the resulting design benefits. The design optimized for code size is smaller, while the design optimized for speed performs faster.
+* For LLVM, this alignment is only partially true. The designs optimized for size are smaller and faster than those optimized for speed.
+* LLVM seems to employ more aggressive loop unrolling compared to GCC.
+* Bambu appears to preserve unrolled loops in LLVM IR.
+
+=== Results for the MD5 functions
+
+Two implementations will be tested for the MD5 function. The {cpp} reference implementation is shown in <<md5-cpp-listing>>. The equivalent Rust implementation can be seen in <<md5-rust-listing>>.
+
+// .Area of the MD5 designs
+// :chart-id: id=md5-area
+// :vega-lite-filename: processed-charts/md5_overview_area.vl.json
+// include::vega-chart.adoc[]
+
+As depicted in <<md5-area>>, the area for all designs except the GCC design optimized for speed is roughly the same. The GCC design optimized for speed is 20% larger than the others. This seems to indicate that the designs generated by Bambu are all quite similar.
+
+// .Clock cycles of the MD5 designs
+// :chart-id: id=md5-average-cycles
+// :vega-lite-filename: processed-charts/md5_average_cycles.vl.json
+// include::vega-chart.adoc[]
+
+<<md5-average-cycles>> shows that the LLVM-based designs all require the same number of cycles. The GCC design optimized for speed needs around 10% more cycles, and the GCC design optimized for size 20% more.
+
+// .Maximum frequency of the MD5 designs
+// :chart-id: id=keccak-max-frequency
+// :vega-lite-filename: processed-charts/md5_max_frequency.vl.json
+// include::vega-chart.adoc[]
+
+The maximum frequency of the Clang-based designs is about 10% higher than the Rust-based designs, as seen in <<keccak-max-frequency>>. The GCC design optimized for speed has the highest frequency, while the GCC design optimized for size is comparable to the Clang designs. 
+
+// .Execution time of the MD5 designs
+// :chart-id: id=md5-execution-time
+// :vega-lite-filename: processed-charts/md5_performance.vl.json
+// include::vega-chart.adoc[]
+
+<<md5-execution-time>> shows the execution time for each design. The execution time of the Clang-based designs is about 10% lower than the Rust-based designs. As their number of cycles is equal, this represents their slightly higher frequency. The GCC designs are the slowest, although they are only around 15% slower than the Clang designs. The GCC design optimized for speed is the slowest design overall.
+
+// .Space efficiency of the MD5 designs
+// :chart-id: id=md5-space-efficiency
+// :vega-lite-filename: processed-charts/md5_space_efficiency.vl.json
+// include::vega-chart.adoc[]
+
+// .Area to performance of the MD5 designs
+// :chart-id: id=md5-area-performance
+// :vega-lite-filename: processed-charts/md5_area_performance.vl.json
+// include::vega-chart.adoc[]
+
+The <<md5-area-performance>> and <<md5-space-efficiency>> clearly show what the other measurements already indicated; all designs perform the same. The only exception is the GCC design optimized for speed, which is slightly slower and a bit larger than the other designs.
+
+These measurements reveal several observations and trends:
+
+* In this case, Bambu seems to perform similarly across all configurations.
+* Rust designs have slightly worse performance than Clang.
+* The optimization goal does not make a difference.
+
+=== Results for the latexmath:[\keccakf] designs
+
+<<keccak-cpp-listing>> presents the reference {cpp} implementation. It is based on a reference implementation provided by the Keccak team. It operates on a pointer to an array of 25 64-bit elements and performs 24 rounds of mutation on these elements. Each round consists of 5 functions that transform the elements in various ways. The resulting values after 24 rounds represent the output of the function. <<keccak-rust-interface>> depicts the latexmath:[\keccakf] function.
+
+// .Shortened `keccak` function
+// [source#keccak-rust-interface.linenums,rust]
+// ----
+// include::../rust-keccak/src/keccak.rs[tag=main-function]
+// ----
+
+The Rust implementation shown in <<keccak-rust-listing>> closely follows the reference implementation. All functions of this direct port must be marked as unsafe because they use raw pointers. It is impossible to safely access raw pointers as they can potentially point to invalid memory.
+
+The idiomatic Rust implementation, seen in <<keccak-idiom-listing>>, is nearly identical to the Rust implementation. The main difference is that it casts the pointer to an array of size 25. This allows the compiler to verify that the array is never accessed out of bounds. It also could allow the compiler to optimize the code better, as it can assume that the array is never accessed out of bounds.
+
+The fourth implementation uses the keccak crate from crates.io <<Rus23>>. This crate provides optimized implementations of the latexmath:[\keccak] sponge functions in different sizes. The tested function, depicted in <<keccak-crate-listing>>, calls the appropriate implementation from the crate. It is added to the comparison to determine whether using crates from the Rust ecosystem for HLS is practical.
+
+// .Wrapper for the `keccak::f1600` function from crates.io
+// [source#keccak-crate-listing,rust]
+// ----
+// include::../rust-keccak/src/keccak_crate.rs[tag=function]
+// ----
+
+==== Measurements
+
+<<keccak-overview-area>> illustrates the results of the area measurements. Both the Rust and idiomatic Rust designs exhibit similar sizes in both optimizations.
+
+// .Area of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-overview-area
+// :vega-lite-filename: processed-charts/keccak_overview_area.vl.json
+// include::vega-chart.adoc[]
+
+The three LLVM designs, optimized for speed and based on the reference implementation, also display similar sizes. This suggests that LLVM was able to optimize the code in a similar manner. When optimized for size, the Rust-based designs are noticeably larger than the Clang-based designs.
+
+The Rust implementation from crates.io <<Rus23>> generates two nearly identically sized designs. They have roughly the same size as the other Rust designs optimized for size.
+
+The GCC design optimized for speed is the biggest. The one optimized for size is the second smallest. This is what we would expect from the optimization goals.
+
+// Performance
+// TODO: Use the reference test cases
+The performance of each design was evaluated using three test cases. Every test case is a 25-element array of 64-bit integers. The input in the first test case was all zeros, and for the second, all 25s. The third test case received the result of the first test case as its input. The cycle count remained consistent across all designs and test cases. <<keccak-cycles>> presents the results of the cycle count measurements.
+
+
+Each of the 25 memory locations in the array needs to be both read and written at least once because they are used for input and output. Accessing memory takes one cycle and has a latency of two cycles, so the theoretical minimum for the number of cycles is 51. This only applies if the module loads all values into some kind of internal storage in the beginning, then takes one cycle to perform all rounds of keccak on that internal storage, and then writes the resulting values back to external memory. If the calculations are performed directly on external memory, the number of memory accesses will be significantly larger.
+
+// .Clock cycles of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-cycles
+// :vega-lite-filename: processed-charts/keccak_average_cycles.vl.json
+// include::vega-chart.adoc[]
+
+The LLVM designs optimized for speed all perform quite well, with the Clang design being the fastest. Interestingly the crate.io design optimized for size also performs quite well. The traces of these designs reveal that they all only required the minimum required amount of 50 memory accesses per calculation. The trace for the Clang design can be observed in <<keccak-clang-speed-trace>>. The traces for the fast Rust designs are similar, but they take 48 cycles to do the calculation between the memory accesses. They require two cycles per round (stem:[24 * 2 = 48]). The Clang design only requires one cycle per round but has an additional cycle of overhead (stem:[24 + 1 = 25]). 
+
+.Trace of the Clang design optimized for speed
+[wavedrom.really-slightly-oversized-content,id="keccak-clang-speed-trace"]
+....
+include::samples/keccak_clang_speed.wavejson.json[]
+....
+
+Surprisingly, the crates.io design, optimized for size, also took the same amount of cycles as the Rust designs optimized for speed. Notably, both crates.io designs perform memory reads during the calculation. These reads appear unrelated to the algorithm and random. <<keccak-crates-speed-trace>> depicts this behaviour. The addresses they try to access are out of bounds, and random values are returned during the tests. These memory accesses do not seem to affect the correctness of the result.
+
+.Trace of the crates.io design optimized for size
+[wavedrom.oversized-content,id="keccak-crates-speed-trace"]
+....
+include::samples/keccak_crates_speed.wavejson.json[]
+....
+
+// TODO: Attach snippet from the traces
+The remaining designs require significantly more cycles, earning them the classification of _slow_ designs. The disparity between the fastest and slowest slow designs is approximately a factor of 10. The fastest slow design is 50 times slower than the slowest fast design. While the fast designs load all values in the beginning and store them when they are done, the slow designs constantly read and write the values in memory. The trace for the GCC design optimized for speed (<<keccak-gcc-speed-trace>>) shows that it constantly performs memory accesses. This behavior is representative of the other slow designs. How much of the calculations are performed on external memory seems to dictate the exact cycle count.
+
+.Clipped trace of the GCC design optimized for speed
+[wavedrom.slightly-oversized-content,id="keccak-gcc-speed-trace"]
+....
+include::samples/keccak_gcc_speed.wavejson.json[]
+....
+
+// Speculation
+It is likely that the designs optimized for size keep the split into the five functions (`theta`, `rho`, `pi`, `chi`, and `iota`) as it is usually smaller for a CPU program to be separated into multiple functions. As Bambu performs HLS on a per-function level, it might be unable to share internal memory between them.
+
+<<keccak-frequency>> displays the maximum frequency for each latexmath:[\keccakf] design. The Rust designs optimized for speed, excluding the crates.io design, stand out as the fastest. The tradeoff to perform each round of latexmath:[\keccakf] in two cycles rather than one proves advantageous, allowing them to run at higher frequencies compared to the LLVM design. Notably, both crate designs operate at the slowest frequency among all designs.
+
+// .Maximum frequency of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-frequency
+// :vega-lite-filename: processed-charts/keccak_max_frequency.vl.json
+// include::vega-chart.adoc[]
+
+The other Rust designs optimized for size run at a lower frequency than the other designs optimized for size. The size-optimized {cpp} designs run at the third and fourth highest frequency.
+
+In <<keccak-performance>> the designs optimized for speed showcase similar performance to each other. 
+
+// .Execution time of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-performance
+// :vega-lite-filename: processed-charts/keccak_performance.vl.json
+// include::vega-chart.adoc[]
+
+The execution time of the designs optimized for speed is roughly the same. Among the speed-optimized designs, the Rust designs are a bit faster than the LLVM designs. Even though these designs take more cycles, their higher clock speed is able to compensate for that. Among the fast designs, the crates.io designs are the slowest.
+
+The designs optimized for size are all significantly slower. Among memory-accessing designs, the GCC design optimized for speed stands out as the fastest. It is still more than 20 times slower than the next fastest design.
+
+// .Area to performance of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-area-performance
+// :vega-lite-filename: processed-charts/keccak_area_performance.vl.json
+// include::vega-chart.adoc[]
+
+// .Space efficiency of the latexmath:[\keccakf] designs
+// :chart-id: id=keccak-space-efficiency
+// :vega-lite-filename: processed-charts/keccak_space_efficiency.vl.json
+// include::vega-chart.adoc[]
+
+<<keccak-area-performance>> and <<keccak-space-efficiency>> demonstrate that the fast designs provide greater performance per area than the slow designs. While the size-optimized {cpp} designs are the smallest overall, their abysmal performance renders them less space efficient. The Rust designs optimized for size rank the worst, being both slow and large. On the other hand, the Rust designs optimized for speed are the most space-efficient. The crates.io designs are between them, with slightly slower performance than the other fast designs and similar size to the larger designs.
+
+// Notes on crates.io design
+==== Unexpected behavior of the crates.io design
+
+In the case of the crates.io design, it did not make any difference whether it was optimized for speed or for size. <<keccak-crates-implementation-listing>> shows that their implementation explicitly inlines and unrolls the steps of a round. Apart from this explicit unrolling, the significant distinction lies in the variable number of rounds supported by the crates.io implementation. The Rust compiler seems to respect these optimizations. It generates basically the same LLVM IR for both optimizations. The biggest difference is that the version optimized for speed inlines the control of the main loop into the loop body.
+
+// TODO: Insert CFG for both LLVM IR files. 
+// experiments/rust-hls-experiments/keccak_crates_speed/rust_hls/keccak_hls_synthesized/keccak.ll
+// Strip all implementation except for differences from both CFGs.
+
+
+// TODO:
+When optimized for speed, the LLVM IR generated from other Rust implementations closely resembles the LLVM IR generated from the crates.io design. Notably, the crates.io designs are larger and slower, despite being based on similar LLVM IR. The most significant differentiation between them is the way they access the `KECCAK_ROUND_CONSTANTS` array. In each of the 24 rounds, a different constant from that array is needed. The array accesses use the same instructions in both cases, albeit in slightly different places. The crates.io implementation fetches the round constant in the middle of the round and the other rust implementations at the end. This difference should have no impact, as they have the same data dependencies and can be reordered. The crates.io design employs a pointer to an integer `i64*` to reference the array, while the other implementation utilizes a pointer to an array of known size `[24 x i64]*`.
+
+It can be assumed that this causes Bambu to perform poorly for some reason. It is possible that the generated design attempts to access the array at an external memory location. This would also explain the 24 out-of-bounds memory accesses during calculations. These values from external memory are apparently not used during calculation. The generated design tries to access external memory when the actual values are in internal memory. It can be assumed that Bambu cannot prove that the instruction only accesses the internal memory. The design should, however, not try to access external memory in addition to internal memory. This is most likely a bug in Bambu.
+// It may be that Clang, usually used with Bambu, does not generate instructions that access memory in this way, so the bug did not occur until now.
+
+The crates.io design also performs a check to verify that the number of rounds is not greater than 24 and panics if it is. It is safe to assume that Bambu detects that this will never happen in our case and optimizes it away. If Bambu did not do that, it would not be able to synthesize the design. 
+// While the designs are mostly treated as block-boxes, the generated Verilog reveals that the ((((not sure controller or datapath)))) of the crates.io design contains a connection to memory, while the others do not.
+
+
+
+// == Evaluation
+
+// === Supported features / Limitations
+
+// Extern c interface
+
+// no panic, exit, etc
+
+// not exhaustive
+
+// We have shown that
+
+// Discuss limitations
+
+// Discuss the results of the performance experiments
+
+// Discuss compiler flags. 
+
+// Why is this a solution
+// Discuss the results of the experiments
+
+== Conclusion
+
+
+
+// Repeat the problem
+As mentioned previously, current HLS tools focus on the common systems-programming languages C or {cpp} as their input language. Rust could provide a more modern alternative.
+
+// Really short summary
+It was shown that Bambu can be used to perform HLS from Rust. The Rust compiler can output LLVM IR, which can be used as an input for Bambu. When the Rust compiler is optimizing for speed, the generated designs are similar in terms of performance and size to the designs generated from {cpp}/Clang. When optimizing for size, the results were mixed; some designs were smaller and faster, some were larger and bigger, and some were similar. They showed that the Rust-based designs usually perform similarly to the {cpp}/Clang-based designs. It was also demonstrated that whether the Rust specifications are C-like or more Rust-like does not make a difference. A specification using an implementation from crates.io was able to be synthesized with promising results. In that specific case, the resulting design was larger than necessary, probably caused by a bug in Bambu. As expected, the support for Rust in Bambu is not as mature as for {cpp}. 
+
+// Gotchas when using Rust
+There are multiple challenges when using the Rust compiler to generate LLVM IR that is compatible with Bambu. Bambu does not support all instructions, so the Rust compiler needs to be configured only to generate compatible IR. Bambu's LLVM support is focused on LLVM IR generated by Clang. As a result, Bambu is not well-tested on LLVM IR generated by other tools. While Bambu is able to process and compile them, the resulting designs might not be as optimized as they are with Clang. This can lead to bugs like the one described in <<_unexpected_behavior_of_the_crates_io_design>>. Rust also performs bounds checks on all memory accesses that could overflow. If these bound-checks cannot be removed during optimization, the resulting LLVM IR contains calls to panic which cannot be synthesized by Bambu. By default, Rust also performs overflow checks on all integer arithmetics, which also can result in panics that can be disabled. Another limitation is that only Rust functions with a C-compatible interface can be synthesized.
+
+// Toolchain
+// TODO: The second sentence is shit.
+RustHLS, a framework for integrating the toolchain with RustHDL, was developed as part of this thesis. RustHLS makes it possible to create a single Rust crate containing both RTL and HLS descriptions. It also enables to write tests for the specification and the generated design side-by-side as Rust unit tests. It achieves this by searching the project for modules marked as HLS specifications, running the toolchain for the found specifications, and embedding the generated modules into the original project. If a function marked as HLS specification shows obvious problems, helpful error messages will be emitted before synthesis is performed. It also allows individual configuration of the toolchain for each specification. 
+
+== Future work
+
+
+// How can the Rust compiler be made to generate better LLVM IR for HLS?
+
+// Measure more test cases
+
+// Test out the limitations of the toolchain
+
+// 
+
+
+
+// Can it be better than CPP when the tools are adjusted for Rust LLVM?
+Future work on HLS from Rust should focus on improving support for Rust-generated LLVM IR in HLS tools. While Bambu can currently synthesize the LLVM IR generated by Rust, it seems possible to improve the generated designs in some cases. Finding these cases and improving Bambu to handle them should be possible.
+
+It would also be interesting to see if the LLVM IR generated by Rust can be improved to generate better designs. Our toolchain builds every project dependency separately and then links them together. This is not ideal, as it does not allow the compiler to perform cross-crate link-time optimizations. This would probably require adjusting cargo or the Rust compiler to allow link-time optimizations when compiling to LLVM IR. The toolchain only configures the Rust compiler with the settings necessary for generating LLVM IR that Bambu can synthesize. Besides that, it uses rustc's default optimization profiles for speed and size. There are probably significant improvements possible by evaluating which optimizations are useful for HLS and which are not.
+
+
+[glossary]
+== List of abbreviations
+// Abbreviations from here will automatically be linked to the document
+
+// Abbreviations in random order and links to read more about them
+[glossary]
+[[FPGA]]FPGA:: Field-Programmable Gate Array link:pass:[https://en.wikipedia.org/wiki/Field-programmable_gate_array][🔗^]
+[[HLS]]HLS:: High-Level Synthesis link:pass:[https://en.wikipedia.org/wiki/High-level_synthesis][🔗^]
+[[HDL]]HDL:: Hardware Description Language link:pass:[https://en.wikipedia.org/wiki/Hardware_description_language][🔗^]
+[[SRAM]]SRAM:: Static RAM link:pass:[https://en.wikipedia.org/wiki/Static_random-access_memory][🔗^]
+[[ADL]]ADL:: Accelerator Design Language link:pass:[https://www.sigarch.org/hdl-to-adl/][🔗^]
+[[GPU]]GPU:: Graphics Processing Unit link:pass:[https://en.wikipedia.org/wiki/Graphics_processing_unit][🔗^]
+[[LLVM_IR]]LLVM IR:: LLVM Intermediate Representation link:pass:[https://en.wikipedia.org/wiki/LLVM#Intermediate_representation][🔗^]
+[[RTL]]RTL:: Register-Transfer Level link:pass:[https://en.wikipedia.org/wiki/Register-transfer_level][🔗^]
+[[DUT]]DUT:: Design/Device Under Test link:pass:[https://en.wikipedia.org/wiki/Test_bench][🔗^]
+[[ASIC]]ASIC:: Application Specific Integrated Circuit link:pass:[https://en.wikipedia.org/wiki/Application-specific_integrated_circuit][🔗^]
+[[QoR]]QoR:: Quality of Results link:pass:[https://en.wikipedia.org/wiki/Quality_of_results][🔗^]
+[[CPU]]CPU:: Central Processing Unit link:pass:[https://en.wikipedia.org/wiki/Central_processing_unit#Structure_and_implementation][🔗^]
+[[LUT]]LUT:: Look-Up Table link:pass:[https://en.wikipedia.org/wiki/Lookup_table][🔗^]
+[[FF]]FF:: Flip-Flop link:pass:[https://en.wikipedia.org/wiki/Flip-flop_(electronics)][🔗^]
+[[DFF]]DFF:: D Flip-Flop link:pass:[https://en.wikipedia.org/wiki/Flip-flop_(electronics)#D_flip-flop][🔗^]
+[[BRAM]]BRAM:: Block RAM link:pass:[https://nandland.com/lesson-15-what-is-a-block-ram-bram/][🔗^]
+[[DSP]]DSP:: Digital Signal Processor link:pass:[https://www.fpgakey.com/tutorial/section613][🔗^]
+[[CLB]]CLB:: Configurable Logic Block link:pass:[https://www.fpgakey.com/wiki/details/51][🔗^]
+[[LB]]LB:: Logic Block link:pass:[https://www.fpgakey.com/wiki/details/51][🔗^]
+[[LE]]LE:: Logic Element link:pass:[https://www.fpgakey.com/wiki/details/342][🔗^]
+[[RAII]]RAII:: Resource Acquisition Is Initialization / Scope-Bound Resource Management link:pass:[https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization][🔗^]
+[[HIR]]HIR:: High-level Intermediate Representation link:pass:[https://rustc-dev-guide.rust-lang.org/hir.html][🔗^]
+[[THIR]]THIR:: Typed HIR link:pass:[https://rustc-dev-guide.rust-lang.org/thir.html][🔗^]
+[[MIR]]MIR:: Mid-level Intermediate Representation link:pass:[https://rustc-dev-guide.rust-lang.org/mir/index.html][🔗^]
+[[PAL]]PAL:: Programmable Array Logic link:pass:[https://en.wikipedia.org/wiki/Programmable_Array_Logic][🔗^]
+[[CFG]]CFG:: Control-Flow Graph link:pass:[https://en.wikipedia.org/wiki/Control-flow_graph][🔗^]
+[[SSA]]SSA:: Static Single Assignment link:pass:[https://en.wikipedia.org/wiki/Static_single-assignment_form][🔗^]
+[[GCC]]GCC:: GNU Compiler Collection link:pass:[https://gcc.gnu.org/][🔗^]
+[[LLVM]]LLVM:: LLVM is not an acronym link:pass:[https://llvm.org/][🔗^]
+[[VHDL]]VHDL:: Very High-Speed Integrated Circuit Hardware Description Language link:pass:[https://en.wikipedia.org/wiki/VHDL][🔗^]
+
+[bibliography]
+== References
+
+// Citation style:
+// Line 1: All authors full first and last names. Authors seperated by commas.
+// Line 2: Title in italics.
+// Line 3: Journal/Conference name or any other information about what gives the source credibility.
+// Line 4: doi with attached hyperlink. For digital editions, also link the PDF with a 📁 icon
+// +Authors seperated by commas+
+
+// Claims to have a transpiler from a subset of Rust (RAR) to restricted algorithmic C (RAC) that can be synthesized to FPGA. No source.
+// The first paper to mention HLS from Rust. 
+* [[[Har22]]]
++David Hardin+ +
+_Hardware/Software Co-Assurance using the Rust Programming Language and ACL2_ +
+arXiv preprint +
+link:pass:[https://doi.org/10.48550/arXiv.2205.11709][10.48550/arXiv.2205.11709^]
+link:pass:[https://arxiv.org/abs/2205.11709v1][📁^]
+
+// * [[[Rog20]]]
+// Rogers, Samuel and Slycord, Joshua and Baharani, Mohammadreza and Tabkhi, Hamed,
+// _gem5-SALAM: A System Architecture for LLVM-based Accelerator Modeling_,
+// 2020 53rd Annual IEEE/ACM International Symposium on Microarchitecture (MICRO), 471-482,
+// 2020.
+// link:pass:[https://ieeexplore.ieee.org/abstract/document/9251937][🔗^]
+
+// * [[[Li21]]]
+// Li, Rui and Berkley, Lincoln and Yang, Yihang and Manohar, Rajit,
+// _Fluid: An Asynchronous High-level Synthesis Tool for Complex Program Structures_,
+// 2021 27th IEEE International Symposium on Asynchronous Circuits and Systems (ASYNC), 1-8,
+// 2020.
+// link:pass:[https://ieeexplore.ieee.org/abstract/document/9565447][🔗^]
+
+// * [[[Lia23]]]
+// Liang, Geng-Ming and Yuan, Chuan-Yue and Yuan, Meng-Shiun and Chen, Tai-Liang and Chen, Kuan-Hsun and Lee, Jenq-Kuen,
+// _The Support of MLIR HLS Adaptor for LLVM IR_,
+// Workshop Proceedings of the 51st International Conference on Parallel Processing, 1-8,
+// 2020.
+// link:pass:[https://doi.org/10.1145/3547276.3548515][🔗^]
+
+// Bambu provides a research environment to experiment with new ideas across HLS, high-level verification, and debugging.
+// Bambu input: standard C/{cpp} specifications, LLVM IR, IRs from GCC
+// Includes many optimizations
+// Makes it easy to integrate new transformations and optimizations
+// Is open-source
+// Bambu is a command line tool
+// Supports most C/{cpp} constructs
+// Bambu has three phases. frontend, middleend and backend
+// Frontend: Uses Clang or gcc
+// Uses a compiler plugin for both extracting the call graph and control flow information
+// Builds its own static single assignment IR
+// This decouples the compiler front end from the rest of the HLS process.
+// Vivado HLS has a frontend based on Clang
+// Middle end:
+// Bambu rebuilds the call graph and control data flow graph and adds its own data structures.
+// Applies a set of analyses and transformations.
+// Including common software compilation optimizations
+// Including target-specific transformations. Such as replacing multiplication and divisions with constants with shift and add operations.
+// Can exploit custom-sized operators
+// TODO: Explore if Bambu can use the rust crate for more integer sizes like u21
+// Bambu performs bitwidth and range analysis to minimize bit width
+// Backend: Bambu performs the actual architectural synthesis here
+// The synthesis process acts on every function individually
+// Every function has at least two parts: control logic and datapath
+// Control logic is an FSM
+// Control logic handles the routing of data values and temporal execution of ops
+// Bambu steps:
+// * Function allocation
+// Bambu has a technology library for standard system libraries such as libm or libs
+// This step associates High-level functions with hardware resources
+// Bambu supports sharing functions across module boundaries
+// * Memory allocation
+// Defines memories to store variables.
+// Defines how dynamic memory is implemented
+// Memories in Bambu can be classified as read-only, local, with aligned or unaligned memory access
+// Bambu supports accessing protocol-based memories
+// * Resource allocation
+// Maps operations (not mapped onto functions) onto resource units
+// Resource units are available in the Bambu's resource library
+// Floating point operations are supported by generating soft floating point cores
+// Rich resource library with multiple implementations for the same operation
+// Resource library annotated with latency and resource occupation.
+// * Scheduling
+// Bambu uses List scheduling
+// Every operation has a priority
+// An operation is ready when its dependencies have been satisfied
+// Ready operations can be scheduled if the resources are available
+// Multiple competing for a resource: higher priority
+// Also has a speculative scheduling algo
+// * binding
+// Pretty much standard
+// Bambu considers how profitable it is for two operations to share the same resource
+// Resources that occupy a big area are more likely to be shared
+// * netlist generation
+// Translates the architecture in an RTL description
+// In Verilog or VHDL
+//
+// Research topics for Bambu: "They range from parallelized hardware accelerator design, dynamic scheduling, verification, and debugging, design exploration of the compilation flow, machine learning accelerator design, IR development, and integration with logic synthesis tools", MLIR
+// MLIR dialects that can be translated to LLVM IR
+* [[[Fer21]]]
++Fabrizio Ferrandi, Vito Giovanni Castellana, Serena Curzel, Pietro Fezzardi, Michele Fiorito, Marco Lattuada, Marco Minutoli, Christian Pilato, Antonino Tumeo+ +
+_Invited: Bambu: an Open-Source Research Framework for the High-Level Synthesis of Complex Applications_ +
+ACM/IEEE Design Automation Conference +
+link:pass:[https://doi.org/10.1109/DAC18074.2021.9586110][10.1109/DAC18074.2021.9586110^]
+link:pass:[https://re.public.polimi.it/retrieve/668507/dac21_bambu.pdf][📁^]
+
+// * [[[Rot10]]]
+// +Nadav Rotem,+
+// _C-to-Verilog. com: High-Level Synthesis Using LLVM_,
+// University of Haifa,
+// 2010.
+// link:pass:[https://llvm.org/devmtg/2010-11/Rotem-CToVerilog.pdf][🔗^]
+
+// * [[[Sch20]]]
+// +Fabian Schuiki, Andreas Kurth, Tobias Grosser, and Luca Benini+,
+// _LLHD: a multi-level intermediate representation for hardware description languages_,
+// In Proceedings of the 41st ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2020), 258-271,
+// 2020.
+// link:pass:[https://doi.org/10.1145/3385412.3386024][🔗^]
+
+// Multiple HLS tools use LLVM
+// C/Cpp are the most popular languages for HLS
+// NOTE: I focused on FPGA descriptions
+// Clock frequency scaling in CPU stalled around 2005
+// A alternative approach for high-throughput and energy-efficient processing is to use specific accelerators
+// Specialized accelerators are hard to design and program
+// RTL requires advanced hardware expertise
+// RTL specifies cycle-by-cycle behavior explicitly
+// RTL is a low-level abstraction
+// RTL leads to longer development times
+// FPGAs with HLS can reduce that.
+// FPGAs are configurable integrated circuits
+// Most FPGAs are reconfigurable
+// FPGA vendors provide toolchains to synthesize HTL to bitstream
+// bitstream gets programmed to the FPGA
+// HLS tools start from an HLL and automatically produce a circuit specification in RTL
+// HLS offers to enable software engineers to benefit from the performance and energy efficiency of hardware without having hardware expertise
+// HLS tools enable hardware engineers to design systems faster
+// HLS tools enable hardware engineers to explore the design space rapidly
+// Microsoft uses FPGAs to accelerate Bing search
+//
+// 
+* [[[Nan16]]]
++Razvan Nane, Vlad-Mihai Sima, Christian Pilato, Jongsok Choi, Blair Fort, Andrew Canis, Yu Ting Chen, Hsuan Hsiao, Stephen Brown, Fabrizio Ferrandi, Jason Anderson, Koen Bertels+ +
+_A Survey and Evaluation of FPGA High-Level Synthesis Tools_ +
+IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems +
+link:pass:[https://doi.org/10.1109/tcad.2015.2513673][10.1109/tcad.2015.2513673^]
+link:pass:[https://sci-hub.st/10.1109/tcad.2015.2513673][📁^]
+
+// * [[[Nor18]]]
+// +D. H. Noronha, B. Salehpour and S. J. E. Wilton+,
+// _LeFlow: Enabling Flexible FPGA High-Level Synthesis of Tensorflow Deep Neural Networks_,
+// Fifth International Workshop on FPGAs for Software Programmers, 1-8,
+// 2018.
+// link:pass:[https://ieeexplore.ieee.org/abstract/document/8470462][🔗^]
+
+// SystemVerilog is the de facto standard for RTL design
+* [[[Soz22]]]
++Emanuele Del Sozzo, Davide Conficconi, Alberto Zeni, Mirko Salaris, Donatella Sciuto, Marco D. Santambrogio+ +
+_Pushing the level of abstraction of digital system design: A survey on how to program FPGAs_ +
+ACM Computing Surveys +
+link:pass:[https://doi.org/10.1145/3532989][10.1145/3532989^]
+link:pass:[https://re.public.polimi.it/retrieve/e3b8d0bb-125b-4457-9780-250f72ef7a02/Survey_FPGA_CSUR.pdf][📁^]
+
+// * [[[XLS]]]
+// _XLS project page_
+// link:pass:[https://google.github.io/xls/][🔗^]
+
+// * [[[DSLX]]]
+// _DSLX Reference_
+// link:pass:[https://google.github.io/xls/dslx_reference/][🔗^]
+
+
+
+
+// * [[[Zen12]]]
+// _Identifying Barriers to Adoption for Rust through Online Discourse_
+// link:pass:[https://arxiv.org/pdf/1901.01001.pdf][🔗^]
+
+// Rust has an ecosystem that greatly simplifies any software project
+// Rust is great
+// Rust has been the "most loved" language since 2016
+// Rust is meant to supersede C/{cpp}
+// Rust's focus is on safety and performance
+// For any need, you may have libraries exist 
+// Dependencies can be installed using the official cargo tool
+// Rust is the first industry-supported computer programming language to overcome the longstanding trade-off between the control over resource management provided by lower-level languages for systems programming, and the safety guarantees of higher-level languages
+// Rust enables many common systems programming pitfalls to be detected at compile-time
+// Rust surpasses all other common memory-safe languages in terms of performance
+// Rust has data-race prevention
+// Considering performance Rust is one of the best languages
+// Considering safety, Rust is the best language
+// Rust offers many modern features that the more established systems-programming languages tend to lack.
+// Cargo is the package manager for Rust
+// Cargo is the build system for Rust
+// Cargo facilitates downloading and building dependencies
+// Cargo facilitates unit testing and integration testing
+// Cargo facilitates benchmarking
+// Cargo facilitates build management with different profiles
+// Cargo facilitates documentation generation from comments
+// Rustfmt facilitates code formatting
+// Dependency management is handled with a configuration file
+// Dependencies are automatically installed during compilation
+// Dependencies can be easily found on the official community crates registry
+// Cargo allows viewing unified documentation for all dependencies
+// Unit tests are written in the same file as the code they test
+// Benchmarking is done in a similar fashion to unit testing
+// The tooling alone makes Rust a much better development experience than most systems languages
+// The tooling is most likely a considerable contributor to its rise.
+// Rust is approaching the status of a mainstream language in health informatics applications
+// The criticisms of Rust tend to originate from its lack of maturity
+// C and {cpp} are well-adopted and much more established in the industry than Rust
+// lack of demand for Rust developers in the market
+* [[[Bug22]]]
++William Bugden, Ayman Alahmar+ +
+_Rust: The Programming Language for Safety and Performance_ +
+arXiv preprint +
+link:pass:[https://doi.org/10.48550/arXiv.2206.05503][10.48550/arXiv.2206.05503^]
+link:pass:[https://arxiv.org/pdf/2206.05503.pdf][📁^]
+
+// Rust can be used for GPU programming
+* [[[Byc22]]]
++Andrey Bychkov, Vsevolod Nikolskiy+ +
+_Rust Language for GPU Programming_ +
+Russian Supercomputing Days, Revised Selected Papers +
+link:pass:[https://doi.org/10.1007/978-3-031-22941-1_38][10.1007/978-3-031-22941-1_38^]
+link:pass:[https://link.springer.com/content/pdf/10.1007/978-3-031-22941-1_38.pdf][📁^]
+
+// Rust can be used for web programming
+* [[[Kyr22]]]
++Kyriakos-Ioannis D. Kyriakou, Nikolaos D. Tselikas+ +
+_Complementing JavaScript in High-Performance Node.js and Web Applications with Rust and WebAssembly._ +
+Electronics +
+link:pass:[https://doi.org/10.3390/electronics11193217][10.3390/electronics11193217^]
+link:pass:[https://mdpi-res.com/d_attachment/electronics/electronics-11-03217/article_deploy/electronics-11-03217-v2.pdf?version=1665474262][📁^]
+
+// Probably one of the greatest features of the language is the package manager, called cargo.
+// Rust is a high-level language
+// Rust is very efficient in terms of performance
+// Rust is based on the principle of zero-cost abstractions
+// Rust provides a memory safety mechanism without using a garbage collector called the borrow checker
+// Rust is a strongly typed language
+// Rust provides an out-of-the-box package manager used for importing dependencies, building, and distributing a project.
+// If a variable is declared in a specific context, it will be freed when the context is over.
+// The ownership of a variable can be passed to another context
+// More basic description of Rust ownership stuff will skip that for now
+// Development in {cpp} on a production level requires the use of additional tools such as CMake, Make, etc. This adds a layer of complexity.
+// Rust has mandatory tooling for building, distributing, and depending on a project
+// In Rust, only a manifest file is needed to configure the project for any scenario possible
+// Rust can be compiled into web assembly
+// Rust is more energy efficient than any other language except C for IoT applications
+// Rust is faster than any other language except C for IoT applications
+// Rust can easily integrate with C or {cpp} code
+// Rust solves the problem of memory safety without using a garbage collector
+// Microsoft states that 70% of security flaws discovered in their systems are related to memory safety
+* [[[Cos19]]]
++Cosmin Cartas+ +
+_Rust - The Programming Language for Every Industry_ +
+Economic Informatics Journal +
+link:pass:[https://doi.org/10.12948/ei2019.01.05][10.12948/ei2019.01.05^]
+link:pass:[https://arxiv.org/pdf/2206.05503.pdf][📁^]
+
+// state-of-art bottom-up logic programming within the Rust ecosystem
+* [[[Sah22]]]
++Arash Sahebolamri, Thomas Gilray, Kristopher Micinski+ +
+_Seamless Deductive Inference via Macros_ +
+ACM SIGPLAN International Conference on Compiler Construction +
+link:pass:[https://doi.org/10.1145/3497776.3517779][10.1145/3497776.3517779^]
+link:pass:[https://thomas.gilray.org/pdf/seamless-deductive.pdf][📁^]
+
+// Productivity in HLS is better than HDL
+// HLS offers easier design and testing
+// HDL implementation is better than HLS
+* [[[Mil20]]]
++Roberto Millón, Emmanuel Frati, Enzo Rucci+ +
+_A Comparative Study between HLS and HDL on SoC for Image Processing Applications_ +
+Revista elektron +
+link:pass:[https://doi.org/10.37537/rev.elektron.4.2.117.2020][10.37537/rev.elektron.4.2.117.2020^]
+link:pass:[https://arxiv.org/pdf/2012.08320.pdf][📁^]
+
+// Describing the traditional HDL design flow (in 1996)
+// TODO: Find a newer source
+* [[[Smi96]]]
++Douglas J. Smith+ +
+_VHDL & Verilog compared & contrasted—plus modeled example written in VHDL, Verilog and C._ +
+Annual Design Automation Conference +
+link:pass:[https://doi.org/10.1145/240518.240664][10.1145/240518.240664^]
+link:pass:[https://dl.acm.org/doi/pdf/10.1145/240518.240664][📁^]
+
+// 
+* [[[Fla20]]]
++Peter Flake, Phil Moorby, Steve Golson, Arturo Salz, Simon J. Davidmann+ +
+_Verilog HDL and its ancestors and descendants._ +
+Proceedings of the ACM on Programming Languages +
+link:pass:[https://doi.org/10.1145/3386337][10.1145/3386337^]
+link:pass:[https://dl.acm.org/doi/pdf/10.1145/3386337][📁^]
+// link:pass:[https://www.researchgate.net/profile/Arturo-Salz-2/publication/342137214_Verilog_HDL_and_its_ancestors_and_descendants/links/613fc7b45d9d0e131b427dbb/Verilog-HDL-and-its-ancestors-and-descendants.pdf][🔗^]
+
+// * [[[intel-hls]]]
+// _Intel® High Level Synthesis Compiler_
+// https://www.intel.de/content/www/de/de/software/programmable/quartus-prime/hls-compiler.html
+
+// * [[[hdl-to-adl]]]
+// _From Hardware Description Languages to Accelerator Design Languages_
+// https://www.sigarch.org/hdl-to-adl/
+
+
+// Survey literature from 2010 to 2016
+// Probably the best comparison of HLS and RTL
+// Also, the newest
+// Shows that the quality of results of RTL is better than that of HLS
+// Shows that development time with HLS is a third of that of the RTL flow
+// Shows that the productivity of a designer is over four times higher with HLS than with RTL
+// Vivado HLS is the most common HLS tool. At least it is used significantly more than any other HLS tool in papers.
+// Xilinx is the leading FPGA vendor
+// FPGAs are made of configurable logic blocks (CLB, different vendors, different names).
+// The CLBs are connected with programmable interconnects.
+// The CLBs consist of a few logic cells, logic elements, or adaptive logic modules (ALM) (LC, LE, and ALM are the same. Different vendors use different names).
+// Logic cells are made of a combination of programmable look-up tables (LUTs) and flip-flops (FFs).
+// FPGAs can also have other resources, but these are vendor specific. Most commonly, DSP blocks and BRAM blocks.
+// There are four performance metrics that are commonly used to compare HLS and RTL: performance, execution time, latency, maximum frequency
+// For projects bigger than 250 lines of code HLS also needs fewer lines of code than RTL
+// Reduction in development time for HLS seems independent of project size.
+// On average, HLS uses 41% more basic FPGA resources than RTL
+// The usage of advanced FPGA resources of HLS is similar to RTL
+// C-based languages are the most common, then OpenCL-based, then high-level language based.
+// CUDA/OpenCL-based HLS is especially resource-consuming and has the worst performance
+// The performance of HLS designs is similar to the performance of RTL designs.
+// The only example in academia where the development time of HLS was more than RTL was when the developer had to learn the HLS tool in the process.
+// Only looks at small to medium designs, 50-500 lines of code
+// It is easier to adopt HLS than RTL for people who have experience in software design
+// HLS allows for efficient behavioral verification
+// The HLS output must still be verified for non-behavioral aspects. This traditional verification is difficult because there is no direct relationship to the source code.
+// HLS halves verification time in many cases
+// HLS is a particularly good choice when the time to market is a dominant issue, and there is no compelling need to gain the ultimate performance or smallest resource usage for the product
+// There is no standard example to compare HLS and RTL
+* [[[Lah19]]]
++Sakari Lahti, Panu Sjövall, Jarno Vanne, Timo D. Hämäläinen+ +
+_Are We There Yet? A Study on the State of High-Level Synthesis_ +
+IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems +
+link:pass:[https://doi.org/10.1109/TCAD.2018.2834439][10.1109/TCAD.2018.2834439^]
+link:pass:[https://sci-hub.st/10.1109/tcad.2018.2834439][📁^]
+
+
+// Studied Rust’s ownership discipline in the presence of unsafe code.
+// Shows that various important Rust libraries with unsafe implementations, many of them involving interior mutability, are safely encapsulated by their type
+// NOTE: Did only read the abstract and conclusion
+* [[[Jun17]]]
++Ralf Jung, Jacques-Henri Jourdan, Robbert Krebbers, Derek Dreyer+ +
+_RustBelt: Securing the Foundations of the Rust Programming Language_ +
+Proceedings of the ACM on Programming Languages +
+link:pass:[https://doi.org/10.1145/3158154][10.1145/3158154^]
+link:pass:[https://dl.acm.org/doi/pdf/10.1145/3158154][📁^]
+
+// Cpp uses RAII
+// "In particular, a programmer can choose to write a low-level-C style and/or violate every rule of good programming. That is not my topic here."
+* [[[Str12]]]
++Bjarne Stroustrup+ +
+_Foundations of {cpp}_ +
+Programming Languages and Systems +
+link:pass:[https://doi.org/10.1007/978-3-642-28869-2_1][10.1007/978-3-642-28869-2_1^]
+link:pass:[https://link.springer.com/content/pdf/10.1007/978-3-642-28869-2_1.pdf][📁^]
+
+
+
+// LLVM is a compiler framework
+// Defines a low-level code representation in a single static assignment (SSA) form
+// LLVM IR
+// Describes a program using an abstract RISC-like instruction set with higher-level information
+// LLVM IR contains type information
+// LLVM IR contains explicit control flow graphs
+// LLVM IR contains explicit dataflow representation (using SSA)
+// Has a low-level, language-independent type system
+// Has instructions for performing type conversions and low-level address arithmetic while preserving type information.
+// Low-level exception handling instructions
+// LLVM is not intended to be a universal compiler IR
+// does not represent high-level language features directly
+// LLVM has no notion of high-level constructs such as classes, inheritance, or exception-handling semantics
+// LLVM does not specify a runtime system or particular object model
+// "Type information captured by LLVM is enough to safely perform a number of aggressive transformations that would traditionally be attempted only on type-safe languages in source-level compilers."
+// NOTE: I skipped section 2
+// "The goal of the LLVM compiler framework is to enable sophisticated transformations at link-time, install-time, runtime, and idle-time, by operating on the LLVM representation of a program at all stages."
+// Static compiler front-ends emit code in the LLVM representation
+// combined by the LLVM linker
+// Linker performs a variety of link time optimizations
+// The resulting code is then translated to native code for a given target.
+// Language-specific optimizations must be performed in the frontend
+// External static LLVM compilers are known as front-ends
+// Frontends translate source language programs into LLVM IR
+// Can perform aggressive interprocedural optimizations across the entire program
+// Some of the interprocedural optimizations are:  inlining, dead global elimination, dead argument elimination, dead type elimination, constant propagation, array bounds check elimination, simple structure field reordering, and Automatic Pool Allocation
+// Uses code generator backends to translate LLVM IR into native code for a given target
+* [[[Lat04]]]
++Chris Lattner, Vikram Adve+ +
+_LLVM: a compilation framework for lifelong program analysis & transformation_ +
+International Symposium on Code Generation and Optimization +
+link:pass:[https://doi.org/10.1109/CGO.2004.1281665][10.1109/CGO.2004.1281665^]
+link:pass:[https://llvm.org/pubs/2004-01-30-CGO-LLVM.pdf][📁^]
+// Shows that HLS is twice as fast as HDL 
+// M. Pelcat, C. Bourrasset, L. Maggiani and F. Berry, "Design productivity of a high-level synthesis compiler versus HDL," 2016 International Conference on Embedded Computer Systems: Architectures, Modeling, and Simulation (SAMOS), Agios Konstantinos, Greece, 2016, pp. 140-147, doi: 10.1109/SAMOS.2016.7818341.
+// https://ieeexplore.ieee.org/abstract/document/7818341
+
+// FPGA inception 30 years ago
+// FPGAs bring faster design cycles than custom chips
+// FPGAs lower dev cost than custom chips
+// low-level hardware reconfigurability
+// FPGA architecture offers many design choices
+// FPGAs consist of different types of programmable blocks
+// "FPGAs are reconfigurable computer chips that can be programmed to implement any digital circuit."
+// prefabricated routing tracks with programmable switches
+// Functionality of all FPGA blocks is controlled by SRAM cells
+// Milloions of SRAM cells
+// HDL is converted to bitstream
+// Bitstream is used to program all configuration SRAM cells
+// Lower NRE cost than ASICs
+// Shorter time to market than ASICs
+// off-the-shelf FPGA can be used to implement a design in a matter of weeks
+// Skipping physical design, layout, fabrication, and verification
+// Allow continuous hardware upgrades by loading new bitstreams in the field
+// Considered a compelling solution for small and medium-sized designs 
+// Exact hardware for every application
+// Exact datapath width, pipeline stages, and parallel units as required
+// Can achieve higher efficiency than CPU or GPU
+// Can implement instruction-free streaming hardware
+// Can implement a custom instruction set
+// Adopted in many domains.
+// "adoption of FPGAs in many application domains including wireless communications, embedded signal processing, networking, ASIC prototyping, high-frequency trading, and many more."
+// Deployed on a large scale in data centers, packet processing, machine learning
+// Lower efficiency than ASICs
+// FPGA, on average 35 times larger than ASIC implementation
+// FPGA, on average four times slower than ASIC implementation
+// For designs that utilize other FPGA blocks, the gap is smaller, still nine times large
+// FPGA architects seek to reduce the gap while maintaining programmability
+// Early FPGAs were simple arrays of logic blocks
+// Modern FPGAs are complex heterogeneous architectures that have more block types
+// Modern FPGA have blocks like BRAM, DSP, processors, external interfaces
+// FPGA architectures are evaluated based on the efficiency of implementing a wide variety of designs
+// There are academic test suites for evaluating FPGA architectures
+// VTR is a CAD system to layout designs on FPGAs
+// CAD system applies a series of complex optimizations 
+// CAD system converts RTL design to netlist.
+// CAD system maps netlist to FPGA blocks
+// CAD system places blocks on FPGA and routes the connections between them
+// CAD system outputs bitstream implementation
+// Total area is a key metric
+// "Total area is the sum of the areas of the FPGA blocks used by the application, along with the programmable routing included with them."
+// Timing analyzer finds the critical path through blocks and routing
+// Critical path limits maximum clock frequency
+// Power consumption is estimated based on resources used and signal toggle rate
+// _hardened_ blocks are blocks that are implemented as ASICs
+// What functionality to harden is a design choice
+// What area of the FPGA to use for hardened blocks is a design choice
+// Hardened blocks can still have some level of configurability
+// How flexible the hardened blocks are is a design choice
+// Hardened blocks are faster, smaller and more power efficient than programmable blocks
+// Tradeoff between flexibility and efficiency
+// Unused hardened blocks are wasted silicon
+// Problems with slow routing to hardened blocks, if they are far away
+// PAL first reconfigurable computing devices
+// PAL does not scale well; area increases quadratically with IO size
+// CPLD includes multiple PALs and programmable routing in a package
+// 1984 Xilinx pioneers first LUT-based FPGA
+// SRAM-based LUTs with interconnects between them
+// Scales well
+// Much higher area efficiency than and/or based designs
+// LUTs form the fundamental logic element in all commercial FPGAs
+// Alternative designs perform worse than LUTs
+// K-LUT implements a K-input LUT
+// K-LUT stores the truth table in SRAM cells,
+// K input signals are used as multiplexers to select line
+// truth table contains 2^K values
+// A basic logic element (BLE) is a K-LUT with an output register
+// A BLE can implement DFF or a K-LUT
+// A BLE has K inputs and two outputs, one for routing and one for feedback inside the LE
+// Logic blocks are composed of multiple (N) BLEs
+// Logic blocks have a local interconnect
+// The local interconnect connects the inputs of the LB and the feedback outputs of the BLEs to the inputs of the BLEs.
+// The local interconnect is often arranged as a local full or partial crossbar.
+// See Figure 4 in the paper.
+// Over time, K and N have increased.
+// More K means more functionality in a single LUT
+// More K leads to less logic in the critical path
+// More N means less demand for fast inter-LB routing
+// The area of the LUT increases exponentially with K as more SRAM cells are needed (2^K)
+// More K linearly degrades the speed of the LUT
+// If the local interconnect is a crossbar, its size increases quadratically with N
+// If the local interconnect is a crossbar, its size decreases linearly with N
+// Empirically, the best size for K is 4-6, and for N, it is 3-10
+// First LUT-based FPGA from Xilinx: N = 2, K = 3
+// Around 2000: 4-LUTs common
+// Study: 4-LUTs vs 6-LUTS: 6-LUTS:14% more perf, 17% bigger
+// Fracturable LUTs can be broken down into smaller LUTs, but limitations like shared inputs
+// FPGA architectures from Xilinx and Altera converge to relatively large LBs with 8 and 10 N
+// Future designs even bigger LBs
+// inter-LB wire delay scales poorly with a process shrink
+// Larger LB sizes can lead to faster CAD tool runtimes
+// Modern FPGAs have more than 1 FFs per BLE
+// Even though there are optimization, the core ideas stayed similar
+// 22% of logic elements in FPGAs are implementing arithmetic
+// These operations can be implemented with LUTs but are inefficient
+// A ripple carry adder requires 2 * the number of bits LUTs
+// This leads to high logic utilization and long critical paths
+// All modern FPGAs include hardened arithmetic circuitry in their logic blocks
+// How the arithmetic is accelerated is a design choice
+// It can be a dedicated adder between two LUTs
+// It can be just a fast path for the carry bit
+// At least 3x faster than LUT-based implementations
+// NOTE: there is more detail on the different types of arithmetic optimizations in the paper
+// Recently, deep learning has become a key workload
+// Deep learning has multiply-accumulate operations at its core, which could benefit from hardened, bigger hardened arithmetic
+// Programmable routing is over 50% of the area of an FPGA
+// Programmable routing accounts for over half the critical path delay
+// High multiplier density in signal processing and communication applications
+// Main design philosophy of the DSP block is to minimize the number of soft logic used to implement common DSP algorithms
+// FPGA CAD tools will automatically map multiplication to DSP blocks
+// Bigger FPGA designs always require a memory buffer
+// Making soft memory out of LUTs is over 100x less dense than SRAM cells
+// Modern FPGAs are about 25% BRAM
+* [[[Bot21]]]
++Andrew Boutros, Betz Vaughn+ +
+_FPGA architecture: Principles and progression_ +
+IEEE Circuits and Systems Magazine +
+link:pass:[https://doi.org/10.1109/MCAS.2021.3071607][10.1109/MCAS.2021.3071607^]
+link:pass:[https://www.eecg.utoronto.ca/~vaughn/papers/casm2021_arch_survey.pdf][📁^]
+
+// TODO: This is an application note; how to cite it?
+// TODO: Especially Cri in the link is wrong
+// TODO: Source for one definition. Necessary?
+// A critical path is a path in the design which must meet certain critical timing requirements in order for the system to function properly
+* [[[Mic95]]]
++Microprocessors and Microsystems+ +
+_Critical path analysis for field-programmable gate arrays_ +
+Microprocessors and Microsystems +
+link:pass:[https://doi.org/10.1016/0141-9331(95)90010-1][10.1016/0141-9331(95)90010-1^]
+link:pass:[https://sci-hub.st/10.1016/0141-9331(95)90010-1][📁^]
+
+// Compares RTL/HDL to assembly
+// High-level languages improved productivity
+// HDL has enabled the wide adoption of simulation tools
+// First HLS tools 1990s
+// In the 2000s: shift to electronic system level (ESL) paradigm that facilitates exploration synthesis and verification of complex SoCs
+// Intro of first languages with a system-level abstraction like SystemC or SystemVerilog
+// 2000s transaction-level modeling
+// ESL paradigm shift caused by rising system complexities
+// HLS reduced time for creating hardware
+// HLS reduced time for verification
+// HLS enables the reuse of the same specification for different targets (ASICs, FPGAs, different ASICS, and FPGAs)
+// functional specification = untimed high level description
+// NOTE: contains more info about HLS design flow
+// HLS tools transform an untimed specification into a fully timed implementation
+// HLS tools generate custom architecture to efficiently implement the specification
+// HLS tools generate an RTL implementation
+// DIAGRAM: High-level synthesis design steps
+// Generated architecture (usually) consists of a datapath and a controller.
+// Generated architecture also has memory banks and communications interfaces.
+// HLS tools usually perform seven tasks:
+// 1. Compiling the specification
+// 2. Allocating/Creating hardware resources
+// 3. Scheduling operations to clock cycles
+// 4. Binding operations to functional units
+// 5. Binding variables to storage elements
+// 6. Binding transfers to connection units
+// 7. Generating the RTL architecture
+// Steps 2-6 are called interdependent
+// Compiling transforms the specification into a formal description
+// Compiling performs optimizations
+// Formal model classically exhibits data and control dependencies.
+// Data flow graph: Every operation is a node, and the edges are values (input, temporary, and output)
+// A pure data flow graph (DFG) models data flow only
+// In some cases, a pure DFG can be created. Can be done by completely unrolling loops and multiplexing conditional assignments.
+// Pure DFG is big and impractical
+// Cannot support unbounded iteration and nonstatic control flow (like goto)
+// control and data flow graph (CDFG) models data and control flow
+// CDFG nodes are called basic blocks and are a straight sequence of statements
+// CDFG edges can be conditional and represent if or switch constructs.
+// CDFGs are more expressive because they can represent loops with unbounded iteration (those that cannot be unrolled)
+// Allocation defines the types and number of resources that are needed to satisfy the design constraints
+// Resources are functional units, storage elements, and communication interfaces
+// HLS tools have an RTL component library with basic resources.
+// Scheduling determines which operations run in which clock cycle.
+// All operations must be scheduled into cycles
+// If there are no data dependencies between operations, they can be scheduled in parallel
+// Every variable that carries values over multiple cycles must be bound to a storage element
+// Variables with nonoverlapping lifetimes can be bound to the same storage element
+// Every operation must be bound to a functional unit that can perform the operation
+// Every connection between functional units and storage elements must be bound to a connection unit
+// After allocation, scheduling, and binding, the RTL architecture can be generated and output
+// The architecture classically includes a controller and a datapath
+// Storage elements: registers, memories, etc.
+// functional units: ALUs, multipliers, DSPs, and other custom functions, etc.
+// connection units: buses, tristate drivers, multiplexers, etc.
+// The datapath consists of the storage elements, functional units, and connection units
+// All these components can be connected arbitrarily through buses
+// They can also be pipelined
+// The controller is a finite state machine (FSM)
+// The controller orchestrates the datapath by setting values of control signals of the datapath
+// The inputs of the controller can come from primary inputs or from the datapath
+// The controller consists of three parts: the next state logic, a state register, and the output logic.
+// The next state logic computes the next state of the FSM from the current state and the inputs.
+// The state register contains the current state of the controller
+// The output logic sets the control signals according to the current state
+// The output logic also sets control outputs that can be used as inputs for the datapath
+// The controller is usually built with hardwired logic but can be more complex with memories and such
+// The controller is usually a custom processor if it is more complex.
+// The state register is then called the program counter. This shows that it is just a processor.
+// NOTE: Only read until "Several design-flows."
+* [[[Cou09]]]
++Philippe Coussy, Daniel D. Gajski, Michael Meredith, Andres Takach+ +
+_An Introduction to High-Level Synthesis_ +
+IEEE Design & Test of Computers +
+link:pass:[https://doi.org/10.1109/MDT.2009.69][10.1109/MDT.2009.69^]
+link:pass:[http://www.cs.columbia.edu/~cs6861/handouts/coussy-DT-09.pdf][📁^]
+
+// Harry Foster has newer studies but no publications assoc with them, only blog posts
+// They say basically the same things
+// System verilog is the most common HDL
+* [[[Fos15]]]
++Harry D. Foster+ +
+_Trends in Functional Verification: A 2014 Industry Study_ +
+Annual Design Automation Conference +
+link:pass:[https://doi.org/10.1145/2744769.2744921][10.1145/2744769.2744921^]
+link:pass:[http://www.eecs.umich.edu/courses/eecs578/eecs578.f15/papers/fos15.pdf][📁^]
+
+// * [[[Ber09]]]
+// +Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche+,
+// _Keccak sponge function family main document._,
+// Submission to NIST (Round 2) 3, no. 30 (2009): 320-337,
+// 2009
+// link:pass:[https://keccak.team/files/Keccak-submission-3.pdf][📁^]
+
+
+
+// Softcores are slower than ASICs
+// There are soft cores that are specially designed for FPGAs
+* [[[Bal07]]]
++James Ball+ +
+_Designing soft-core processors for FPGAs_ +
+Processor Design +
+link:pass:[https://doi.org/10.1007/978-1-4020-5530-0_11][10.1007/978-1-4020-5530-0_11^]
+link:pass:[https://sci-hub.st/10.1007/978-1-4020-5530-0_11][📁^]
+
+// Opensource tools catch up with the vendor tooling
+* [[[Bar23]]]
++Benjamin L.C. Barzen, Arya Reais-Parsi, Eddie Hung, Minwoo Kang, Alan Mishchenko, Jonathan W. Greene, John Wawrzynek+ +
+_Narrowing the Synthesis Gap: Academic FPGA Synthesis is Catching Up With the Industry_ +
+Design, Automation & Test in Europe Conference and Exhibition +
+link:pass:[https://doi.org/10.23919/DATE56975.2023.10137310][10.23919/DATE56975.2023.10137310^]
+link:pass:[http://people.eecs.berkeley.edu/~alanmi/publications/2023/date23_gap.pdf][📁^]
+
+// Rust compiler has multiple intermediate representations (IRs)
+// * MIR (Mid-level IR)
+// * HIR (High-level IR)
+// * THIR (Typed HIR)
+// * LLVM IR
+// Typechecking happens on HIR
+// Optimization happens on MIR
+// MIR is a typed SSA
+// Borrowchecking happens at the MIR level
+// Optimizations also happen in LLVM
+// LLVM is used as the backend
+// LLVM can generate machine code for many architectures
+// LLVM is a collection of modular and reusable compiler and toolchain technologies
+// LLVM contains a pluggable compiler backend used by rustc and Clang
+// Clang is a C compiler
+// LLVM takes LLVM IR
+// Rust compiler uses LLVM because
+// * They don't have to write their own backend. Reduces implementation and maintenance effort.
+// * Benefit from the large suite of advanced optimizations that LLVM provides
+// * Rust can be compiled into any of the platforms that LLVM supports.
+// * Community benfits. Things like specter and meltdown only need to be fixed in LLVM, and many compilers benefit from that
+// rustc groups LLVM IR into "modules" known as codegen units
+// Rustc can use LLVM to codegen multiple of these modules in parallel utilizing multiple CPU cores
+// The resulting object files are then linked together by the linker
+* [[[Rus18]]]
++The Rust Project Developers+ +
+_Rust Compiler Development Guide (rustc-dev-guide)_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://github.com/rust-lang/rustc-dev-guide][github.com/rust-lang/rustc-dev-guide^]
+link:pass:[https://rustc-dev-guide.rust-lang.org/backend/codegen.html][📁^]
+
+// Rust is the most loved language of 2016
+* [[[Sta16]]]
++Stack Overflow+ +
+_Stack Overflow Developer Survey 2016_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://insights.stackoverflow.com/survey/2016/][insights.stackoverflow.com/survey/2016^]
+
+// Rust is the most loved language of 2020
+* [[[Sta20]]]
++Stack Overflow+ +
+_Stack Overflow Developer Survey 2020_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://insights.stackoverflow.com/survey/2020/][insights.stackoverflow.com/survey/2020^]
+
+// Rust is the most loved language of 2023
+* [[[Sta23]]]
++Stack Overflow+ +
+_Stack Overflow Developer Survey 2023_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://survey.stackoverflow.co/2023/][survey.stackoverflow.co/2023^]
+
+* [[[Smi21]]]
++Smiths Digital Forge, Samit Basu+ +
+_A framework for writing FPGA firmware using the Rust Programming Language_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://github.com/samitbasu/rust-hdl][github.com/samitbasu/rust-hdl^]
+
+* [[[Rus23]]]
++RustCrypto Developers+ +
+_Pure Rust implementation of the latexmath:[\keccak] sponge function, including the latexmath:[\keccakfraw] and latexmath:[\keccakpraw] variants_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://crates.io/crates/keccak][crates.io/crates/keccak^]
+
+* [[[Kla23]]]
++Steve Klabnik, Carol Nichols+ +
+_The Rust programming language_ +
+[Online; accessed 5.7.23] +
+link:pass:[https://doc.rust-lang.org/stable/book/][doc.rust-lang.org/stable/book^]
+
+== Appendix
+
+
+
+.Example of a generated RustHDL struct
+[source#rust-hls-synthesized-listing.linenums.hundred_max,rust]
+----
+/// This file was generated by rust_hls. Please do not edit it manually.
+/// rust_hls hash: "fc1b10f200f5632694995e666ba00202"
+
+extern crate verilated;
+use ::rust_hdl::prelude::*;
+
+#[allow(dead_code, unused)]
+mod minmax_verilated {
+    /// Bindings to the C++ library generated by Verilator go here
+}
+
+#[derive(::std::default::Default)]
+pub struct Minmax {
+    pub clk: Signal<
+        In,
+        Clock,
+    >,
+    pub reset: Signal<In, bool>,
+    pub start_port: Signal<In, bool>,
+    pub elements: Signal<In,Bits<32usize>>,
+    pub num_elements: Signal<In,Bits<32usize>>,
+    pub m_rdata_ram: Signal<In,Bits<32usize>>,
+    pub m_data_rdy: Signal<In, bool>,
+    pub done_port: Signal<Out, bool>,
+    pub return_port: Signal<Out,Bits<64usize>,>,
+    pub mout_oe_ram: Signal<Out, bool>,
+    pub mout_we_ram: Signal<Out, bool>,
+    pub mout_addr_ram: Signal<Out,Bits<32usize>>,
+    pub mout_wdata_ram: Signal<Out,Bits<32usize>>,
+    pub mout_data_ram_size: Signal<Out,Bits<6usize>>,
+    verilated_module: Arc<Mutex<self::minmax_verilated::MinmaxVerilated>>,
+}
+unsafe impl Send for Minmax {}
+
+#[automatically_derived]
+impl Logic for Minmax {
+    fn update(&mut self) {
+        let mut verilated_module = match self.verilated_module.lock() {
+            Ok(verilated_module) => verilated_module,
+            Err(e) => panic!("Failed to aquire verilated_module lock: {}", e),
+        };
+        verilated_module.set_clk(if self.clk.val().clk { 1u8 } else { 0u8 });
+        verilated_module.set_reset(if self.reset.val() { 1u8 } else { 0u8 });
+        verilated_module.set_start_port(if self.start_port.val() { 1u8 } else { 0u8 });
+        verilated_module.set_Pd61(self.elements.val().to_u32());
+        verilated_module.set_Pd62(self.num_elements.val().to_u32());
+        verilated_module.set_M_Rdata_ram(self.m_rdata_ram.val().to_u32());
+        verilated_module.set_M_DataRdy(if self.m_data_rdy.val() { 1u8 } else { 0u8 });
+        verilated_module.eval();
+        self.done_port.next = verilated_module.done_port() != 0;
+        self
+            .return_port
+            .next = to_bits::<
+            64usize,
+        >(verilated_module.return_port() & 18446744073709551615u64);
+        self.mout_oe_ram.next = verilated_module.Mout_oe_ram() != 0;
+        self.mout_we_ram.next = verilated_module.Mout_we_ram() != 0;
+        self.mout_addr_ram.next = to_bits::<32usize,>(
+          verilated_module.Mout_addr_ram() & 4294967295u32);
+        self.mout_wdata_ram.next = to_bits::<32usize,>(
+          verilated_module.Mout_Wdata_ram() & 4294967295u32);
+        self.mout_data_ram_size.next = to_bits::<6usize,>(
+          verilated_module.Mout_data_ram_size() & 63u8);
+    }
+    fn connect(&mut self) {
+        self.done_port.connect();
+        self.return_port.connect();
+        self.mout_oe_ram.connect();
+        self.mout_we_ram.connect();
+        self.mout_addr_ram.connect();
+        self.mout_wdata_ram.connect();
+        self.mout_data_ram_size.connect();
+    }
+    fn hdl(&self) -> Verilog {
+        Verilog::Wrapper(Wrapper {
+            code: r#"minmax minmax_inst(
+                      .clk(clk), .reset(reset), .start_port(start_port),
+                      .done_port(done_port), .return_port(return_port),
+                      .Pd61(elements), .Pd62(num_elements),
+                      .M_Rdata_ram(m_rdata_ram), .M_DataRdy(m_data_rdy),
+                      .Mout_oe_ram(mout_oe_ram), .Mout_we_ram(mout_we_ram),
+                      .Mout_addr_ram(mout_addr_ram), .Mout_Wdata_ram(mout_wdata_ram),
+                      .Mout_data_ram_size(mout_data_ram_size));"#
+                .into(),
+            cores: "verilog generated by bambu ...",
+        })
+    }
+}
+----
+
+// TODO: Make sure this graph is displayed correctly,
+.Simplified CFG of the LLVM IR of minmax Rust speed
+[graphviz.slightly-oversized-content,id=minmax-speed-cfg,opts=inline,width=15cm]
+----
+include::samples/minmax_speed_control_flow.dot[]
+----
+
+// Reference thesis:
+// * https://webthesis.biblio.polito.it/7573/1/tesi.pdf
+// * https://scholarworks.gvsu.edu/cgi/viewcontent.cgi?article=1754&context=theses
+
+include::scripts/trailing-scripts.adoc[]
+
+
+// Final checklist:
+// * are all abbreviations defined?
+// * are all abbreviations linked to Wikipedia (or somewhere else)?
+// * are all references used?
+// * are all references linked to the correct source?
+// * are all TODOs processed?
+// * are the product names consistent? (Bambu)
+// * check for duplicate references
+// * check for broken references
+// * archive.org all links
+// * Check for duplication of information
+// * oxford comma
+// * style code blocks

@@ -14,18 +14,14 @@
 :toc: macro
 :toclevels: 3
 :sectanchors:
-
 // Disable title page
 // We will build the title page manually for maximum flexibility
 :notitle:
 :title-page: false
-
+// Prefetch diagrams with kroki
 :kroki-fetch-diagram: true
 :kroki-default-options: inline
 :xrefstyle: short
-ifdef::env-web-pdf[]
-:docinfo: shared-footer
-endif::env-web-pdf[]
 
 image::logo_hda.svg[role=logo]
 

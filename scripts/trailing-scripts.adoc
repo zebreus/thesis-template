@@ -16,6 +16,8 @@ include::included/markReferences.adoc[]
 
 include::included/createLists.adoc[]
 
+include::included/fixPagebreaksInListings.adoc[]
+
 // You can also add your own scripts here
 // Example:
 

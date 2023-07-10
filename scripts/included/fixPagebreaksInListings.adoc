@@ -1,0 +1,182 @@
+// Hacky script for fixing pre elements in pagedjs
+// 
+// Add this script as `docinfo-footer-pdf.html` to your
+// project and add the following to the top of your asciidoc file:
+// ```
+// ifdef::env-web-pdf[]
+// :docinfo: shared-footer
+// endif::env-web-pdf[]
+// ```
+//
+// This script will replace all newlines in pre elements with 
+// <br> elements and spaces with &nbsp;
+//
+// That works mostly, at least pagedjs does not crash anymore.
+// The start of pages is a bit bugged and if a listing will span
+// multiple pages it will always start on its own page.
+//
+// I think pagedjs has problems if there is only whitespace and
+// newlines between spans in a `white-space: pre` element.
+// IDK what the exact bug is, but I currently dont have the time
+// to find and fix it upstream.
+
+ifdef::env-web-pdf[]
+
+++++
+<script>
+
+
+    const getParts = (text) => {
+        return text.replace(/ /g, "\xa0").split(/(?:\r\n|\r|\n)/g)
+    }
+
+    const flattenHljsTree = (element) => {
+        let children = [...element.childNodes];
+        children.forEach((node) => {
+            switch (node.nodeType) {
+
+                case Node.ELEMENT_NODE: {
+                    if (node.tagName === "SPAN" && node.childNodes.length > 1) {
+                        node.replaceWith(...node.childNodes)
+                    }
+                    flattenHljsTree(node)
+                    return
+                }
+                default: {
+                    return
+                }
+            }
+        })
+
+        return
+
+    }
+
+    const getNewlinesOutOfSpans = (element) => {
+        let children = [...element.childNodes];
+        children.forEach((node) => {
+            switch (node.nodeType) {
+                case Node.TEXT_NODE: {
+                    let parts = getParts(node.textContent)
+                    let new_nodes = parts.flatMap(text => {
+                        const newNode = document.createTextNode(text)
+                        const newBrd = document.createElement("br");
+                        return [newBrd, newNode]
+                    })
+                    new_nodes.shift();
+                    node.replaceWith(...new_nodes)
+
+                    return
+
+                }
+                case Node.ELEMENT_NODE: {
+                    if (node.tagName === "SPAN") {
+                        let parts = getParts(node.textContent)
+                        let new_nodes = parts.flatMap(text => {
+                            const newNode = node.cloneNode(false)
+                            newNode.textContent = text
+                            const coolNode = document.createElement("br");
+                            return [coolNode, newNode]
+                        })
+                        new_nodes.shift();
+                        node.replaceWith(...new_nodes)
+                        return
+                    }
+                    flattenHljsTree(node)
+                    return
+                }
+                default: {
+                    return
+                }
+            }
+        })
+
+        return
+
+    }
+
+    const createLineNumberNodes = (number) => {
+        const newSpan = document.createElement("span")
+        newSpan.classList.add("line-number")
+        newSpan.style.position = "absolute"
+        newSpan.style.transform = "translateX(-100%)"
+        let number_text = ("" + number);
+        const endPadding = "\xa0".repeat(1)
+        newSpan.appendChild(document.createTextNode(number_text))
+        return [document.createTextNode(endPadding), newSpan]
+    }
+
+    const removePres = (root) => {
+
+        var codeblocks = [...root.querySelectorAll("code.hljs")]
+        codeblocks.forEach(codeblock => flattenHljsTree(codeblock))
+
+
+        codeblocks.forEach(codeblock => getNewlinesOutOfSpans(codeblock))
+
+        codeblocks.forEach(codeblock => {
+            let firstSpan = document.createElement("span")
+            let nodes = [...codeblock.childNodes].reduce((acc, node) => {
+                if (node.tagName === "BR") {
+                    acc.push(node)
+                    acc.push(document.createElement("span"))
+
+                    return acc
+                }
+
+                acc[acc.length - 1].appendChild(node)
+                return acc
+            }, [firstSpan])
+            nodes[0].classList.add("first-line-in-codeblock")
+            nodes[nodes.length - 1].classList.add("last-line-in-codeblock")
+
+            codeblock.replaceChildren(...nodes)
+
+            const preNode = codeblock.parentNode
+            const newNode = document.createElement("div");
+            newNode.classList.add(...preNode.classList);
+            newNode.classList.add("pseudo-pre");
+            newNode.replaceChildren(...preNode.childNodes)
+            preNode.replaceWith(newNode)
+        })
+    }
+
+    const insertLineNumbers = (root) => {
+
+        var codeblocks = [...root.querySelectorAll(".linenums code.hljs")]
+
+
+        codeblocks.forEach(codeblock => {
+            let line = 0;
+            let nodes = [...codeblock.childNodes].forEach(node => {
+                if (node.tagName === "SPAN") {
+                    for (newNode of createLineNumberNodes(++line)) {
+                        node.prepend(newNode)
+                    }
+                }
+            })
+            let paddingWidth = line.toString().length
+            codeblock.style.paddingLeft = (paddingWidth + 1) + "ch"
+        })
+    }
+
+window.addEventListener('DOMContentLoaded', () => {
+    class MyHandler extends Paged.Handler {
+        constructor(chunker, polisher, caller) {
+            super(chunker, polisher, caller);
+        }
+
+        beforeParsed(pageFragment) {
+            // fixPres(pageFragment);
+            removePres(pageFragment)
+            insertLineNumbers(pageFragment)
+        }
+
+    }
+    Paged.registerHandlers(MyHandler);
+})
+
+</script>
+++++
+
+endif::env-web-pdf[]

@@ -1,4 +1,25 @@
 {
     "nix.serverPath": "nil",
-    "nix.enableLanguageServer": true
+    "nix.enableLanguageServer": true,
+
+    "editor.formatOnSave": true,
+    "editor.inlineSuggest.enabled": true,
+    "asciidoc.extensions.enableKroki": true,
+
+    "[markdown][asciidoc][plaintext]": {
+        "editor.wordWrap": "on",
+        "editor.acceptSuggestionOnEnter": "off",
+        "editor.formatOnSave": true,
+        "editor.inlineSuggest.enabled": true,
+        "editor.stickyScroll.enabled": true,
+    },
+
+    "grammarly.config.documentDialect": "american",
+    "grammarly.config.documentDomain": "academic",
+    "grammarly.config.suggestions.InformalPronounsAcademic": true,
+    "grammarly.config.suggestions.OxfordComma": true,
+    "grammarly.config.suggestions.UnnecessaryEllipses": true,
+    "grammarly.config.suggestions.PunctuationWithQuotation": false,
+    //     "asciidoc.preview.scrollPreviewWithEditor": false,
+    //   "asciidoc.preview.scrollEditorWithPreview": false,
 }

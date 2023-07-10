@@ -1,0 +1,68 @@
+// Add page numbers to the table of contents, when printing
+$dot-spacing: 6px;
+$end-dot-padding: 8px;
+$start-dot-padding: 4px;
+
+@media print {
+
+    #content {
+        counter-reset: page 1;
+    }
+
+    #toc.toc,
+    #toc.toc2 {
+        background-color: white;
+
+        /* Page numbers in TOC */
+        a::after {
+            content: target-counter(attr(href url), page);
+            float: right;
+            right: 0;
+            position: relative;
+        }
+
+
+
+        /* Dots between section title and page number */
+        ul ul ul li {
+            position: relative;
+
+            &::before {
+                content:
+                    ".............................................."
+                    "..............................................";
+                direction: rtl;
+                letter-spacing: $dot-spacing;
+                position: absolute;
+                white-space: nowrap;
+                overflow: hidden;
+                width: 100%;
+                padding: 0 4px;
+            }
+        }
+
+        /* Dots are covered by the `a` on the start and end of the line. This makes sure they are white and on top of the dots. */
+        ul,
+        a,
+        li,
+        div,
+        a::after {
+            background-color: inherit;
+        }
+
+        /* Add padding around text, so it does not touch the dots */
+        a {
+            padding-right: $start-dot-padding;
+
+            &::after {
+                padding-left: $end-dot-padding;
+            }
+        }
+
+        /* Make sure `a` covers the ::before element */
+        a {
+            position: relative;
+            z-index: 1;
+        }
+    }
+}

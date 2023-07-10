@@ -1,0 +1,23 @@
+// Contains the styles for hiding elements only on print or only on screen.
+
+.print-only {
+    display: none !important;
+}
+
+@media print {
+    .hide-on-print {
+        display: none !important;
+    }
+
+    .print-only {
+        display: block !important;
+    }
+
+    .hide-for-print {
+        display: none !important;
+    }
+
+    .show-for-print {
+        display: inherit !important;
+    }
+}

@@ -1,0 +1,22 @@
+// Contains helper classes for styling texts
+@import "../../variables.scss";
+
+.big {
+    font-size: larger;
+}
+
+.small {
+    font-size: smaller;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.overline {
+    text-decoration: overline;
+}
+
+.line-through {
+    text-decoration: line-through;
+}

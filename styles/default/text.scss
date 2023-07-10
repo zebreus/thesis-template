@@ -1,0 +1,160 @@
+// Styles for normal text
+@import "../variables.scss";
+
+b,
+strong {
+    font-weight: bold;
+}
+
+abbr {
+    font-size: 90%;
+}
+
+abbr[title] {
+    cursor: help;
+    border-bottom: 1px dotted #dddddf;
+    text-decoration: none;
+}
+
+dfn {
+    font-style: italic;
+}
+
+hr {
+    height: 0;
+}
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+p {
+    line-height: $lineheight-normal;
+    margin-bottom: $paragraph-margin;
+    text-rendering: optimizeLegibility;
+    text-align: justify;
+}
+
+p aside {
+    font-size: $aside-font-size;
+    line-height: 1.35;
+    font-style: italic;
+}
+
+
+
+hr {
+    border: solid #dddddf;
+    border-width: 1px 0 0;
+    clear: both;
+    margin: $paragraph-margin 0 1.1875em;
+}
+
+em,
+i {
+    font-style: italic;
+    line-height: inherit;
+}
+
+strong,
+b {
+    font-weight: $bold-font-weight;
+    line-height: inherit;
+}
+
+small {
+    font-size: $small-font-size;
+    line-height: inherit;
+}
+
+em em {
+    font-style: normal;
+}
+
+strong strong {
+    font-weight: $bold-font-weight;
+}
+
+
+.sect1 {
+    padding-bottom: 0.625em;
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+    @if $border-between-sections {
+        &+.sect1 {
+            border-top: 1px solid #e7e7e9;
+        }
+    }
+
+}
+
+.paragraph.lead>p,
+#preamble>.sectionbody>[class=paragraph]:first-of-type p {
+    font-size: 1.21875em;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+dt,
+th.tableblock,
+td.content,
+div.footnote {
+    text-rendering: optimizeLegibility;
+}
+
+
+
+p strong,
+td.content strong,
+div.footnote strong {
+    letter-spacing: -0.005em;
+}
+
+p,
+blockquote,
+dt,
+td.content,
+span.alt,
+summary {
+    font-size: $p-font-size;
+}
+
+p {
+    margin-bottom: $paragraph-margin;
+}
+
+.sidebarblock p,
+.sidebarblock dt,
+.sidebarblock td.content,
+p.tableblock {
+    font-size: $p-font-size;
+}
+
+h1,
+h2,
+p,
+td.content,
+span.alt,
+summary {
+    letter-spacing: -0.01em;
+}

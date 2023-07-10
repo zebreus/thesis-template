@@ -1,0 +1,19 @@
+// Footnotes for print
+
+@media print {
+    span.footnote {
+        float: footnote;
+    }
+
+    [data-footnote-call]::after {
+        content: "[" counter(footnote) "]";
+    }
+
+    .pagedjs_area a[data-footnote-call] {
+        cursor: pointer;
+    }
+
+    [data-footnote-call]::after {
+        content: "[" counter(footnote) "]";
+    }
+}

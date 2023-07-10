@@ -1,0 +1,65 @@
+// Helper classes for positioning and formatting stuff
+@import "../../variables.scss";
+
+.left {
+    float: left !important;
+}
+
+.right {
+    float: right !important;
+}
+
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-justify {
+    text-align: justify !important;
+}
+
+.hide {
+    display: none;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stretch {
+    width: 100%;
+}
+
+.clearfix::before,
+.clearfix::after,
+.float-group::before,
+.float-group::after {
+    content: " ";
+    display: table;
+}
+
+.clearfix::after,
+.float-group::after {
+    clear: both;
+}
+
+:not(pre).nobreak {
+    word-wrap: normal;
+}
+
+:not(pre).nowrap {
+    white-space: nowrap;
+}
+
+:not(pre).pre-wrap {
+    white-space: pre-wrap;
+}

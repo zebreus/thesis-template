@@ -1,0 +1,102 @@
+// Contains styles for images, audios and videos
+@import "../variables.scss";
+
+img,
+object,
+embed {
+    max-width: 100%;
+    height: auto;
+}
+
+object,
+embed {
+    height: 100%;
+}
+
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
+img,
+object,
+svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+img {
+    border: 0;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 0;
+}
+
+audio,
+video {
+    display: inline-block;
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+.imageblock.left {
+    margin: 0.25em 0.625em $paragraph-margin 0;
+}
+
+.imageblock.right {
+    margin: 0.25em 0 $paragraph-margin 0.625em;
+}
+
+.imageblock>.title {
+    margin-bottom: 0;
+}
+
+.imageblock.thumb,
+.imageblock.th {
+    border-width: 6px;
+}
+
+.imageblock.thumb>.title,
+.imageblock.th>.title {
+    padding: 0 0.125em;
+}
+
+.image.left,
+.image.right {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    display: inline-block;
+    line-height: 0;
+}
+
+.image.left {
+    margin-right: 0.625em;
+}
+
+.image.right {
+    margin-left: 0.625em;
+}
+
+a.image {
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.image object {
+    pointer-events: none;
+}
+
+.thumb,
+.th {
+    line-height: 0;
+    display: inline-block;
+    border: 4px solid #fff;
+    box-shadow: 0 0 0 1px #ddd;
+}

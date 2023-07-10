@@ -1,0 +1,130 @@
+// Styles for section headings
+@import "../variables.scss";
+
+h1 {
+    font-size: $h1-font-size;
+}
+
+h2 {
+    font-size: $h2-font-size;
+}
+
+h3,
+#toctitle,
+.sidebarblock>.content>.title {
+    font-size: $h3-font-size;
+}
+
+h4 {
+    font-size: $h4-font-size;
+}
+
+h5 {
+    font-size: $h5-font-size;
+}
+
+h6 {
+    font-size: $h6-font-size;
+}
+
+#toctitle {
+    color: $title-text-color;
+}
+
+h1,
+h2,
+h3,
+#toctitle,
+.sidebarblock>.content>.title,
+h4,
+h5,
+h6 {
+    font-family: $text-font-family;
+    font-weight: $heading-font-weight;
+    font-style: normal;
+    color: $heading-text-color;
+    text-rendering: optimizeLegibility;
+    margin-top: $heading-margin-top;
+    margin-bottom: $heading-margin-bottom;
+    word-spacing: -0.05em;
+    // line-height: 1.0125em;
+
+    small {
+        font-size: $small-font-size;
+        color: $title-annotation-text-color;
+        line-height: 0;
+    }
+
+    strong {
+        font-weight: $bold-font-weight;
+    }
+
+    // Style links in headings
+    &>a.link {
+        color: $heading-text-color;
+        text-decoration: none;
+
+        &:hover {
+            color: $heading-hovered-link-color;
+        }
+    }
+
+}
+
+
+// Styles for the anchor link that appears when hovering over the heading and `:sectanchors:` is set.
+#content h1,
+h2,
+h3,
+#toctitle,
+.sidebarblock>.content>.title,
+h4,
+h5,
+h6 {
+    &>a {
+        &.anchor {
+            position: absolute;
+            z-index: 1001;
+            width: 1.5ex;
+            margin-left: -1.5ex;
+            display: block;
+            text-decoration: none !important;
+            visibility: hidden;
+            text-align: center;
+            font-weight: 400;
+
+            &::before {
+                content: "\00A7";
+                font-size: 0.85em;
+                display: block;
+                padding-top: 0.1em;
+            }
+
+            &.link {
+                color: $heading-text-color;
+                text-decoration: none;
+
+                &:hover {
+                    color: $heading-hovered-link-color;
+                }
+            }
+
+
+        }
+    }
+
+    &:hover>a.anchor,
+    &>a.anchor:hover {
+        visibility: visible;
+    }
+}
+
+// Decorate first big heading, if there are no other classes on it
+#content>h1:first-child:not([class]) {
+    color: rgba(0, 0, 0, 0.85);
+    border-bottom: 1px solid #dddddf;
+    padding-bottom: 8px;
+    margin-top: 0;
+    padding-top: 1rem;
+    margin-bottom: $paragraph-margin;
+}

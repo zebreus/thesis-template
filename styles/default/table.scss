@@ -1,0 +1,157 @@
+// Styles for tables
+@import "../variables.scss";
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+table {
+    background: #fff;
+    margin-bottom: $paragraph-margin;
+    border: 1px solid #dedede;
+    word-wrap: normal;
+}
+
+table thead,
+table tfoot {
+    background: #f7f8f7;
+}
+
+table thead tr th,
+table thead tr td,
+table tfoot tr th,
+table tfoot tr td {
+    padding: 0.5em 0.625em 0.625em;
+    font-size: inherit;
+    color: $base-text-color;
+    text-align: left;
+}
+
+table tr th,
+table tr td {
+    padding: 0.5625em 0.625em;
+    font-size: inherit;
+    color: $base-text-color;
+}
+
+table tr.even,
+table tr.alt {
+    background: #f8f8f7;
+}
+
+table thead tr th,
+table tfoot tr th,
+table tbody tr td,
+table tr td,
+table tfoot tr td {
+    line-height: $lineheight-normal;
+}
+
+table.grid-all>*>tr>* {
+    border-width: 1px;
+}
+
+table.grid-cols>*>tr>* {
+    border-width: 0 1px;
+}
+
+table.grid-rows>*>tr>* {
+    border-width: 1px 0;
+}
+
+table.frame-all {
+    border-width: 1px;
+}
+
+table.frame-ends {
+    border-width: 1px 0;
+}
+
+table.frame-sides {
+    border-width: 0 1px;
+}
+
+table.frame-none>colgroup+*> :first-child>*,
+table.frame-sides>colgroup+*> :first-child>* {
+    border-top-width: 0;
+}
+
+table.frame-none> :last-child> :last-child>*,
+table.frame-sides> :last-child> :last-child>* {
+    border-bottom-width: 0;
+}
+
+table.frame-none>*>tr> :first-child,
+table.frame-ends>*>tr> :first-child {
+    border-left-width: 0;
+}
+
+table.frame-none>*>tr> :last-child,
+table.frame-ends>*>tr> :last-child {
+    border-right-width: 0;
+}
+
+table.stripes-all>*>tr,
+table.stripes-odd>*>tr:nth-of-type(odd),
+table.stripes-even>*>tr:nth-of-type(even),
+table.stripes-hover>*>tr:hover {
+    background: #f8f8f7;
+}
+
+th.halign-left,
+td.halign-left {
+    text-align: left;
+}
+
+th.halign-right,
+td.halign-right {
+    text-align: right;
+}
+
+th.halign-center,
+td.halign-center {
+    text-align: center;
+}
+
+th.valign-top,
+td.valign-top {
+    vertical-align: top;
+}
+
+th.valign-bottom,
+td.valign-bottom {
+    vertical-align: bottom;
+}
+
+th.valign-middle,
+td.valign-middle {
+    vertical-align: middle;
+}
+
+table thead th,
+table tfoot th {
+    font-weight: bold;
+}
+
+tbody tr th {
+    background: #f7f8f7;
+}
+
+tbody tr th,
+tbody tr th p,
+tfoot tr th,
+tfoot tr th p {
+    color: $base-text-color;
+    font-weight: bold;
+}
+
+p.tableblock>code:only-child {
+    background: none;
+    padding: 0;
+}
+
+p.tableblock {
+    font-size: 1em;
+}

@@ -1,0 +1,57 @@
+// Table of Contents
+@import "../variables.scss";
+
+#toc {
+    border-bottom: 1px solid #e7e7e9;
+    padding-bottom: 0.5em;
+
+    &>ul {
+        margin-left: 0.125em;
+    }
+
+    ul.sectlevel0 {
+        // &>li>a {
+        //     font-style: italic;
+        // }
+
+        ul.sectlevel1 {
+            margin: 0;
+        }
+    }
+
+    ul {
+        font-family: $text-font-family;
+        list-style-type: none;
+    }
+
+    li {
+        line-height: $lineheight-normal + 0.1;
+        margin-top: 0;
+    }
+
+    a {
+        text-decoration: none;
+
+        &:active {
+            text-decoration: underline;
+        }
+    }
+
+}
+
+
+#content #toc {
+    border: 1px solid #e0e0dc;
+    margin-bottom: $paragraph-margin;
+    padding: 1.25em;
+    background: #f8f8f7;
+    border-radius: 4px;
+}
+
+// #content #toc> :first-child {
+//     margin-top: 0;
+// }
+
+#content #toc> :last-child {
+    margin-bottom: 0;
+}

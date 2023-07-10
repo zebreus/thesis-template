@@ -59,7 +59,7 @@ Second Examiner:: Prof. Dr. Another Person
 
 If you are writing a thesis you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class which add a nice line where you can write your name.
 
-If you are not writing a thesis, just delete it.
+If you are not writing a thesis, just delete this whole section.
 
 _Darmstadt, 5.7.2023_
 

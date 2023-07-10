@@ -1,0 +1,34 @@
+/* Define first page */
+.front-matter {
+    page: front;
+}
+
+/* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
+.pagedjs_page_content>div {
+    height: 100%;
+}
+
+@page {
+    @footnote {
+        float: bottom;
+        /*border-top: solid black thin;
+        padding-top: 8pt;*/
+    }
+}
+
+/* fix admonition icon size with Font Awesome 5*/
+.admonitionblock>table td.icon svg {
+    height: 2.5em;
+    width: 100%;
+    cursor: default;
+}
+
+/* fix callout text alignment */
+.conum[data-value]:after {
+    display: flex;
+    margin: auto;
+}
+
+pre .conum[data-value] {
+    display: inline-flex;
+}

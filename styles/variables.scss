@@ -1,0 +1,117 @@
+// Used for most text
+$text-font-family: "Spectral", serif;
+// Used for captions and stuff
+$serif-font-family: $text-font-family;
+// Used for captions and stuff
+$sans-serif-font-family: sans-serif;
+// Used for code
+$mono-font-family: "Spectral Mono", monospace;
+
+
+
+// Used for normal text
+$base-font-size: 0.96em; // 12pt adjusted for spectral
+// Latex Large
+$large: $base-font-size * (14 / 11);
+// Latex LARGE
+$very-large: $base-font-size * (17 / 11);
+// Latex huge
+$huge: $base-font-size * (20 / 11);
+
+// Used for headings
+// Default: 2.125em
+$h1-font-size: $base-font-size * (14 / 11);
+// Default: 1.6875em
+$h2-font-size: $base-font-size * (12 / 11);
+// Default: 1.375em
+$h3-font-size: $base-font-size * (9 / 11);
+// Default: 1.125em
+$h4-font-size: $base-font-size;
+// Default: 1.125em
+$h5-font-size: $base-font-size;
+// Default: 1em
+$h6-font-size: $base-font-size;
+// Used for paragraphs and other things
+// Default: 1em
+$p-font-size: $base-font-size;
+// Used for listings
+$code-font-size: 0.9 * $base-font-size;
+$code-line-height: 1.25;
+
+// Font size used for small text
+// Default: 60%
+$small-font-size: 60%;
+
+// Font size for footnotes and asides
+$annotation-font-size: $base-font-size * 0.875;
+// Default: 0.875em
+$footnote-font-size: $annotation-font-size;
+// Default: 0.875em
+$aside-font-size: $annotation-font-size;
+
+// Default: 300
+$heading-font-weight: normal;
+$normal-font-weight: normal;
+$bold-font-weight: bold;
+$light-font-weight: 300;
+
+// Margins for headings
+// Default: 1em
+$heading-margin-top: $base-font-size * 1.5;
+// Default: 0.5em
+$heading-margin-bottom: $base-font-size * 1.5;
+
+// Used where lineheight was 1.6
+// Default: 1.6
+$lineheight-normal: 1.25;
+
+// Margin between paragraphs
+// Default: 1.25em
+$paragraph-margin: 0.75rem;
+
+// Padding around content and stuff
+$box-side-padding: 0.9375em;
+
+// Basic text color
+// Default: rgba(0, 0, 0, 0.8)
+$base-text-color: rgba(0, 0, 0, 1);
+// Color for all titles for images, tables, etc.
+// Default: #7a2518;
+$title-text-color: #7a2518;
+// Color for all headings and titles
+// Default: #ba3925
+$heading-text-color: rgba(0, 0, 0, 1);
+
+// Color of the decorativ big quotation mark before a blockquote
+// Default: #7a2518
+$blockquote-big-quote-color: #7a2518;
+
+// Color of hovered links in headings
+// Default: #a53221
+$heading-hovered-link-color: #a53221;
+// Color of normal links
+// Default: #2156a5
+$normal-link-color: #2156a5;
+// Color of hovered or focussed links
+// Default: #1d4b8f
+$focused-link-color: #1d4b8f;
+
+// idk, used in small elements in headings
+// Default: #e99b8f
+$title-annotation-text-color: #e99b8f;
+
+// Colors of the different admonition blocks
+// Default: #19407c
+$admonition-note-color: #19407c;
+// Default: #111111
+$admonition-tip-color: #111111;
+// Default: #bf6900
+$admonition-warning-color: #bf6900;
+// Default: #bf3400
+$admonition-caution-color: #bf3400;
+// Default: #bf0000
+$admonition-important-color: #bf0000;
+
+// Add a light border between highest level sections
+// Default: true
+$border-between-sections: false;

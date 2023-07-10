@@ -1,0 +1,74 @@
+// Various print styles from the default theme
+
+@media print {
+
+
+    // * {
+    //     box-shadow: none !important;
+    //     text-shadow: none !important;
+    // }
+
+
+    // // Styling for links disabled for now
+    // a {
+    //     color: inherit !important;
+    //     text-decoration: underline !important;
+    // }
+
+    // a.bare,
+    // a[href^="#"],
+    // a[href^="mailto:"] {
+    //     text-decoration: none !important;
+    // }
+
+    // a[href^="http:"]:not(.bare)::after,
+    // a[href^="https:"]:not(.bare)::after {
+    //     content: "(" attr(href) ")";
+    //     display: inline-block;
+    //     font-size: 0.875em;
+    //     padding-left: 0.25em;
+    // }
+
+
+    // Styling for abbreviations disabled for now
+    // abbr[title] {
+    //     border-bottom: 1px dotted;
+    // }
+
+    // abbr[title]::after {
+    //     content: " (" attr(title) ")";
+    // }
+
+    thead {
+        display: table-header-group;
+    }
+
+    svg {
+        max-width: 100%;
+    }
+
+    p,
+    blockquote,
+    dt,
+    td.content {
+        orphans: 3;
+        widows: 3;
+    }
+
+    #header,
+    #content,
+    #footnotes,
+    #footer {
+        max-width: none;
+    }
+
+
+    #toc {
+        border-bottom: 1px solid #dddddf !important;
+        padding-bottom: 0 !important;
+    }
+
+    .listingblock code[data-lang]::before {
+        display: block;
+    }
+}

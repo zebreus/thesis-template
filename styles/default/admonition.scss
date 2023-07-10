@@ -1,0 +1,44 @@
+// Styles for admonitions
+@import "../variables.scss";
+
+span.icon>.fa {
+    cursor: default;
+}
+
+a span.icon>.fa {
+    cursor: inherit;
+}
+
+
+.admonitionblock td.icon [class^="fa icon-"] {
+    font-size: 2.5em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
+.admonitionblock td.icon .icon-note::before {
+    content: "\f05a";
+    color: $admonition-note-color;
+}
+
+
+.admonitionblock td.icon .icon-tip::before {
+    content: "\f0eb";
+    text-shadow: 1px 1px 2px rgba(155, 155, 0, 0.8);
+    color: $admonition-tip-color;
+}
+
+.admonitionblock td.icon .icon-warning::before {
+    content: "\f071";
+    color: $admonition-warning-color;
+}
+
+.admonitionblock td.icon .icon-caution::before {
+    content: "\f06d";
+    color: $admonition-caution-color;
+}
+
+.admonitionblock td.icon .icon-important::before {
+    content: "\f06a";
+    color: $admonition-important-color;
+}

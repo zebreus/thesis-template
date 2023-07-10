@@ -1,0 +1,65 @@
+// Styles for keyboard and menu instructions
+@import "../variables.scss";
+
+/*
+Example:
+
+To save the file, select menu:File[Save].
+
+Select menu:View[Zoom > Reset] to reset the zoom level to the default setting.
+*/
+
+.keyseq {
+    color: rgba(51, 51, 51, 0.8);
+}
+
+kbd {
+    font-family: $mono-font-family;
+    display: inline-block;
+    color: $base-text-color;
+    font-size: 0.65em;
+    line-height: 1.45;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 0.1em #fff inset;
+    margin: 0 0.15em;
+    padding: 0.2em 0.5em;
+    vertical-align: middle;
+    position: relative;
+    top: -0.1em;
+    white-space: nowrap;
+}
+
+.keyseq kbd:first-child {
+    margin-left: 0;
+}
+
+.keyseq kbd:last-child {
+    margin-right: 0;
+}
+
+.menuseq,
+.menuref {
+    color: #000;
+}
+
+.menuseq b:not(.caret),
+.menuref {
+    font-weight: inherit;
+}
+
+.menuseq {
+    word-spacing: -0.02em;
+}
+
+.menuseq b.caret {
+    font-size: 1.25em;
+    line-height: 0.8;
+}
+
+.menuseq i.caret {
+    font-weight: bold;
+    text-align: center;
+    width: 0.45em;
+}

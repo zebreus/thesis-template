@@ -1,0 +1,56 @@
+// Contains footnotes stuff
+@import "../variables.scss";
+
+sup.footnote,
+sup.footnoteref {
+    font-size: $footnote-font-size;
+    position: static;
+    vertical-align: super;
+}
+
+sup.footnote a,
+sup.footnoteref a {
+    text-decoration: none;
+}
+
+sup.footnote a:active,
+sup.footnoteref a:active {
+    text-decoration: underline;
+}
+
+#footnotes {
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    margin-bottom: 0.625em;
+}
+
+#footnotes hr {
+    width: 20%;
+    min-width: 6.25em;
+    margin: -0.25em 0 0.75em;
+    border-width: 1px 0 0;
+}
+
+#footnotes .footnote {
+    padding: 0 0.375em 0 0.225em;
+    line-height: 1.3334;
+    font-size: $footnote-font-size;
+    margin-left: 1.2em;
+    margin-bottom: 0.2em;
+}
+
+#footnotes .footnote a:first-of-type {
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: -1.05em;
+}
+
+#footnotes .footnote:last-of-type {
+    margin-bottom: 0;
+}
+
+#content #footnotes {
+    margin-top: -0.625em;
+    margin-bottom: 0;
+    padding: 0.75em 0;
+}

@@ -1,0 +1,160 @@
+// Styles for quotes
+@import "../variables.scss";
+
+q {
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+blockquote {
+    margin: 0 0 $paragraph-margin;
+    padding: 0.5625em 1.25em 0 1.1875em;
+    border-left: 1px solid #ddd;
+}
+
+blockquote,
+blockquote p {
+    line-height: $lineheight-normal;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.quoteblock {
+    margin: 0 1em $paragraph-margin 1.5em;
+    display: table;
+}
+
+.quoteblock:not(.excerpt)>.title {
+    margin-left: -1.5em;
+    margin-bottom: 0.75em;
+}
+
+.quoteblock blockquote,
+.quoteblock p {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 1.15rem;
+    line-height: 1.75;
+    word-spacing: 0.1em;
+    letter-spacing: 0;
+    font-style: italic;
+    text-align: justify;
+}
+
+.quoteblock blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.quoteblock blockquote::before {
+    content: "\201c";
+    float: left;
+    font-size: 2.75em;
+    font-weight: bold;
+    line-height: 0.6em;
+    margin-left: -0.6em;
+    color: $blockquote-big-quote-color;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.quoteblock blockquote>.paragraph:last-child p {
+    margin-bottom: 0;
+}
+
+.quoteblock .attribution {
+    margin-top: 0.75em;
+    margin-right: 0.5ex;
+    text-align: right;
+}
+
+.verseblock {
+    margin: 0 1em $paragraph-margin;
+}
+
+.verseblock pre {
+    font-family: $text-font-family;
+    font-size: 1.15rem;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+}
+
+.verseblock pre strong {
+    font-weight: 400;
+}
+
+.verseblock .attribution {
+    margin-top: 1.25rem;
+    margin-left: 0.5ex;
+}
+
+.quoteblock .attribution,
+.verseblock .attribution {
+    font-size: 0.9375em;
+    line-height: 1.45;
+    font-style: italic;
+}
+
+.quoteblock .attribution br,
+.verseblock .attribution br {
+    display: none;
+}
+
+.quoteblock .attribution cite,
+.verseblock .attribution cite {
+    display: block;
+    letter-spacing: -0.025em;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.quoteblock.abstract blockquote::before,
+.quoteblock.excerpt blockquote::before,
+.quoteblock .quoteblock blockquote::before {
+    display: none;
+}
+
+.quoteblock.abstract blockquote,
+.quoteblock.abstract p,
+.quoteblock.excerpt blockquote,
+.quoteblock.excerpt p,
+.quoteblock .quoteblock blockquote,
+.quoteblock .quoteblock p {
+    line-height: $lineheight-normal;
+    word-spacing: 0;
+}
+
+.quoteblock.abstract {
+    margin: 0 1em $paragraph-margin;
+    display: block;
+}
+
+.quoteblock.abstract>.title {
+    margin: 0 0 0.375em;
+    font-size: 1.15em;
+    text-align: center;
+}
+
+.quoteblock.excerpt>blockquote,
+.quoteblock .quoteblock {
+    padding: 0 0 0.25em 1em;
+    border-left: 0.25em solid #dddddf;
+}
+
+.quoteblock.excerpt,
+.quoteblock .quoteblock {
+    margin-left: 0;
+}
+
+.quoteblock.excerpt blockquote,
+.quoteblock.excerpt p,
+.quoteblock .quoteblock blockquote,
+.quoteblock .quoteblock p {
+    color: inherit;
+    font-size: $p-font-size;
+}
+
+.quoteblock.excerpt .attribution,
+.quoteblock .quoteblock .attribution {
+    color: inherit;
+    font-size: 0.85rem;
+    text-align: justify;
+    margin-right: 0;
+}

@@ -1,0 +1,250 @@
+// Contains all the styles for code listings
+@import "../variables.scss";
+
+code,
+kbd,
+pre,
+.pseudo-pre,
+samp {
+    font-family: $mono-font-family;
+    font-size: 1em;
+}
+
+code {
+    font-family: $mono-font-family;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+.literalblock pre,
+.literalblock .pseudo-pre,
+.listingblock>.content>pre,
+.literalblock .pseudo-pre {
+    border-radius: 4px;
+    overflow-x: auto;
+    padding: 1em;
+    font-size: $code-font-size;
+}
+
+.listingblock .content .pseudo-pre,
+.listingblock .content pre {
+    font-size: $code-font-size
+}
+
+p a>code:hover {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+:not(pre):not(.pseudo-pre):not([class^=L])>code {
+    font-size: 0.9375em;
+    font-style: normal !important;
+    letter-spacing: 0;
+    padding: 0.1em 0.5ex;
+    word-spacing: -0.15em;
+    background: #f7f7f8;
+    border-radius: 4px;
+    line-height: $code-line-height;
+    // Make sure text is the same width whether print or not. 
+    // If not set the text can be different in headless chrome
+    text-rendering: geometricPrecision;
+}
+
+pre,
+.pseudo-pre {
+    color: rgba(0, 0, 0, 0.9);
+    font-family: $mono-font-family;
+    line-height: $code-line-height;
+    // Make sure text is the same width whether print or not. 
+    // If not set the text can be different in headless chrome
+    text-rendering: geometricPrecision;
+}
+
+pre code,
+.pseudo-pre code,
+pre pre {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+pre>code,
+.pseudo-pre>code {
+    display: block;
+}
+
+pre.nowrap,
+pre.nowrap pre {
+    white-space: pre;
+    word-wrap: normal;
+}
+
+.literalblock pre,
+.literalblock .pseudo-pre,
+.listingblock>.content>pre:not(.highlight),
+.listingblock>.content>.pseudo-pre:not(.highlight),
+.listingblock>.content>pre[class=highlight],
+.listingblock>.content>.pseudo-pre[class=highlight],
+.listingblock>.content>pre[class^="highlight "],
+.listingblock>.content>.pseudo-pre[class^="highlight "] {
+    background: #f7f7f8;
+}
+
+.literalblock.output pre,
+.literalblock.output .pseudo-pre {
+    color: #f7f7f8;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.listingblock>.content {
+    position: relative;
+}
+
+.listingblock code[data-lang]::before {
+    display: none;
+    content: attr(data-lang);
+    position: absolute;
+    font-size: 0.75em;
+    top: 0.425rem;
+    right: 0.5rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: inherit;
+    opacity: 0.5;
+}
+
+.listingblock:hover code[data-lang]::before {
+    display: block;
+}
+
+.listingblock.terminal pre .command::before {
+    content: attr(data-prompt);
+    padding-right: 0.5em;
+    color: inherit;
+    opacity: 0.5;
+}
+
+.listingblock.terminal pre .command:not([data-prompt])::before {
+    content: "$";
+}
+
+.listingblock pre.highlightjs,
+.listingblock .pseudo-pre.highlightjs {
+    padding: 0;
+}
+
+.listingblock pre.highlightjs>code,
+.listingblock .pseudo-pre.highlightjs>code {
+    padding: 1em;
+    border-radius: 4px;
+}
+
+.listingblock pre.prettyprint,
+.listingblock .pseudo-pre.prettyprint {
+    border-width: 0;
+}
+
+.prettyprint {
+    background: #f7f7f8;
+}
+
+pre.prettyprint .linenums,
+.pseudo-pre.prettyprint .linenums {
+    line-height: $code-line-height;
+    margin-left: 2em;
+}
+
+pre.prettyprint li,
+.pseudo-pre.prettyprint li {
+    background: none;
+    list-style-type: inherit;
+    padding-left: 0;
+}
+
+pre.prettyprint li code[data-lang]::before,
+.pseudo-pre.prettyprint li code[data-lang]::before {
+    opacity: 1;
+}
+
+pre.prettyprint li:not(:first-child) code[data-lang]::before,
+.pseudo-pre.prettyprint li:not(:first-child) code[data-lang]::before {
+    display: none;
+}
+
+
+table.linenotable {
+    border-collapse: separate;
+    border: 0;
+    margin-bottom: 0;
+    background: none;
+}
+
+table.linenotable td[class] {
+    color: inherit;
+    vertical-align: top;
+    padding: 0;
+    line-height: inherit;
+    white-space: normal;
+}
+
+table.linenotable td.code {
+    padding-left: 0.75em;
+}
+
+table.linenotable td.linenos,
+pre.pygments .linenos {
+    border-right: 1px solid;
+    opacity: 0.35;
+    padding-right: 0.5em;
+    user-select: none;
+}
+
+pre.pygments span.linenos {
+    display: inline-block;
+    margin-right: 0.75em;
+}
+
+
+.conum[data-value] {
+    display: inline-block;
+    color: #fff !important;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.75em;
+    width: 1.67em;
+    height: 1.67em;
+    line-height: 1.67em;
+    font-family: $text-font-family;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.conum[data-value] * {
+    color: #fff !important;
+}
+
+.conum[data-value]+b {
+    display: none;
+}
+
+.conum[data-value]::after {
+    content: attr(data-value);
+}
+
+pre .conum[data-value],
+.pseudo-pre .conum[data-value] {
+    position: relative;
+    top: -0.125em;
+}
+
+b.conum * {
+    color: inherit !important;
+}
+
+.conum:not([data-value]):empty {
+    display: none;
+}

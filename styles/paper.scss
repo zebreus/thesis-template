@@ -1,0 +1,652 @@
+// Contains our fonts
+@import './fonts.scss';
+// Contains the asciidoctor default stylesheets
+@import './default.scss';
+// Contains the default styles for print
+@import './print.scss';
+// Contains variables used to configure the other stylesheets
+@import './variables.scss';
+
+$color-green: #008000;
+$color-red: oklch(0.3 0.12 31.46 / 1);
+
+$content-width: 60ch;
+
+$page-margin-top: 3.05cm;
+$page-margin-right: (
+    3.86cm - 0.39687cm
+);
+$page-margin-bottom: 3.81cm;
+$page-margin-left: (
+    4.26cm - 0.39687cm
+);
+
+@page {
+    size: A4;
+    margin: $page-margin-top $page-margin-right $page-margin-bottom $page-margin-left ;
+}
+
+@page :first {
+    margin-top: 2.4cm;
+}
+
+#preamble~* {
+    page: content
+}
+
+@page content {
+    @bottom-center {
+        content: counter(page);
+        font-size: 0.8rem;
+        padding: 10pt 0 0 0;
+        margin: 10pt 10pt 30pt 10pt;
+        border-top: .1pt solid #d2d2d2;
+    }
+}
+
+.really-slightly-oversized-content>.content {
+    margin-right: -($page-margin-right - 3cm);
+    margin-left: -($page-margin-left - 3cm);
+    text-align: center;
+}
+
+.slightly-oversized-content>.content {
+    margin-right: -($page-margin-right - 2cm);
+    margin-left: -($page-margin-left - 2cm);
+    text-align: center;
+}
+
+.oversized-content>.content {
+    margin-right: -($page-margin-right - 1cm);
+    margin-left: -($page-margin-left - 1cm);
+    text-align: center;
+}
+
+.completly-oversized-content>.content {
+    margin-right: -($page-margin-right);
+    margin-left: -($page-margin-left);
+    text-align: center;
+}
+
+@media print {
+    .listingblock {
+        // TODO: Increase the spacing in the font
+        letter-spacing: 0.03em !important;
+
+        code {
+            letter-spacing: 0.03em !important;
+        }
+
+        code {
+            orphans: 6 !important;
+            widows: 6 !important;
+        }
+
+        .content {
+            margin-left: calc(-1.5cm - 1ch);
+            margin-right: calc(-1.5cm - 1ch);
+        }
+
+        // Extra class for codeblocks that can get up to 100 chars wide
+        &.small_code .content {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        // Extra class for codeblocks that can get up to 100 chars wide
+        &.hundred_max .content {
+            margin-right: calc(-3cm - 1ch);
+            margin-left: calc(-3cm - 1ch);
+        }
+
+        // Extra class for codeblocks that can get up to 100 chars wide
+        &.super_max .content {
+            margin-right: calc(-3cm - 1ch);
+            margin-left: calc(-3cm - 1ch);
+            font-size: 95%;
+        }
+    }
+}
+
+// Fix symbolator fonts
+.kroki svg {
+
+    .fnt2,
+    .fnt2 tspan {
+        font-family: 'Spectral Mono';
+        font-weight: 400;
+        font-size: 0.85rem;
+        fill: black;
+    }
+
+    .fnt1 {
+        font-family: 'Spectral';
+        font-weight: normal;
+        font-size: 1.1rem;
+        font-style: italic;
+        fill: black;
+
+    }
+
+    // Remove background colors
+    rect[fill="#C5DBFB"] {
+        fill: #f7f8f7;
+    }
+
+    rect[fill="#E7FDBA"] {
+        fill: #f7f8f7;
+    }
+
+    rect[fill="#FFAFFD"] {
+        fill: #f7f8f7;
+    }
+}
+
+// Fix wavedrom fonts
+@import './wavedrom_default.scss';
+
+.WaveDrom {
+    padding-right: 2cm !important;
+
+    g#waves_0 {
+
+        // Left labels
+        g>g>text>tspan {
+            font-size: 1.2rem !important;
+            font-family: 'Spectral' !important;
+            fill: black !important;
+        }
+
+        // Top labels and inside waves
+        g>g>g>text>tspan {
+            font-size: 1rem !important;
+
+            font-family: 'Spectral' !important;
+        }
+    }
+}
+
+.imageblock svg .imageblock {
+    .content {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    .title {
+        break-before: avoid;
+        page-break-before: avoid;
+    }
+}
+
+.listingblock {
+    .content {
+        break-before: avoid;
+        page-break-before: avoid;
+        break-inside: auto !important;
+    }
+
+    .title {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+}
+
+@media print {
+    .listingblock .pseudo-pre.highlightjs>code.hljs[data-split-to] {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-style: none;
+    }
+
+    .listingblock .pseudo-pre.highlightjs>code.hljs[data-split-from] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top-style: none;
+    }
+
+    .listingblock.linenums .line-number {
+        opacity: 0.35;
+        user-select: none;
+        pointer-events: none;
+        cursor: not-allowed;
+        -webkit-touch-callout: none;
+    }
+}
+
+
+#main-title {
+    text-transform: none;
+    letter-spacing: 0.02rem;
+}
+
+h1,
+h2,
+h3,
+#toctitle,
+.like-toctitle,
+.sidebarblock>.content>.titled {
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+    word-spacing: 0.2rem;
+}
+
+#_thesis {
+    counter-reset: page 1;
+}
+
+.like-toc,
+#toc {
+    &>ul {
+        margin-left: 0.25rem;
+
+        &>li>a {
+            color: $color-red;
+        }
+
+        &>li>ul {
+            margin-left: 0;
+
+            ul {
+                margin-left: 1.1rem;
+
+                ul {
+                    margin-left: 1.8rem;
+                }
+            }
+        }
+    }
+
+    a {
+        letter-spacing: 0rem;
+        color: $heading-text-color;
+
+        &::after {
+            color: $normal-link-color;
+        }
+    }
+}
+
+span.section-number {
+    margin-right: 0.5rem;
+    font-style: normal;
+    text-transform: uppercase;
+    color: currentColor;
+}
+
+// Add lines to h2
+#toctitle,
+.like-toctitle,
+h2 {
+    break-before: always;
+    font-size: $h2-font-size;
+    margin-bottom: 2.3rem;
+    position: relative;
+
+    &::after {
+        bottom: -1rem;
+        left: 0;
+        content: "";
+        width: 100%;
+        position: absolute;
+        height: 0.5px;
+        background: black;
+    }
+}
+
+#content h1:first-child {
+    color: $color-red;
+    font-size: $h2-font-size * 1.1;
+    font-weight: 400;
+    margin-top: 6.5cm;
+
+    span.section-number {
+        text-transform: none;
+        color: $heading-text-color;
+        display: block;
+        margin: 1rem auto 1.2rem;
+        white-space: nowrap;
+        letter-spacing: 0;
+    }
+}
+
+// Add numbers to h2
+h2 {
+    span.section-number {
+        font-size: 7rem;
+        position: absolute;
+        color: lighten($heading-text-color, 50%);
+        right: -5rem;
+        bottom: -1rem;
+    }
+}
+
+h4,
+h5,
+h6 {
+    font-style: italic;
+}
+
+.logo {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    img {
+        margin-top: 0rem;
+        width: 7.7cm;
+    }
+}
+
+.university {
+    p {
+        text-align: center;
+        font-size: $huge;
+        font-weight: bold;
+        margin-top: 0.1cm;
+        margin-bottom: 0;
+    }
+}
+
+.faculty {
+    p {
+        text-align: center;
+        font-size: $very-large;
+
+        &::before,
+        &::after {
+            content: "\2013";
+            margin: 0.5rem;
+        }
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: $very-large;
+    font-weight: bold;
+    margin: 8rem 0;
+}
+
+.description p {
+    text-align: center;
+    font-size: $large;
+}
+
+.presented-by p {
+    text-align: center;
+    font-size: $large;
+    margin: 6rem 0;
+}
+
+.student p {
+    text-align: center;
+    font-size: $large;
+    font-weight: bold;
+}
+
+.student-id p {
+    text-align: center;
+    font-size: $base-font-size;
+}
+
+.other-people {
+    dl {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        flex-flow: row wrap;
+        border: none;
+        justify-content: center;
+    }
+
+    dt {
+        margin: 0;
+        font-weight: normal;
+    }
+
+    dd {
+        margin: 0;
+
+        ::before {
+            content: ":";
+            margin: 0 0.75rem;
+        }
+    }
+}
+
+// Adds a line where a signature can be written
+.signature-required {
+    width: 40%;
+    margin-right: 0;
+    margin-left: auto;
+
+    &::before {
+        content: "";
+        background: black;
+        width: 100%;
+        height: 1px;
+        display: block;
+        margin-bottom: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    p {
+        text-align: center;
+    }
+}
+
+a.citation {
+    color: $color-green;
+    cursor: pointer;
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+
+    &::before {
+        content: "[";
+        color: $base-text-color;
+    }
+
+    &::after {
+        content: "]";
+        color: $base-text-color;
+    }
+}
+
+a.abbreviation,
+a.abbreviation:hover {
+    background: inherit;
+    color: inherit;
+    font-size: inherit;
+    text-decoration: inherit;
+    cursor: pointer;
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+
+    abbr {
+        cursor: inherit;
+        color: inherit;
+        font-size: inherit;
+        text-decoration-color: #dddddf;
+        text-decoration-style: dashed;
+        text-decoration-line: underline;
+        border-bottom: none;
+    }
+}
+
+a.reference,
+a.reference:hover {
+    color: $color-red;
+    cursor: pointer;
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+
+    text-decoration-color: #dddddf;
+    text-decoration-style: dashed;
+    text-decoration-line: underline;
+    border-bottom: none;
+}
+
+@media print {
+
+    a.hide-in-print,
+    a.hide-in-print:hover,
+    a.hide-in-print:focus {
+        color: inherit;
+        cursor: pointer;
+        -webkit-user-select: text;
+        user-select: text;
+        -webkit-user-drag: none;
+        -webkit-app-region: no-drag;
+
+        text-decoration-style: none;
+        text-decoration-line: none;
+        border-bottom: none;
+    }
+}
+
+ul.bibliography {
+    list-style: none;
+    margin-left: 3rem;
+
+    &>li {
+        break-inside: avoid;
+
+        a:first-child {
+            margin-left: -2rem;
+            position: absolute;
+            left: 0;
+            color: inherit;
+            text-decoration: inherit;
+        }
+    }
+}
+
+// .signature img {
+//     height: 2cm;
+//     margin-left: 1cm;
+//     width: auto;
+// }
+
+// .recipient {
+//     text-align: right;
+//     margin: 1em auto 2em;
+// }
+
+// .main-text {
+//     text-align: justify;
+// }
+
+// .opening,
+// .closing {
+//     margin: 50px 0 20px 0;
+// }
+
+/*
+TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-02-19-toc/
+The page numbering is straightforward and generally works.
+The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
+*/
+// @page {
+//     margin: 1.5cm;
+//     size: A4;
+
+//     @bottom-center {
+//         content: "fdlakdjfdas";
+//         color: green;
+//         background-color: red;
+//         width: 100%;
+//         height: 100%;
+//     }
+// }
+
+// @page {
+//     margin: 1.5cm;
+//     size: A4;
+
+//     @bottom-center {
+//         content: element(bottom-title-block);
+//     }
+// }
+
+// .bottom-title-block {
+//     position: running(bottom-title-block);
+// }
+
+// .page-count::before {
+//     content: counter(page);
+// }
+
+// .page-count::after {
+//     content: counter(pages);
+// }
+
+// table.bottom-title-block {
+//     table-layout: auto;
+//     display: table;
+//     width: 100%;
+// }
+
+// .bottom-title-block {
+//     position: running(bottom-title-block);
+// }
+
+// // completely useless
+// .pagedjs_page .pagedjs_margin-bottom-center {}
+
+// .pagedjs_page .pagedjs_margin-bottom-center>.pagedjs_margin-content>* {
+//     display: table;
+// }
+
+// .contact-us {
+//     width: 6cm;
+//     position: running(runningContact)
+// }
+
+// @page {
+//     margin: 1cm 2cm 4cm 2cm;
+// }
+
+// @page :right {
+//     @bottom-left {
+//         content: element(runningContact)
+//     }
+
+//     @bottom-right {
+//         content: counter(page);
+//         margin: 10pt 10pt 30pt 0;
+//     }
+// }
+
+// @page :left {
+//     @bottom-right {
+//         content: element(runningContact)
+//     }
+
+//     @bottom-left {
+//         content: counter(page);
+//         margin: 10pt 0 30pt 10pt;
+//     }
+// }
+
+
+
+// @page :left {
+//     @bottom-right {
+//         margin: 10pt 0 30pt 0;
+//         border-top: .1pt solid #d2d2d2;
+//     }
+
+//     @bottom-left {
+//         content: counter(page);
+//         font-size: 0.8rem;
+//         padding: 10pt 0 0 0;
+//         margin: 10pt 10pt 30pt 10pt;
+//         border-top: .1pt solid #d2d2d2;
+//     }
+// }

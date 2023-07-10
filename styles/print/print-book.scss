@@ -1,0 +1,37 @@
+// Styles for printing books
+
+@media print {
+    body.book #header {
+        text-align: center;
+    }
+
+    body.book #header>h1:first-child {
+        border: 0 !important;
+        margin: 2.5em 0 1em;
+    }
+
+    body.book #header .details {
+        border: 0 !important;
+        display: block;
+        padding: 0 !important;
+    }
+
+    body.book #header .details span:first-child {
+        margin-left: 0 !important;
+    }
+
+    body.book #header .details br {
+        display: block;
+    }
+
+    body.book #header .details br+span::before {
+        content: none !important;
+    }
+
+    body.book #toc {
+        border: 0 !important;
+        text-align: left !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}

@@ -1,0 +1,217 @@
+// Contains styles for lists
+@import "../variables.scss";
+
+ul,
+ol,
+dl {
+    line-height: $lineheight-normal;
+    margin-bottom: $paragraph-margin;
+    list-style-position: outside;
+    font-family: inherit;
+}
+
+ul,
+ol {
+    margin-left: 1.5em;
+}
+
+ul li ul,
+ul li ol {
+    margin-left: 1.25em;
+    margin-bottom: 0;
+}
+
+ul.circle {
+    list-style-type: circle;
+}
+
+ul.disc {
+    list-style-type: disc;
+}
+
+ul.square {
+    list-style-type: square;
+}
+
+ul.circle ul:not([class]),
+ul.disc ul:not([class]),
+ul.square ul:not([class]) {
+    list-style: inherit;
+}
+
+ol li ul,
+ol li ol {
+    margin-left: 1.25em;
+    margin-bottom: 0;
+}
+
+dl dt {
+    margin-bottom: 0.3125em;
+    font-weight: bold;
+}
+
+dl dd {
+    margin-bottom: $paragraph-margin;
+}
+
+
+
+ol {
+    margin-left: 1.75em;
+}
+
+ul li ol {
+    margin-left: 1.5em;
+}
+
+dl dd {
+    margin-left: 1.125em;
+}
+
+dl dd:last-child,
+dl dd:last-child> :last-child {
+    margin-bottom: 0;
+}
+
+li p,
+ul dd,
+ol dd,
+.olist .olist,
+.ulist .ulist,
+.ulist .olist,
+.olist .ulist {
+    margin-bottom: 0.625em;
+}
+
+ul.checklist,
+ul.none,
+ol.none,
+ul.no-bullet,
+ol.no-bullet,
+ol.unnumbered,
+ul.unstyled,
+ol.unstyled {
+    list-style-type: none;
+}
+
+ul.no-bullet,
+ol.no-bullet,
+ol.unnumbered {
+    margin-left: 0.625em;
+}
+
+ul.unstyled,
+ol.unstyled {
+    margin-left: 0;
+}
+
+li>p:empty:only-child::before {
+    content: "";
+    display: inline-block;
+}
+
+ul.checklist>li>p:first-child {
+    margin-left: -1em;
+}
+
+ul.checklist>li>p:first-child>.fa-square-o:first-child,
+ul.checklist>li>p:first-child>.fa-check-square-o:first-child {
+    width: 1.25em;
+    font-size: 0.8em;
+    position: relative;
+    bottom: 0.125em;
+}
+
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child {
+    margin-right: 0.25em;
+}
+
+ul.inline {
+    display: flex;
+    flex-flow: row wrap;
+    list-style: none;
+    margin: 0 0 0.625em -1.25em;
+}
+
+ul.inline>li {
+    margin-left: 1.25em;
+}
+
+.unstyled dl dt {
+    font-weight: 400;
+    font-style: normal;
+}
+
+ol.arabic {
+    list-style-type: decimal;
+}
+
+ol.decimal {
+    list-style-type: decimal-leading-zero;
+}
+
+ol.loweralpha {
+    list-style-type: lower-alpha;
+}
+
+ol.upperalpha {
+    list-style-type: upper-alpha;
+}
+
+ol.lowerroman {
+    list-style-type: lower-roman;
+}
+
+ol.upperroman {
+    list-style-type: upper-roman;
+}
+
+ol.lowergreek {
+    list-style-type: lower-greek;
+}
+
+
+.hdlist>table,
+.colist>table {
+    border: 0;
+    background: none;
+}
+
+.hdlist>table>tbody>tr,
+.colist>table>tbody>tr {
+    background: none;
+}
+
+td.hdlist1,
+td.hdlist2 {
+    vertical-align: top;
+    padding: 0 0.625em;
+}
+
+td.hdlist1 {
+    font-weight: bold;
+    padding-bottom: $paragraph-margin;
+}
+
+td.hdlist2 {
+    word-wrap: anywhere;
+}
+
+.literalblock+.colist,
+.listingblock+.colist {
+    margin-top: -0.5em;
+}
+
+.colist td:not([class]):first-child {
+    padding: 0.4em 0.75em 0;
+    line-height: 1;
+    vertical-align: top;
+}
+
+.colist td:not([class]):first-child img {
+    max-width: none;
+}
+
+.colist td:not([class]):last-child {
+    padding: 0.25em 0;
+}

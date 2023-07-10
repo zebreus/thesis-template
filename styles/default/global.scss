@@ -1,0 +1,58 @@
+// Styles for body, html, :root and other global elements
+@import "../variables.scss";
+
+html {
+    font-family: $text-font-family;
+    -webkit-text-size-adjust: 100%;
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-size: $base-font-size;
+}
+
+body {
+    background: #fff;
+    color: $base-text-color;
+    padding: 0;
+    margin: 0;
+    font-family: $serif-font-family;
+    line-height: 1;
+    position: relative;
+    cursor: auto;
+    tab-size: 4;
+    word-wrap: anywhere;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+#toctitle,
+.sidebarblock>.content>.title,
+h4,
+h5,
+h6,
+pre,
+form,
+p,
+blockquote,
+th,
+td {
+    margin: 0;
+    padding: 0;
+}

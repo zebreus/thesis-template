@@ -1,0 +1,27 @@
+= Asciidoctor.js thesis template
+
+I recently wrote my bachelors thesis in asciidoc. The biggest reason for doing so was that I wanted to use a typesetting system that I can actually understand. Asciidoc is also far easier to read than documents written in the common typesetting system for scientific writing.
+
+If you just want to start writing, you can go ahead and start in `paper.adoc`. To get a pdf use `make pdf`, to preview the pdf in a browser use `make preview`. You can also generate a website using `make index.html`. You need to have asciidoctor-web-pdf and make and some other things. The easiest way to get them on Linux or Mac is by using the nix package manager and type `nix develop` in the root of this repo.
+
+== Setup
+
+After cloning this repo you can use `nix develop` to enter a shell with all neccessary tools. You should use vscode as your editor, as that has really good support for asciidoc and the settings are preconfigured in this repo. After you open this project in vscode, some extensions will be suggested to you. Install them. They add support for live preview and asciidoc syntax highlighting.
+
+.Install deps without nix
+[%collapsible]
+====
+If you dont use the nix package manager I recommend installing it. That way you are guaranteed to have the same versions of things that were used to create the template. Alternativly you can also install the dependencies manually. You need the following things:
+
+* asciidoctor-js
+* asciidoctor-web-pdf
+* asciidoctor-kroki
+* sass
+* jq
+* gnumake
+* python3 (optional)
+====
+
+== Toolchain
+
+This template is completly based on web technologies, so modifying the template is as easy as modifying any other HTML/CSS website. This is a big 

@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
     python3
     asciidoctor-web-pdf
     asciidoctor-js
-
-    # Utils
+    sass
     gnumake
     nixpkgs-fmt
     nil

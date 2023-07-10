@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "jnoortheen.nix-ide",
+        "asciidoctor.asciidoctor-vscode",
+        "alefragnani.bookmarks",
+        "tintinweb.graphviz-interactive-preview",
+        "csstools.postcss",
+        "randomfractalsinc.vscode-vega-viewer"
+    ]
+}

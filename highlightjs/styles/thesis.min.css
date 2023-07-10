@@ -1,0 +1,64 @@
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code.hljs {
+    padding: 3px 5px
+}
+
+.hljs {
+    color: #111;
+    background: #fefefe;
+    border-color: #888;
+    border-style: dashed;
+    border-width: 1px;
+}
+
+.hljs-addition,
+.hljs-attribute,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-name,
+.hljs-string,
+.hljs-symbol,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-title,
+.hljs-type,
+.hljs-variable {
+    color: oklch(0.3 0.12 31.46 / 1)
+}
+
+.hljs-keyword,
+.hljs-link,
+.hljs-literal,
+.hljs-section,
+.hljs-selector-tag {
+    color: #000
+}
+
+
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta,
+.hljs-quote {
+    color: #555
+}
+
+.hljs-emphasis {
+    font-style: italic
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-literal,
+.hljs-name,
+.hljs-section,
+.hljs-selector-tag,
+.hljs-strong,
+.hljs-title,
+.hljs-type {
+    font-weight: 700
+}

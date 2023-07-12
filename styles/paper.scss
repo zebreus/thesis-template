@@ -30,20 +30,25 @@ $page-margin-left: (
 
 
 // Use these to make figures, listings and tables extend over the margins.
-.slightly-oversized-content>.content {
-    margin-right: -($page-margin-right * 0.25);
-    margin-left: -($page-margin-left * 0.25);
-    text-align: center;
+.listingblock,
+.tableblock,
+.imageblock {
+    &.slightly-oversized>.content {
+        margin-right: -($page-margin-right * 0.25);
+        margin-left: -($page-margin-left * 0.25);
+    }
+
+    &.oversized>.content {
+        margin-right: -($page-margin-right * 0.5);
+        margin-left: -($page-margin-left * 0.5);
+    }
+
+    &.completly-oversized>.content {
+        margin-right: -($page-margin-right * 0.75);
+        margin-left: -($page-margin-left * 0.75);
+    }
 }
 
-.oversized-content>.content {
-    margin-right: -($page-margin-right * 0.5);
-    margin-left: -($page-margin-left * 0.5);
-    text-align: center;
-}
-
-.completly-oversized-content>.content {
-    margin-right: -($page-margin-right * 0.75);
-    margin-left: -($page-margin-left * 0.75);
+.imageblock>.content {
     text-align: center;
 }

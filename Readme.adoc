@@ -14,6 +14,8 @@ If you just want to start writing, you can go ahead and start in `paper.adoc`. T
 
 I recommend using vscode for editing, as it has a good extension for live previewing.
 
+This document focuses on the template and not on general asciidoc syntax. Asciidoc is quite similar to markdown, so you can probably figure it out by looking at the source of this document. I recommend the https://docs.asciidoctor.org/asciidoc/latest/[asciidoc language documentation]. There you can find info on features like https://docs.asciidoctor.org/asciidoc/latest/tables/build-a-basic-table/[tables], https://docs.asciidoctor.org/asciidoc/latest/macros/images/[images] and more.
+
 === Setup
 
 After cloning this repo you can use `nix develop` to enter a shell with all neccessary tools. You should use vscode as your editor, as that has really good support for asciidoc and the settings are preconfigured in this repo. After you open this project in vscode, some extensions will be suggested to you. Install them. They add support for live preview and asciidoc syntax highlighting.
@@ -80,7 +82,6 @@ This template also puts all content into a single file. I strongly believe that 
 
 I already explicitly decided against using bibtex for citations because that makes the whole setup less usable. I pratice I found the default asciidoctor glossary to works really well. Comments for each entry can be added as comments and links to the papers can just be included in the text. This is one of the decisions that worked out really well.
 
-
 == Content
 
 This section is aimed at giving practical examples of how you can do things that are commonly done in scientific writing. For most of them you should be able to find examples in paper.adoc, but I will try to go into more detail here. I will go through my thesis from the start to finish and will explain all the things that are unusual. You should be familiar with asciidoc syntax in general, I recommend skimming the first few chapters of documentation <https://docs.asciidoctor.org/asciidoc/latest/>
@@ -146,6 +147,26 @@ The makefile also inlines csv data into vega-lite charts. The recommended workfl
 The main problem with figures is handling page breaks. If they are to big for a single page, layouting will fail. To mitigate this problem you can explicitly limit the maximum width of a figure by setting width to something like 15cm.
 
 Even if you dont limit the width, the figures cannot be wider than the page without margins. To make a figure, table or image wider the stylesheet includes the classes `slightly-oversized`, `oversized` and `completly-oversized`. They extend the margins for the element by 1/4, 1/2 and 3/4 of the page width respectively.
+
+=== Code listings
+
+Asciidoc supports source listings with syntax highlighting. The template is configured to use highlightjs for syntax highlighting.
+
+Asciidoctor does not support linenumbers when using highlighjs. The template has a `linenums` class that adds linenumbers with CSS and javascript. You can use it like this:
+
+[source,asciidoc]
+-----
+[source.linenums,rust]
+----
+\include::assets/long_rust_listing.rs[tag=function]
+----
+-----
+
+The template also converts code blocks from whitespace-preserving html blocks to divs with explicit linebreaks (`<br>`) and spaces. This mitigates the problem, that pagedjs has trouble with breaking whitespace preserving blocks over multiple pages.
+
+The monospace font that is used for code listings currently only supports ascii characters, unicode is not monospace.
+
+Your code should be not wider than 80 characters. If it is try using the `oversized` classes to avoid unnecessary line breaks.
 
 === Bibliography
 

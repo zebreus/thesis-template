@@ -24,6 +24,13 @@
     "grammarly.config.suggestions.OxfordComma": true,
     "grammarly.config.suggestions.UnnecessaryEllipses": true,
     "grammarly.config.suggestions.PunctuationWithQuotation": false,
+    // Allow the page property in CSS and SCSS
+    "css.lint.validProperties": [
+        "page"
+    ],
+    "scss.lint.validProperties": [
+        "page"
+    ],
     //     "asciidoc.preview.scrollPreviewWithEditor": false,
     //   "asciidoc.preview.scrollEditorWithPreview": false,
 }

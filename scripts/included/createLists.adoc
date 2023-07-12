@@ -60,7 +60,7 @@ let figureInfos = [...document.querySelectorAll(".imageblock")].map(listing => {
 }).filter(({id, title}) => id && title)
 
 if (figureInfos.length){
-let listOfFigures = createTocLookalike("List of Figuress", "ul-of-figures")
+let listOfFigures = createTocLookalike("List of Figures", "ul-of-figures")
 toc.parentNode.insertBefore(listOfFigures, afterToc)
 figureInfos.forEach(figure => insertTableEntry(figure, "figure"))
 }

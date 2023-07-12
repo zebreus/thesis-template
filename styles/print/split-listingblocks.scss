@@ -1,0 +1,44 @@
+// Dont break listing blocks in weird ways
+@media print {
+    .listingblock {
+        // TODO: Increase the spacing in the font
+        letter-spacing: 0.03em !important;
+
+        code {
+            letter-spacing: 0.03em !important;
+        }
+
+        code {
+            orphans: 6 !important;
+            widows: 6 !important;
+        }
+
+        .content {
+            margin-left: calc(-1.5cm - 1ch);
+            margin-right: calc(-1.5cm - 1ch);
+        }
+    }
+}
+
+// Dont draw top and bottom lines when the listing block is split
+@media print {
+    .listingblock .pseudo-pre.highlightjs>code.hljs[data-split-to] {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-style: none;
+    }
+
+    .listingblock .pseudo-pre.highlightjs>code.hljs[data-split-from] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top-style: none;
+    }
+
+    .listingblock.linenums .line-number {
+        opacity: 0.35;
+        user-select: none;
+        pointer-events: none;
+        cursor: not-allowed;
+        -webkit-touch-callout: none;
+    }
+}

@@ -1,0 +1,126 @@
+@import './spectral-mono.scss';
+@import './fix-wavedrom.scss';
+@import './fix-symbolator.scss';
+@import './title-page.scss';
+@import './abbreviation.scss';
+@import './citation.scss';
+@import './reference.scss';
+@import './helper-classes.scss';
+@import './page-counter.scss';
+
+h1,
+h2,
+h3,
+#toctitle,
+.sidebarblock>.content>.titled {
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+    word-spacing: 0.2rem;
+}
+
+#toc {
+    &>ul {
+        margin-left: 0.25rem;
+
+        &>li>a {
+            color: $color-intradoc-links;
+        }
+
+        &>li>ul {
+            margin-left: 0;
+
+            ul {
+                margin-left: 1.1rem;
+
+                ul {
+                    margin-left: 1.8rem;
+                }
+            }
+        }
+    }
+
+    a {
+        letter-spacing: 0rem;
+        color: $heading-text-color;
+
+        &::after {
+            color: $heading-text-color;
+        }
+    }
+}
+
+span.section-number {
+    margin-right: 0.5rem;
+    font-style: normal;
+    text-transform: uppercase;
+    color: currentColor;
+}
+
+// Add lines to h2
+#toctitle,
+h2 {
+    break-before: always;
+    font-size: $h2-font-size;
+    margin-bottom: 2.3rem;
+    position: relative;
+
+    &::after {
+        bottom: -1rem;
+        left: 0;
+        content: "";
+        width: 100%;
+        position: absolute;
+        height: 0.5px;
+        background: black;
+    }
+}
+
+#content h1:first-child {
+    color: $color-titles;
+    font-size: $h2-font-size * 1.1;
+    font-weight: 400;
+    margin-top: 6.5cm;
+
+    span.section-number {
+        text-transform: none;
+        color: $heading-text-color;
+        display: block;
+        margin: 1rem auto 1.2rem;
+        white-space: nowrap;
+        letter-spacing: 0;
+    }
+}
+
+// Add numbers to h2
+h2 {
+    span.section-number {
+        font-size: 7rem;
+        position: absolute;
+        color: lighten($heading-text-color, 50%);
+        right: -5rem;
+        bottom: -1rem;
+    }
+}
+
+h4,
+h5,
+h6 {
+    font-style: italic;
+}
+
+ul.bibliography {
+    list-style: none;
+    margin-left: 3rem;
+
+    &>li {
+        break-inside: avoid;
+
+        a:first-child {
+            margin-left: -2rem;
+            position: absolute;
+            left: 0;
+            color: inherit;
+            text-decoration: inherit;
+        }
+    }
+}

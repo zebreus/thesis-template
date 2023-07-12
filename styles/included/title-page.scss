@@ -1,0 +1,113 @@
+#main-title {
+    text-transform: none;
+    letter-spacing: 0.02rem;
+}
+
+.logo {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    img {
+        margin-top: 0rem;
+        width: 7.7cm;
+    }
+}
+
+.university {
+    p {
+        text-align: center;
+        font-size: $huge;
+        font-weight: bold;
+        margin-top: 0.1cm;
+        margin-bottom: 0;
+    }
+}
+
+.faculty {
+    p {
+        text-align: center;
+        font-size: $very-large;
+
+        &::before,
+        &::after {
+            content: "\2013";
+            margin: 0.5rem;
+        }
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: $very-large;
+    font-weight: bold;
+    margin: 8rem 0;
+}
+
+.description p {
+    text-align: center;
+    font-size: $large;
+}
+
+.presented-by p {
+    text-align: center;
+    font-size: $large;
+    margin: 6rem 0;
+}
+
+.student p {
+    text-align: center;
+    font-size: $large;
+    font-weight: bold;
+}
+
+.student-id p {
+    text-align: center;
+    font-size: $base-font-size;
+}
+
+.other-people {
+    dl {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        flex-flow: row wrap;
+        border: none;
+        justify-content: center;
+    }
+
+    dt {
+        margin: 0;
+        font-weight: normal;
+    }
+
+    dd {
+        margin: 0;
+
+        ::before {
+            content: ":";
+            margin: 0 0.75rem;
+        }
+    }
+}
+
+// Adds a line where a signature can be written
+.signature-required {
+    width: 40%;
+    margin-right: 0;
+    margin-left: auto;
+
+    &::before {
+        content: "";
+        background: black;
+        width: 100%;
+        height: 1px;
+        display: block;
+        margin-bottom: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    p {
+        text-align: center;
+    }
+}

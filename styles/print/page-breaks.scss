@@ -15,6 +15,13 @@ body.book h1.sect0 {
     page-break-after: page
 }
 
+.listingblock .title {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+.listingblock .title,
+.tableblock .title,
 #toctitle,
 .sidebarblock>.content>.title,
 h1,
@@ -33,7 +40,8 @@ div.unbreakable,
 blockquote,
 img,
 object,
-svg {
+svg,
+.imageblock {
     page-break-inside: avoid;
     break-inside: avoid;
 }

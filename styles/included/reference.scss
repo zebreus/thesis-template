@@ -1,0 +1,14 @@
+a.reference,
+a.reference:hover {
+    color: $color-intradoc-links;
+    cursor: pointer;
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+
+    text-decoration-color: #dddddf;
+    text-decoration-style: dashed;
+    text-decoration-line: underline;
+    border-bottom: none;
+}

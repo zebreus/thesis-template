@@ -1,4 +1,27 @@
-// Scoped and less aggressive version of the wavedrom default css
+@import '../variables.scss';
+
+// Makes wavedrom charts match the template style
+.WaveDrom {
+    padding-right: 2cm !important;
+
+    g#waves_0 {
+
+        // Left labels
+        g>g>text>tspan {
+            font-size: 1.2rem !important;
+            font-family: 'Spectral' !important;
+            fill: black !important;
+        }
+
+        // Top labels and inside waves
+        g>g>g>text>tspan {
+            font-size: 1rem !important;
+            font-family: 'Spectral' !important;
+        }
+    }
+}
+
+// Scoped and less aggressive version of the wavedrom default css, as the default gets stripped by a script.
 .WaveDrom {
     text {
         font-family: Spectral
@@ -6,7 +29,7 @@
 
     .s1 {
         fill: none;
-        stroke: #000;
+        stroke: $base-text-color;
         stroke-width: 1;
         stroke-linecap: round;
         stroke-linejoin: miter;
@@ -17,7 +40,7 @@
 
     .s2 {
         fill: none;
-        stroke: #000;
+        stroke: $base-text-color;
         stroke-width: 0.5;
         stroke-linecap: round;
         stroke-linejoin: miter;
@@ -27,9 +50,9 @@
     }
 
     .s3 {
-        color: #000;
+        color: $base-text-color;
         fill: none;
-        stroke: #000;
+        stroke: $base-text-color;
         stroke-width: 1;
         stroke-linecap: round;
         stroke-linejoin: miter;
@@ -44,9 +67,9 @@
     }
 
     .s4 {
-        color: #000;
+        color: $base-text-color;
         fill: none;
-        stroke: #000;
+        stroke: $base-text-color;
         stroke-width: 1;
         stroke-linecap: round;
         stroke-linejoin: miter;
@@ -61,18 +84,19 @@
     }
 
     .s5 {
-        fill: #fff;
+        fill: $background-color;
         stroke: none
     }
 
     .s6 {
-        fill: #000;
+        fill: $base-text-color;
         fill-opacity: 1;
         stroke: none
     }
 
     .s7 {
-        color: #000;
+        color: $base-text-color;
+        // This is expclicitly set to white and not background, I think
         fill: #fff;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -85,7 +109,7 @@
     }
 
     .s8 {
-        color: #000;
+        color: $base-text-color;
         fill: #ffffb4;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -98,7 +122,7 @@
     }
 
     .s9 {
-        color: #000;
+        color: $base-text-color;
         fill: #ffe0b9;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -111,7 +135,7 @@
     }
 
     .s10 {
-        color: #000;
+        color: $base-text-color;
         fill: #b9e0ff;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -124,7 +148,7 @@
     }
 
     .s11 {
-        color: #000;
+        color: $base-text-color;
         fill: #ccfdfe;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -137,7 +161,7 @@
     }
 
     .s12 {
-        color: #000;
+        color: $base-text-color;
         fill: #cdfdc5;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -150,7 +174,7 @@
     }
 
     .s13 {
-        color: #000;
+        color: $base-text-color;
         fill: #f0c1fb;
         fill-opacity: 1;
         fill-rule: nonzero;
@@ -163,7 +187,7 @@
     }
 
     .s14 {
-        color: #000;
+        color: $base-text-color;
         fill: #f5c2c0;
         fill-opacity: 1;
         fill-rule: nonzero;

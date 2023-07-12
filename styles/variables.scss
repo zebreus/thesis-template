@@ -115,3 +115,20 @@ $admonition-important-color: #bf0000;
 // Add a light border between highest level sections
 // Default: true
 $border-between-sections: false;
+
+// The accent color used for most things that need a color
+$color-accent: oklch(0.3 0.12 31.46 / 1);
+// If a title is colored, it will use this color
+// For example figure captions, etc.
+$color-titles: $color-accent;
+// The color used for links to sections, figures, etc.
+// Default: $color-accent
+$color-intradoc-links: $color-accent;
+// The color used for citations
+$color-citations: #008000;
+
+// Use this color, for explicit background colors
+$background-color: #ffffff;
+// Use this color for slightly darker backgrounds
+// e.g. for table headers
+$darker-background-color: #f7f8f7;

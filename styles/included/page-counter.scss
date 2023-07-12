@@ -1,0 +1,13 @@
+#preamble~* {
+    page: content
+}
+
+@page content {
+    @bottom-center {
+        content: counter(page);
+        font-size: 0.8rem;
+        padding: 10pt 0 0 0;
+        margin: 10pt 10pt 30pt 10pt;
+        border-top: .1pt solid #d2d2d2;
+    }
+}

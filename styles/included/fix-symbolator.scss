@@ -1,0 +1,34 @@
+// Fix symbolator diagram fonts and colors
+@import '../variables.scss';
+
+.kroki svg {
+
+    .fnt2,
+    .fnt2 tspan {
+        font-family: 'Spectral Mono';
+        font-weight: 400;
+        font-size: 0.85rem;
+        fill: black;
+    }
+
+    .fnt1 {
+        font-family: 'Spectral';
+        font-weight: normal;
+        font-size: 1.1rem;
+        font-style: italic;
+        fill: black;
+    }
+
+    // Remove background colors
+    rect[fill="#C5DBFB"] {
+        fill: $darker-background-color;
+    }
+
+    rect[fill="#E7FDBA"] {
+        fill: $darker-background-color;
+    }
+
+    rect[fill="#FFAFFD"] {
+        fill: $darker-background-color;
+    }
+}

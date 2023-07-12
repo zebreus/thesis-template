@@ -5,6 +5,10 @@
     "editor.formatOnSave": true,
     "editor.inlineSuggest.enabled": true,
     "asciidoc.extensions.enableKroki": true,
+    "asciidoc.preview.asciidoctorAttributes": {
+        "kroki-server-url": "https://kroki.io",
+        "kroki-default-options": "none"
+    },
 
     "[markdown][asciidoc][plaintext]": {
         "editor.wordWrap": "on",

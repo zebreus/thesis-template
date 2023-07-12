@@ -6,7 +6,7 @@
 // Setup highlight.js to use a local version with a local stylesheet
 :source-highlighter: highlight.js
 :highlightjs-theme: thesis
-:highlightjsdir: highlightjs
+:highlightjsdir: libraries/highlightjs
 // Enable rendering mathequations
 :stem:
 // Generate table of contents at the toc macro
@@ -18,10 +18,13 @@
 // We will build the title page manually for maximum flexibility
 :notitle:
 :title-page: false
-// Prefetch diagrams with kroki
+// Refer to things like "Figure 1" instead of by their name
+:xrefstyle: short
+// Prefetch and inline diagrams with kroki but not in vscode
+ifndef::env-vscode[]
 :kroki-fetch-diagram: true
 :kroki-default-options: inline
-:xrefstyle: short
+endif::env-vscode[]
 
 image::logo_hda.svg[role=logo]
 
@@ -84,13 +87,8 @@ Zebreus
 // Most actual results as a teaser to read the complete thesis.
 
 
-// Motivation
-This thesis explores generating digital circuits from Rust functions.
-Synthesis of these low-level hardware descriptions from specifications written in high-level languages is known as high-level synthesis (HLS). Existing HLS tools primarily focus on older systems programming languages or custom languages for their input specifications. Regarding productivity and useability, Rust provides various benefits over these older systems programming languages. This research uses an existing HLS tool, PandA Bambu, to synthesize specifications written in Rust.  Bambu is an open-source research framework for HLS. The present study takes advantage of the fact that the Rust compiler and Bambu share the same intermediate representations, as they are based on the LLVM compiler infrastructure. No prior study has investigated using existing HLS tools with Rust. 
-
-// Results
-A library for using HLS in RustHDL, a Rust-based hardware definition language, was developed. It was used to generate and test designs from different Rust specifications. In most cases, these designs achieved similar results in terms of size and performance than designs generated from equivalent {cpp} specifications. Most Rust language features are supported for high-level synthesis with Bambu, with the most notable restriction being the disallowance of undefined behavior resulting in program termination (panic). Additionally, this research found that the rust ecosystem can be leveraged and that it is possible to synthesize specifications with dependencies on other crates.
-
+// Generated with chatgpt
+This document presents the Asciidoctor.js thesis template, which offers a versatile and easily understandable alternative to traditional typesetting systems for scientific writing. The template leverages the flexibility of web technologies, allowing seamless design modifications and rendering both PDF and website versions of the thesis. The source document structure resembles markdown, enhancing its readability. This abstract provides an overview of the template's benefits, getting started instructions, toolchain details, customization options using JavaScript, integration of source code listings and syntax highlighting, philosophical considerations behind the design decisions, and a comprehensive guide to using the template's features for scientific writing. Overall, the Asciidoctor.js thesis template provides a user-friendly and efficient approach for creating scientific theses, offering enhanced readability and ease of customization compared to traditional typesetting systems.
 
 // The table of contents gets inserted here.
 toc::[]
@@ -106,6 +104,7 @@ toc::[]
 :listing-caption: Listing
 :partnums:
 
+// Main part starts here
 = Thesis
 
 == Introduction
@@ -122,141 +121,114 @@ An investigation to identify HLS tools compatible with Rust was conducted. A mod
 
 // CAUTION: Rework the start of this section
 
-== State of the art
+== Using figures
 
-It is assumed that the reader has some knowledge of systems programming and the Rust programming language. This section provides an overview of the topics that are relevant to this paper.
+All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text lik <<sample-nomnoml-chart>>, by giving it an id, in this case `sample-nomnoml-chart`.
 
-// // TODO: Write a section on that.
-// // It also provides an overview of the related work that has been done for HLS from Rust.
+.Sample nomnoml chart
+[nomnoml,id=sample-nomnoml-chart]
+....
+[<actor>Jolly;Sailor]
+[Jolly;Sailor]->[Pirate]
+[Jolly;Sailor]->[rum]
 
-// // === Related work
+[Pirate|
+  [beard]--[parrot]
+  [beard]-:>[foul mouth]
+]
+[Pirate]-> *[rum|tastiness: int|swig()]
+[<abstract>Marauder]<:--[Pirate]
 
-// // The only previous report on using Rust as an HLS language focuses on a limited subset of Rust and its formal verification <<Har22>>.
+[<table>mischief| bawl | sing || yell | drink ]
+[Pirate] - 0..7[mischief]
 
-// // === Target platforms
+#gutter: 10
+#lineWidth: 1.25
+#stroke: #000000
+#font: Spectral
+#fill: #f7f8f7; #ffffff; #f7f8f7; #ffffff; #f7f8f7; #ffffff
+....
 
-// // TODO: Maybe custom IC instead of ASIC
+.Source for the section above
+[source,asciidoc]
+----
+All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text lik <<sample-nomnoml-chart>>, by giving it an id, in this case `sample-nomnoml-chart`.
 
+.Sample nomnoml chart
+[nomnoml,id=sample-nomnoml-chart]
+....
+[<actor>Jolly;Sailor]
+[Jolly;Sailor]->[Pirate]
+[Jolly;Sailor]->[rum]
 
-// ==== Short refresher on CPUs
-// CPUs process their instructions one by one. They are purpose-built machines that are carefully designed for processing lots of instructions in sequence. Traditional programming languages reflect this design for the most part. They are designed to make it easy to write programs that can be executed sequentially, one instruction at a time <<Nan16>>.
+[Pirate|
+  [beard]--[parrot]
+  [beard]-:>[foul mouth]
+]
+[Pirate]-> *[rum|tastiness: int|swig()]
+[<abstract>Marauder]<:--[Pirate]
 
-// Two common approaches to parallelism on CPUs include multithreading and vector instructions.
-// TODO 
-// There are approaches to parallelism, but they are either limited to having multiple threads of execution that run from top to bottom simultaneously. Or they have some instructions that perform the same operation on a fixed amount of data elements at the same time.
+[<table>mischief| bawl | sing || yell | drink ]
+[Pirate] - 0..7[mischief]
 
-=== Design using traditional hardware description languages
-// What are common HDLs, and what are they used for
-// TODO: Systema verilog is most common nowadays
-Traditionally, logic design is done in hardware description languages (HDL). The two historically relevant ones are Verilog and VHDL. VHDL has a slightly higher level of abstraction and some features that make it easier to manage bigger projects. Both can be used to model the structure of hardware equally efficiently, so the choice is mostly a matter of personal preference <<Smi96>> <<Soz22>>.
+#gutter: 10
+#lineWidth: 1.25
+#stroke: #000000
+#font: Spectral
+#fill: #f7f8f7; #ffffff; #f7f8f7; #ffffff; #f7f8f7; #ffffff
+....
+----
 
-SystemVerilog is a superset of Verilog which merges Verilog with many of the features found in VHDL. In some ways, the relation between Verilog and SystemVerilog is comparable to the relation between C and {cpp} in terms of features and abstraction. It is the de facto standard HDL nowadays <<Fos15>> <<Soz22>>.
+.Sample wavedrom chart
+[wavedrom,id=sample-wavedrom-chart]
+....
+include::assets/keccak_clang_speed.wavejson.json[]
+....
 
-// What do you describe in HDLs
-// TODO: Citation needed
-HDLs are used to describe circuits in a register-transfer level (RTL) abstraction. On RTL, these languages describe registers that can hold state and the combinational (time-independent) logic that connects them. In HDLs, the registers and combinational logic can be bundled into a module to make it reusable. These modules can then be connected to form a larger circuit. This is the basic structure of an HDL design <<Soz22>>.
+.Source for the wavedrom chart
+[source,asciidoc]
+----
+.Sample wavedrom chart
+[wavedrom,id=sample-wavedrom-chart]
+....
+\include::assets/keccak_clang_speed.wavejson.json[]
+....
+----
 
-// What distinguishes them from programming languages
+To make the chart extend over the margins of the page, add a `slightly-oversized`, `oversized` or `completly-oversized` to the chart.
 
-// What is a typical HDL design flow
-A typical HDL workflow comprises four phases, design, verification, synthesis, and implementation. In the design phase, the circuit is designed in an HDL. The design is then verified in various ways. For verifying the behavior of a design, test benches are defined. These test benches (usually also written in HDL) instantiate the module of the design under test (DUT), exercise the inputs, and verify that the outputs behave as expected. A logic simulator is used to execute the test benches. This is comparable to unit testing in programming languages. After the design is verified, a logic synthesis tool is used to synthesize the design into an optimized gate-level logic description (netlist). A formal equivalence tool can verify that the netlist is equivalent to the original design. In the implementation phase, the netlist is mapped to the target hardware <<Fla20>>. Additional verification can take place in any of these phases.
- 
-// What are the problems with HDLs
-// The use of HDLs is mostly limited to hardware engineers,
+.Source for the section above
+.Sample graphviz graph
+[graphviz.slightly-oversized,id=minmax-speed-cfg,width=570px]
+....
+include::assets/minmax_speed_control_flow.dot[]
+....
 
-// What are the possible solutions
+[source,asciidoc]
+----
+.Sample graphviz graph
+[graphviz.slightly-oversized,id=minmax-speed-cfg,width=570px]
+....
+\include::assets/minmax_speed_control_flow.dot[]
+....
+----
 
+=== vega-lite
 
-=== What is a field-programmable gate arrays
+[source,asciidoc,subs=attributes]
+----
+.Sample vega-lite chart
+:chart-id: id=minmax-area
+:vega-lite-filename: processed-assets/minmax_overview_area.vl.json
+\include::scripts/vega-chart.adoc[]
+----
 
-There are two main target platforms for logic design: field-programmable gate arrays (FPGA) and application-specific integrated circuits (ASIC). FPGAs are off-the-shelf components capable of implementing any digital circuit <<Bot21>>. As the name field programmable gate array implies, they consist of programmable logic gates with programmable connections between them. ASICs are custom integrated circuits designed for a specific purpose. Design costs and time when targeting FPGAs are much lower than for custom circuits. Another benefit of using FPGAs is that the circuit can be upgraded after deployment. The downsides of using FPGAs are lower performance and higher power consumption compared to custom circuits. They are considered compelling options for small to medium-sized projects, as they do not have the high upfront cost of application-specific integrated circuits (ASIC) <<Bot21>><<Nan16>>.
+.thing
 
-// FPGA as a prototyping platform
-So instead of producing the circuit into a chip, it is possible to program an FPGA that emulates the circuit <<Bot21>>. For example, a design describing the logic gates and connections that make up a CPU can be programmed to the FPGA, so it will behave exactly like the CPU and can process the same instructions. This can be used for prototyping because the CPU design can be verified in hardware with external peripherals, like memory and I/O devices. If the design is not specially designed to run well on an FPGA, a 'soft' CPU will perform worse on an FPGA than as an ASIC because of the additional overhead caused by programmable logic instead of fixed logic <<Bal07>>.
-
-In the past, FPGAs were mostly used for prototyping hardware development. This is still the most common use case for FPGAs, but it is not the only one. In recent years the usage of FPGAs as pseudo-general-purpose computational accelerators has become more relevant <<Nan16>>.
-
-
-//  Hardware designers designed a circuit in a hardware description language (HDL) and simulated it as the first stage of verification. If that works, it can be deployed to an FPGA and tested there.
-
-// // FPGA as computational accelerators
-
-// Here you do not use them to prototype circuits that will eventually be taped out but as the final platform. FPGAs used in this context are known as _computational FPGAs_. It is somewhat comparable to the use of GPUs as computing accelerators. But where GPUs excel at tasks that perform the same operations in parallel on massive amounts of data, FPGAs can be used for some kind of computations with irregular parallelism with static structure. In opposition to GPUs, it is not yet clear what an appropriate abstraction for the computational pattern used with computational FPGAs is 
-
-
-// What is an ASIC / Custom accelerator
-// TODO: This is a stub
-// Another solution is to produce a custom chip that implements the operations in hardware.
-
-// What is an FPGA
-// Instead of producing the circuit into a chip, it is possible to program the FPGA to emulate the circuit. FPGAs are off-the-shelf reconfigurable ICs capable of implementing any digital circuit.  Design cost and time with FPGAs are much lower than for custom chips. Another benefit of using FPGAs is that the circuit can be upgraded after deployment. The downsides of using FPGAs are lower performance and higher power consumption compared to custom chips. They are considered compelling options for small to medium-sized projects. Because FPGAs are off-the-shelf components, they don't have the high upfront cost of ASICs <<Bot21>>.
-
-
-// CN: FPGAs are suitable for small to medium-sized projects because they don't have the high upfront cost of ASICs.
-// CN: They use up more space than ASICs, so they are more expensive than the same ASIC produced at high volume.
-
-// TODO: Early FPGA diagram
-// TODO: improve note
-
-
-
-
-// How do basic FPGAs work?
-FPGAs consist of many programmable logic elements (LE) that can represent a simple boolean logic function. Logic elements usually have between 4-6 input bits; the exact number depends on the manufacturer and the model of FPGA. The inputs are used to address a programmable lookup table (LUT). The LUT contains the truth table of the boolean logic function. The output of the LUT is coupled with an output register of the logic element. This way, the LE can also act as a flip-flop (FF) <<Bot21>>.
-
-Multiple logic elements are grouped into a logic block (LB). A logic block provides a local interconnect between the logic elements. This programmable local interconnect can be used to define connections between the inputs of the logic block and the inputs and outputs of the logic elements. The local interconnect is usually realized as a programmable crossbar interconnect <<Bot21>>.
-
-An FPGA is made up of multiple LBs that are connected by global routing. There are multiple ways in which global routing can be realized, but island-style architecture is the most popular. This architecture is based on a two-dimensional grid of horizontal and vertical wires with logic blocks in between. Each logic block has programmable connections to the wires beside it. The horizontal and vertical wires can get connected by programmable switches at their crossings <<Bot21>>.
-
-// TODO: If there is much time left: Insert a figure on island-style architecture
-
-// FPGAs consist of configurable logic blocks (CLB) that are connected by programmable interconnects. The CLBs consist of multiple basic logic elements (BLE) and a local interconnect. At the core of each BLE is a Lookup table (LUT)<<Lah19>> <<Bot21>> 
-
-// How are FPGAs programmed
-// TODO: Citation needed
-All the programmable components are controlled by configuration stored in static RAM (SRAM) cells. FPGAs are programmed with a bitstream that contains the individual bits for every SRAM cell in the correct order <<Bot21>>. They usually have a serial interface where the FPGA can accept the bitstream and program itself. 
-
-// The logic blocks are connected by a network of programmable interconnects. The logic blocks and interconnects are programmed by a bitstream. The bitstream is a binary file that configures the FPGA. The bitstream is generated from a hardware description language (HDL) design <<Bot21>>.
-
-// Explain the concept of the critical path
-Every path that the data takes through the circuit needs a certain amount of time. The longer the path and the more things are in it, the longer it takes to take it. A critical path is a path that must meet certain timing requirements for the design to function properly <<Mic95>>. If the circuit, for example, is clocked, then some actions should probably be finished before the next clock cycle. If they do not finish in time, the clock needs to be slowed down, or the circuit will behave in unexpected ways. For this reason, the slowest critical path limits the maximum frequency <<Bot21>> <<Mic95>>.
-
-// What is the difference in modern FPGAs
-Modern FPGAs improve critical path delay by hardening certain features. Hardening means that a feature is implemented in a fixed way instead of being programmable. Which features are hardened depends on the FPGA model. All modern FPGAs include hardened circuitry for arithmetic operations in their logic blocks. The exact details of the hardening depend on the FPGA model, but it usually involves a fast path for the carry bit between LUTs. This is at least three times faster than an implementation based on pure LUTs <<Bot21>>.
-
-Digital signal processing (DSP) blocks are another common feature of modern FPGAs. They minimize the number of soft logic operations needed to implement common DSP algorithms. Like LBs, they are connected to programmable routing. Depending on the FPGA model, they can be configured to perform operations like multiplication, addition, subtraction, accumulation, and/or multiplication-accumulation in various sizes <<Bot21>> <<Lah19>>.
-
-Bigger hardware designs almost always require a memory buffer. Building a memory buffer out of logic blocks is possible but not very efficient. Modern FPGAs include hardened memory blocks that can be used as memory buffers. They are called block random access memory (BRAM). BRAMs are over 100 times denser than soft memory made from LUTs. BRAMs are about 25% of the area of modern FPGAs <<Bot21>> <<Lah19>>.
-
-// What are the steps to convert an RTL design to an FPGA
-// TODO: Mapping the netlist to the FPGA architecture is called technology mapping. Citation needed
-// T
-
-Converting a register-transfer level (RTL) design to a bitstream is a multi-step process. The first step is synthesis. The RTL design is converted to a structural gate-level description. This is called the netlist.
-The next step consists of mapping the netlist to the block types available on the specific FPGA model. A series of optimizations can also be performed at this stage. After that, the blocks are placed on specific blocks on the FPGA, and the connections between them are routed. Minimizing the routing distance between logic blocks is crucial because routing accounts for over 50% of the critical path delay. The last step is producing a bitstream. At this point, it is known how every part of the FPGA should behave, so the bitstream for the specific FPGA can be generated <<Bot21>>. 
-
-All these steps are performed by a computer-aided design (CAD) tool usually provided by the FPGA vendor. Nearly all FPGA manufacturers integrated these tools into their respective integrated development environments (IDE). Recent developments in the open-source community have led to the development of open-source tools that can perform these steps <<Bar23>>.
-
-NOTE: Different FPGA vendors use different names for the same things <<Lah19>>. This paper uses LB, made of LEs, made of LUTs, and FFs.
-
-// TODO: Mention timing analyzers and shit
-
-
-// How do they compare to ASICs
-
-// Notable FPGA vendors?
-
-// Context of this paper
-
-// === Other types of hardware
-
-// // TODO: This is a stub
-// All hardware design approaches generate a structural gate-level description called netlist, typically in a subset of SystemVerilog. This netlist is then used to generate the actual hardware design in a mostly automated fashion. For different targets, FPGAs, ASICs or 
-
-// How this step actually works depends on what kind of Hardware is targeted, e.g., FPGA, ASIC, or fully custom chips.
-
-// This step is basically manufacturing a design. The focus of this paper is only on design and not on manufacturing; it is not going to go into detail about this step. It is just important to know that a netlist is something that can be manufactured/deployed to an FPGA.
-
+.Sample vega-lite chart
+:chart-id: id=minmax-area
+:vega-lite-filename: processed-assets/minmax_overview_area.vl.json
+include::scripts/vega-chart.adoc[]
 
 === SystemVerilog
 
@@ -1132,25 +1104,13 @@ The LLVM designs optimized for speed all perform quite well, with the Clang desi
 .Trace of the Clang design optimized for speed
 [wavedrom.really-slightly-oversized-content,id="keccak-clang-speed-trace"]
 ....
-include::samples/keccak_clang_speed.wavejson.json[]
+include::assets/keccak_clang_speed.wavejson.json[]
 ....
 
 Surprisingly, the crates.io design, optimized for size, also took the same amount of cycles as the Rust designs optimized for speed. Notably, both crates.io designs perform memory reads during the calculation. These reads appear unrelated to the algorithm and random. <<keccak-crates-speed-trace>> depicts this behaviour. The addresses they try to access are out of bounds, and random values are returned during the tests. These memory accesses do not seem to affect the correctness of the result.
 
-.Trace of the crates.io design optimized for size
-[wavedrom.oversized-content,id="keccak-crates-speed-trace"]
-....
-include::samples/keccak_crates_speed.wavejson.json[]
-....
-
 // TODO: Attach snippet from the traces
 The remaining designs require significantly more cycles, earning them the classification of _slow_ designs. The disparity between the fastest and slowest slow designs is approximately a factor of 10. The fastest slow design is 50 times slower than the slowest fast design. While the fast designs load all values in the beginning and store them when they are done, the slow designs constantly read and write the values in memory. The trace for the GCC design optimized for speed (<<keccak-gcc-speed-trace>>) shows that it constantly performs memory accesses. This behavior is representative of the other slow designs. How much of the calculations are performed on external memory seems to dictate the exact cycle count.
-
-.Clipped trace of the GCC design optimized for speed
-[wavedrom.slightly-oversized-content,id="keccak-gcc-speed-trace"]
-....
-include::samples/keccak_gcc_speed.wavejson.json[]
-....
 
 // Speculation
 It is likely that the designs optimized for size keep the split into the five functions (`theta`, `rho`, `pi`, `chi`, and `iota`) as it is usually smaller for a CPU program to be separated into multiple functions. As Bambu performs HLS on a per-function level, it might be unable to share internal memory between them.
@@ -2118,12 +2078,6 @@ impl Logic for Minmax {
 }
 ----
 
-// TODO: Make sure this graph is displayed correctly,
-.Simplified CFG of the LLVM IR of minmax Rust speed
-[graphviz.slightly-oversized-content,id=minmax-speed-cfg,opts=inline,width=15cm]
-----
-include::samples/minmax_speed_control_flow.dot[]
-----
 
 // Reference thesis:
 // * https://webthesis.biblio.polito.it/7573/1/tesi.pdf

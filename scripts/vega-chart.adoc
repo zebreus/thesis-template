@@ -1,0 +1,178 @@
+ifndef::env-vscode[]
+:env-not-vscode: 
+endif::env-vscode[]
+ifndef::env-web-pdf[]
+:env-not-web-pdf:
+endif::env-web-pdf[]
+ifdef::backend-html5+env-not-vscode+env-not-web-pdf[]
+:vega-as-script:
+endif::backend-html5+env-not-vscode+env-not-web-pdf[]
+
+// :vega-lite-filename: The file name of the vega-lite specification
+// :vega-theme: The vega theme to use. See https://github.com/vega/vega-themes
+// :vega-hide-actions: Set this to hide action links included with the embedded view.
+
+
+
+ifndef::vega-lite-filename[]
+[IMPORTANT]
+.Missing source file for vega chart
+====
+You need to defined the source file as `:vega-lite-filename:`
+
+.Example:
+----
+:vega-lite-filename: my-chart.vl.json
+\include::vega-lite.adoc[]
+----
+====
+
+++++
+<script>
+  const vegaError = 'Missing source file for vega chart. You need to defined the source file as `:vega-lite-filename:`';
+  console.error(vegaError);
+</script>
+++++
+endif::vega-lite-filename[]
+
+ifdef::vega-lite-filename[]
+ifdef::vega-as-script[]
+
+[{chart-id},.vega-js-chart]
+:allow-uri-read: true
+image::data:image/gif;base64,R0lGODlhAQABAAAAACw=[]
+
+[subs="attributes"]
+++++
+    <script>
+      if(
+        !document.vegaLoaded &&
+        document.querySelector('script[src="https://cdn.jsdelivr.net/npm/vega@5.22.1"]') &&
+        document.querySelector('script[src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"]') &&
+        document.querySelector('script[src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"]')
+      ){
+        document.vegaLoaded = Promise.resolve();
+      }
+      
+      if(!document.vegaLoaded) {
+        console.log('Loading vega dynamically. Consider adding');
+        console.log('<script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"><\/script>\n<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"><\/script>\n<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"><\/script>');
+        console.log('to docinfo.html');
+        var scriptA = document.createElement('script');
+        scriptA.type = 'text/javascript';
+        scriptA.src = 'https://cdn.jsdelivr.net/npm/vega@5.22.1';    
+        var scriptB = document.createElement('script');
+        scriptB.type = 'text/javascript';
+        scriptB.src = 'https://cdn.jsdelivr.net/npm/vega-lite@5.6.0';    
+        var scriptC = document.createElement('script');
+        scriptC.type = 'text/javascript';
+        scriptC.src = 'https://cdn.jsdelivr.net/npm/vega-embed@6.21.0';    
+
+        document.vegaLoaded = Promise.all([
+          new Promise((resolve, reject) => {
+            scriptA.onload = () => {
+              document.head.appendChild(scriptB);
+              resolve();
+            };
+            scriptA.onerror = reject;
+          }),
+          new Promise((resolve, reject) => {
+            scriptB.onload = () => {
+              document.head.appendChild(scriptC);
+              resolve();
+            };
+            scriptB.onerror = reject;
+          }),
+          new Promise((resolve, reject) => {
+            scriptC.onload = resolve;
+            scriptC.onerror = reject;
+          })]
+        );
+
+        document.head.appendChild(scriptA);
+      }
+
+      if(!document.styleInserted) {
+        document.styleInserted = true;
+        var style = document.createElement('style');
+        style.innerHTML = `
+        #vg-tooltip-element table {
+          background: unset;
+          margin-bottom: unset;
+          border: unset;
+          word-wrap: unset;
+        }
+        #vg-tooltip-element table td, #vg-tooltip-element table th, #vg-tooltip-element table tr {
+          line-height: unset;
+          padding: unset;
+        }
+        `;
+        document.head.appendChild(style);
+      }
+
+     (() => {
+      const thisScript = document.currentScript;
+      
+
+      // Assign the specification to a local variable vlSpec.
+      const vlSpec =
+
+include::../{vega-lite-filename}[]
+
+      ;
+
+      const waitForElm = (selector) => {
+          return new Promise(resolve => {
+              if (document.querySelector(selector)) {
+                  return resolve(document.querySelector(selector));
+              }
+
+              const observer = new MutationObserver(mutations => {
+                  if (document.querySelector(selector)) {
+                      resolve(document.querySelector(selector));
+                      observer.disconnect();
+                  }
+              });
+
+              observer.observe(document.body, {
+                  childList: true,
+                  subtree: true
+              });
+          });
+      }
+
+      const hideActions = "{vega-hide-actions}".includes("vega-hide-actions") ? false : true;
+      const theme = "{vega-theme}".includes("vega-theme") ? "powerbi" : "{vega-theme}";
+      const downloadFileName = "{vega-lite-filename}".includes("vega-lite-filename") ? "visualization" : "{vega-lite-filename}".split(".")[0];
+      const container = thisScript.previousElementSibling.querySelector(".content");
+      container.style = "display: flex; justify-content: center; break-inside: avoid;";
+      container.classList.add("diagram");
+      container.innerHTML = "";
+      const containerId = new Array(20).fill().map(() => Math.random().toString(36)[2]).join('').replace(/[^a-z]/g, '');
+
+      waitForElm(`#${containerId}`).then((container) => {
+        (async () => {
+          await document.vegaLoaded;
+          vegaEmbed(`#${containerId}`, vlSpec, {
+            actions: !hideActions,
+            theme: theme,
+            downloadFileName
+          });
+        })();
+      });
+
+      container.id = containerId;
+
+      })();
+    </script>
+++++
+endif::vega-as-script[]
+ifndef::vega-as-script[]
+// Embed the script with asciidoctor-kroki if we are running in vscode
+[vegalite.completly-oversized-content,{chart-id}]
+....
+include::../{vega-lite-filename}[]
+....
+:chart-id:
+endif::vega-as-script[]
+endif::vega-lite-filename[]

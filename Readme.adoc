@@ -115,6 +115,37 @@ This template includes a script to generate indices for figures, tables, listing
 
 Asciidoctor can number sections, figures, tables and listings automatically. This template uses that feature.
 
+=== Figures
+
+`asciidoctor-kroki` is used for figures. On https://kroki.io you can interactivly try out all diagram types that are available. The diagrams are inserted as inline SVGs, this way they can be styled with CSS. This way figures can have the same font as the rest of the document.
+
+If you want to insert a figure that is not supported by kroki, just use an image.
+
+==== Vega-lite
+
+The template includes a special script for vega-lite figures. It renders them with vega-embed when building a web version and uses kroki for PDFs. This way the figures in the web version are interactive. 
+
+.Using vega-lite figures
+[source,asciidoc]
+----
+:chart-id: id=minmax-area
+:vega-lite-filename: processed-assets/minmax_overview_area.vl.json
+include::vega-chart.adoc[]
+----
+
+The makefile also inlines csv data into vega-lite charts. The recommended workflow for charts with CSV data is as follows:
+
+1. Place your CSV data in the `assets` directory
+2. Create a vega-lite chart with the data in the `assets` directory as a `.vl.json` file
+3. Use the vscode extension for vega-lite to design the chart with a preview
+4. Include the chart as shown above in your document. Important to use the `processed-assets` directory and not the `assets` directory.
+5. When you `make` the document, CSV will be inlined and the file will be placed in processed-assets
+
+==== Troubleshooting figures
+
+The main problem with figures is handling page breaks. If they are to big for a single page, layouting will fail. To mitigate this problem you can explicitly limit the maximum width of a figure by setting width to something like 15cm.
+
+Even if you dont limit the width, the figures cannot be wider than the page without margins. To make a figure, table or image wider the stylesheet includes the classes `slightly-oversized`, `oversized` and `completly-oversized`. They extend the margins for the element by 1/4, 1/2 and 3/4 of the page width respectively.
 
 === Bibliography
 

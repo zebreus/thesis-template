@@ -23,18 +23,18 @@ index.html: paper.adoc paper.css $(TARGETS_WITHOUT_HTML)
 paper.pdf: paper.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
 	$(ASCIIDOCTOR_WEB_PDF) paper.adoc -o paper.pdf
 
-# ALL_DATA_JSON = experiments/all_data.json
+# Preprocess vega charts
 
-# VEGA_CHART_FILES = $(shell find charts -name '*.json')
-# VEGA_DATA_FILES = $(shell find data -type f -name '*.csv') data/minmax_overview.csv
-# PROCESSED_CHARTS = $(addprefix processed-charts/,$(notdir $(VEGA_CHART_FILES)))
+VEGA_CHART_FILES = $(shell find assets -name '*.vl.json')
+VEGA_DATA_FILES = $(addprefix assets/,$(shell grep -Poh "[^\"]+.csv" $(VEGA_CHART_FILES) /dev/null | sort | uniq))
+PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 
-# process-charts: $(PROCESSED_CHARTS)
+process-charts: $(PROCESSED_CHARTS)
 
-# $(PROCESSED_CHARTS) : processed-charts/%.vl.json : charts/%.vl.json $(VEGA_DATA_FILES)
-# 	mkdir -p $(dir $@)
-# 	bash process_chart.sh $< > $@
-# 	touch $@
+$(PROCESSED_CHARTS) : processed-assets/%.vl.json : assets/%.vl.json $(VEGA_DATA_FILES)
+	mkdir -p $(dir $@)
+	bash scripts/process_chart.sh $< > $@
+	touch $@
 
 # data:
 # 	cd experiments && make data

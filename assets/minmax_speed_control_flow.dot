@@ -1,0 +1,19 @@
+digraph "LLVM CFG for minmax function optimized for speed" {
+    node [fontname = "Spectral Mono, monospace";];
+    Node0x4ec4d0 [shape = record;color = "#3d50c3ff";style = filled;fillcolor = "#ead5c970";label = "{start:\l  …\l|{<s0>LENGTH IS NOT 0|<s1>LENGTH IS 0}}";];
+    Node0x4ec4d0:s0 -> Node0x4ecbb0;
+    Node0x4ec4d0:s1 -> Node0x4ecc30;
+    Node0x4ecbb0 [shape = record;color = "#3d50c3ff";style = filled;fillcolor = "#d9dce170";label = "{bb2.preheader:                                    \l  …\l|{<s0>LESS THAN 4 ELEMENTS |<s1>4 OR MORE ELEMENTS}}";];
+    Node0x4ecbb0:s0 -> Node0x4ecf60;
+    Node0x4ecbb0:s1 -> Node0x4ed1d0;
+    Node0x4ecf60 [shape = record;color = "#3d50c3ff";style = filled;fillcolor = "#d9dce170";label = "{bb4.loopexit.unr-lcssa:                           \l  …\l|{<s0>ALL ELEMENTS COMPARED|<s1>SOME ELEMENTS REMAIN}}";];
+    Node0x4ecf60:s0 -> Node0x4ecc30;
+    Node0x4ecf60:s1 -> Node0x4edeb0;
+    Node0x4edeb0 [shape = record;color = "#b70d28ff";style = filled;fillcolor = "#b70d2870";label = "{bb2.epil:                                         \l  …\l  %indvars.iv.next.epil = add nuw nsw i64 %indvars.iv.epil, 1\l  %3 = getelementptr inbounds i32, ptr %numbers, i64 %indvars.iv.epil\l  %_14.epil = load i32, ptr %3, align 4, !noundef !2\l  %4 = tail call i32 @llvm.smax.i32(i32 %_14.epil, i32 %local_max.026.epil)\l  %5 = tail call i32 @llvm.smin.i32(i32 %_14.epil, i32 %local_min.025.epil)\l  …\l|{<s0>NO ELEMENTS REMAIN|<s1>SOME ELEMENTS REMAIN}}";];
+    Node0x4edeb0:s0 -> Node0x4ecc30;
+    Node0x4edeb0:s1 -> Node0x4edeb0;
+    Node0x4ecc30 [shape = record;color = "#3d50c3ff";style = filled;fillcolor = "#ead5c970";label = "{bb4:                                              \l  …\l}";];
+    Node0x4ed1d0 [shape = record;color = "#b70d28ff";style = filled;fillcolor = "#c5333470";label = "{bb2:                                              \l  …\l  %indvars.iv.next = or i64 %indvars.iv, 1\l  %6 = getelementptr inbounds i32, ptr %numbers, i64 %indvars.iv\l  %_14 = load i32, ptr %6, align 4, !noundef !2\l  %7 = tail call i32 @llvm.smax.i32(i32 %_14, i32 %local_max.026)\l  %8 = tail call i32 @llvm.smin.i32(i32 %_14, i32 %local_min.025)\l  %indvars.iv.next.1 = or i64 %indvars.iv, 2\l  %9 = getelementptr inbounds i32, ptr %numbers, i64 %indvars.iv.next\l  %_14.1 = load i32, ptr %9, align 4, !noundef !2\l  %10 = tail call i32 @llvm.smax.i32(i32 %_14.1, i32 %7)\l  %11 = tail call i32 @llvm.smin.i32(i32 %_14.1, i32 %8)\l  %indvars.iv.next.2 = or i64 %indvars.iv, 3\l  %12 = getelementptr inbounds i32, ptr %numbers, i64 %indvars.iv.next.1\l  %_14.2 = load i32, ptr %12, align 4, !noundef !2\l  %13 = tail call i32 @llvm.smax.i32(i32 %_14.2, i32 %10)\l  %14 = tail call i32 @llvm.smin.i32(i32 %_14.2, i32 %11)\l  %indvars.iv.next.3 = add nuw nsw i64 %indvars.iv, 4\l  %15 = getelementptr inbounds i32, ptr %numbers, i64 %indvars.iv.next.2\l  %_14.3 = load i32, ptr %15, align 4, !noundef !2\l  %16 = tail call i32 @llvm.smax.i32(i32 %_14.3, i32 %13)\l  %17 = tail call i32 @llvm.smin.i32(i32 %_14.3, i32 %14)\l  …\l|{<s0>LESS THAN 4 REMAIN|<s1>4 OR MORE REMAIN}}";];
+    Node0x4ed1d0:s0 -> Node0x4ecf60;
+    Node0x4ed1d0:s1 -> Node0x4ed1d0;
+}

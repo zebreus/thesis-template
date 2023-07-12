@@ -1,0 +1,101 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Estimated area",
+  "data": {
+    "url": "./minmax_overview.csv"
+  },
+  "config": { "font": "Spectral, sans-serif" },
+  "autosize": "none",
+  "padding": { "left": 50, "top": 20, "right": 50, "bottom": 60 },
+  "width": 300,
+  "height": 165,
+  "encoding": {
+    "x": {
+      "field": "Scenario",
+      "type": "nominal",
+      "axis": {
+        "labelAngle": 45
+      },
+      "title": null,
+      "scale": {
+        "padding": 0.6
+      }
+    },
+    "y": {
+      "field": "Optimized for",
+      "type": "nominal",
+      "scale": {
+        "padding": 0.55
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "tooltip": true,
+        "stroke": "black"
+      },
+      "encoding": {
+        "size": {
+          "field": "Area",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "range": [
+              0,
+              5000
+            ]
+          }
+        },
+        "color": {
+          "legend": null,
+          "field": "color",
+          "type": "nominal",
+          "scale": {
+            "range": {
+              "field": "color"
+            }
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Setup"
+          },
+          {
+            "field": "Area",
+            "type": "quantitative"
+          }
+        ],
+        "strokeWidth": {
+          "condition": [
+            {
+              "param": "hover",
+              "empty": false,
+              "value": 0.5
+            }
+          ],
+          "value": 0
+        }
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "on": "mouseover"
+          }
+        }
+      ]
+    },
+    {
+      "mark": "text",
+      "encoding": {
+        "text": {
+          "field": "Area",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "signal": [
+    { "name": "clock",       "wave": "p..|..|..|..." },
+    { "name": "start_port",  "wave": "010|..|..|..." },
+    { "name": "done_port",   "wave": "0..|..|..|.10" },
+    { "name": "Mout_oe_ram", "wave": "01.|.0|..|..." },
+    { "name": "Mout_we_ram", "wave": "0..|..|.1|.0." }
+  ],
+  "head": {
+    "tick": "0 1 2 3 24 25 26 49 50 51 74 75 76 77 "
+  }
+}

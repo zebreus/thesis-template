@@ -26,7 +26,7 @@ ifndef::env-vscode[]
 :kroki-default-options: inline
 endif::env-vscode[]
 
-image::logo_hda.svg[role=logo]
+image::../assets/logo_hda.svg[role=logo]
 
 [.university.text-center]
 Darmstadt University of Applied Sciences
@@ -35,7 +35,7 @@ Darmstadt University of Applied Sciences
 Faculty of Computer Science
 
 [discrete#main-title]
-= Is high-level synthesis from Rust possible using existing tools?
+= Writing a scientific paper in AsciiDoc
 
 [.description.text-center]
 Submitted in partial fulfillment of the requirements for the degree of +

@@ -201,3 +201,50 @@ The glossary should be the first section after the main text.
 
 === Bibliography
 
+This template uses the https://docs.asciidoctor.org/asciidoc/latest/sections/bibliography/[built-in bibliography support] of asciidoctor. It is relativly basic, but I found it to work really well in practice.
+
+The bibliography is basically a normal list in a special bibliography section. The first thing in each entry is the citation key, which is used to reference the entry in the text. You are free to choose any string. I prefer the three letters of the main authors surname followed by the year of publication.
+
+For scientific publications I put the full names of all authors, seperated by commas into the first line. In the second line I add the title of the paper in italics. In the third line I add the journal or conference name or any other information about what gives the source credibility. In the fourth line I add the doi with an attached hyperlink to `doi.org`. After the doi a 📁 icon with a link to the unpaywalled PDF is added. If there is no unpaywalled PDF, the 📁 icon is omitted.
+
+For internet sources without a doi, the journal line is replaced with information about when the site was accessed. The doi line is replaced with a link to the website. The autors are more freestyle for internet sources, I try to find the real author on the website, but if I cant find one I just use the name of the website. It would probably be smart to link a archive.org version of the source instead of the live website.
+
+When using vscode you can ctrl+click on the links in your editor to get to the source. I usually add all the facts that are I am referencing from a source into a comment above the bibliography entry. This way I can quickly check if I am referencing the correct source.
+
+The bibliography sections goes after the glossary.
+
+.Bibliography example
+[source,asciidoc]
+----
+[bibliography]
+== References
+
+// Claims to have a transpiler from a subset of Rust (RAR) to restricted algorithmic C (RAC) that can be synthesized to FPGA. No source.
+// The first paper to mention HLS from Rust. 
+* [[[Har22]]]
++David Hardin+ +
+_Hardware/Software Co-Assurance using the Rust Programming Language and ACL2_ +
+arXiv preprint +
+link:pass:[https://doi.org/10.48550/arXiv.2205.11709][10.48550/arXiv.2205.11709^]
+link:pass:[https://arxiv.org/abs/2205.11709v1][📁^]
+
+// Includes many optimizations
+// Makes it easy to integrate new transformations and optimizations
+// Is open-source
+// Bambu is a command line tool
+// Supports most C/{cpp} constructs
+* [[[Fer21]]]
++Fabrizio Ferrandi, Vito Giovanni Castellana, Serena Curzel, Pietro Fezzardi, Michele Fiorito, Marco Lattuada, Marco Minutoli, Christian Pilato, Antonino Tumeo+ +
+_Invited: Bambu: an Open-Source Research Framework for the High-Level Synthesis of Complex Applications_ +
+ACM/IEEE Design Automation Conference +
+link:pass:[https://doi.org/10.1109/DAC18074.2021.9586110][10.1109/DAC18074.2021.9586110^]
+link:pass:[https://re.public.polimi.it/retrieve/668507/dac21_bambu.pdf][📁^]
+----
+
+=== Citations
+
+You can cite the bibliography entries just like references to sections or figures (`<<Fer21>>`). They will be styled differently than other references and link to the bibliography entry.
+
+=== Footnotes
+
+We dont do them.

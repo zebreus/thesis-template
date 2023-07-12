@@ -53,10 +53,6 @@ Second Examiner:: Prof. Dr. Another Person
 
 <<<
 
-
-
-<<<
-
 [discrete]
 == Declaration
 
@@ -110,19 +106,14 @@ toc::[]
 
 == Introduction
 
-The popularity of the Rust programming language is rising, and it is one of the most admired programming languages <<Sta16>> <<Sta20>> <<Sta23>> <<Bug22>>. It integrates modern tooling like standardized dependency management, testing, documentation generation, formatting, and building. In the future, adoption will probably increase further, and it could replace {cpp} as the most common systems programming language <<Bug22>>.
-Rust also provides benefits in domains other than systems programming. It has been shown that Rust can be used for other fields such as GPU programming, web development, or logic programming <<Sah22>> <<Byc22>> <<Kyr22>>. These fields profit from some of the benefits of Rust, like guaranteed memory safety and improved productivity  <<Bug22>> <<Cos19>>.
+Scientific writing plays a vital role in conveying research findings and academic knowledge. As traditional typesetting systems for scientific documents can be complex, there is a growing interest in alternative approaches that prioritize flexibility, readability, and ease of use. The Asciidoctor.js thesis template offers a comprehensive framework for creating well-structured and visually appealing theses. By leveraging web technologies, this template allows for seamless design modifications and facilitates the generation of PDF and website versions. In this introduction, we will explore the key features, benefits, and practical considerations of the Asciidoctor.js thesis template, highlighting its potential to revolutionize scientific writing.
+// Thx chatgpt
 
-This paper explores how Rust can be used in FPGA firmware development. Usually, FPGA firmware is developed in a hardware description language (HDL) such as Verilog or VHDL. In these languages, the programmer has to describe the hardware in detail. This low-level approach can lead to efficient designs but is quite time-consuming <<Mil20>>. The RustHDL project facilitates expressing hardware descriptions in Rust similar to traditional HDLs <<Smi21>>. In addition to manually designing hardware in an HDL, it is also possible to use high-level synthesis (HLS) to generate hardware descriptions in HDLs from an algorithmic description written in high-level programming languages. Typically systems programming languages are used for writing these specifications. This increases productivity at the cost of slightly less optimized designs <<Mil20>>. There are multiple HLS tools available that can synthesize HDL descriptions from {cpp} code. Some of these tools are based on the LLVM compiler infrastructure <<Nan16>>. The only previous report on using Rust as an HLS language focuses on a limited subset of Rust and its formal verification <<Har22>>. 
+== Figures, tables and listings
 
-// As Rust is also based on LLVM, it can be used with these tools too. 
+Figures tables and listings are automatically numbered and added to their respective list after the table of contents.
 
-// To determine the feasibility of utilizing Rust as a source language for High-Level Synthesis (HLS).
-An investigation to identify HLS tools compatible with Rust was conducted. A modular approach was developed to seamlessly integrate HLS tools with RustHDL. By employing this approach, a proof-of-concept integration with the PandA Bambu HLS framework was achieved, demonstrating the feasibility of using Rust as a source language for HLS. The performance of designs generated from various algorithms was compared with that of designs generated from algorithmically equivalent {cpp} code. The evaluation showed that, in most cases, the Rust-based workflow produced designs with similar characteristics to those derived from {cpp}-based workflows.
-
-// CAUTION: Rework the start of this section
-
-== Using figures
+=== Using figures
 
 All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text lik <<sample-nomnoml-chart>>, by giving it an id, in this case `sample-nomnoml-chart`.
 
@@ -214,11 +205,11 @@ include::assets/minmax_speed_control_flow.dot[]
 ....
 ----
 
-=== vega-lite
+==== Data driven charts
 
 Vega-lite is the preferred way to display any data-driven charts. You use the included `vega-chart.adoc` script to include vega-lite charts. It detects if the document is currently built for a browser or as a PDF. If the document is built for a browser, it will include the chart directly via the vega javascript library. That way the chart supports tooltips and other interactive features.
 
-[source.completly-oversized,asciidoc,subs=attributes]
+[source,asciidoc]
 ----
 .Sample vega-lite chart
 :chart-id: id=minmax-area
@@ -231,7 +222,7 @@ Vega-lite is the preferred way to display any data-driven charts. You use the in
 :vega-lite-filename: processed-assets/minmax_overview_area.vl.json
 include::scripts/vega-chart.adoc[]
 
-== Using source listings
+=== Using source listings
 
 Asciidoc also supports source listings. A short verilog listing is shown in <<short-verilog-listing>>.
 
@@ -262,7 +253,7 @@ include::assets/long_rust_listing.rs[tag=function]
 
 Your code should be not wider than 80 characters. If it is try using the `oversized` classes to avoid unnecessary line breaks.
 
-== Using tables
+=== Using tables
 
 Asciidoc supports tables. A simple table is shown in <<somewhat-complex-table>>.
 
@@ -306,7 +297,7 @@ Asciidoc supports tables. A simple table is shown in <<somewhat-complex-table>>.
 Asciidoc supports referencing other parts of the document. To reference other parts of the document, you can use the `<<id>>` syntax. The template styles them like this:
 <<somewhat-complex-table>> and <<short-verilog-listing>> and <<sample-wavedrom-chart>> and <<_using_figures>> and <<invalid-reference>>
 
-== Using abbreviations
+=== Using abbreviations
 
 When you first use abbreviations you should introduce them like: field-programmable gate array (FPGA). You should also add them to the <<_list_of_abbreviations>>. Every abbreviation added to that list will automatically be linked when it is used in the document. 
 
@@ -316,7 +307,7 @@ I also recommend adding a link to a more detailed web source like wikipedia to e
 
 To see an example for a list of abbreviations, look at the source for <<_list_of_abbreviations>>.
 
-== Citations and bibliography
+=== Citations and bibliography
 
 This template uses the built-in bibliography support of asciidoctor. It is relativly basic, but I found it to work really well in practice. The Readme goes into more detail how you can structure your bibliography, alternativly you can directly look into the source of this document.
 
@@ -325,24 +316,19 @@ To cite a source just reference it like a figure, table or section. References t
 .Example
 The Rust programming language <<Kla23>> is a modern systems programming language. It is the most loved programming languag of the last years <<Sta16>> <<Sta20>> <<Sta23>>. On an unrelated note, Microsoft uses FPGAs to accelerate their Bing search engine <<Nan16>> and bambu <<Fer21>> is a framework for HLS. I dont think Microsoft uses bambu for their FPGAs, they probably use the SystemVerilog, the most common language for hardware design <<Soz22>>.
 
+=== Referencing things from the appendix
+
+Just add an extra chapter named Appendix after the references and dump your figures and whatnot there. You can reference them like any other figure. <<extra-long-rust-listing>> was banished into the appendix, because I needed to put something there as an example.
+
+== Conclusion
+
+In conclusion, the Asciidoctor.js thesis template offers a flexible, readable, and user-friendly approach to scientific writing. By leveraging web technologies, the template enables easy customization and modification of the document's design. The inclusion of interactive figures using asciidoctor-kroki and vega-lite enhances the visual presentation of data and improves the overall reading experience. The template's support for source listings and syntax highlighting ensures clear and legible code representation. It is important to note that this section was generated with the assistance of an AI language model trained by OpenAI, because a conclusion does not really make sense in a dummy document like this. With its comprehensive documentation and practical examples, the Asciidoctor.js thesis template empowers users to create well-structured and visually appealing scientific theses. By combining the simplicity of markdown-like syntax with the power of web technologies, this template sets a new standard for scientific writing, making the process more accessible and enjoyable for researchers and students alike.
+
 == Future work
 
+This template is by no means perfect, there are still some things that could be improved. For example, the template does not support footnotes, because I dont need them. Images are also untested, but should work exactly like figures. Admonitions look acceptable, but could definitly be fancier. But who uses admonitions in scientific writing anyway? There are probably more asciidoc features I dont use that may not work properly. As the default stylesheets are included in the template, most should still look fine. I also do not like blue links maybe I should style them differently.
 
-// How can the Rust compiler be made to generate better LLVM IR for HLS?
-
-// Measure more test cases
-
-// Test out the limitations of the toolchain
-
-// 
-
-
-
-// Can it be better than CPP when the tools are adjusted for Rust LLVM?
-Future work on HLS from Rust should focus on improving support for Rust-generated LLVM IR in HLS tools. While Bambu can currently synthesize the LLVM IR generated by Rust, it seems possible to improve the generated designs in some cases. Finding these cases and improving Bambu to handle them should be possible.
-
-It would also be interesting to see if the LLVM IR generated by Rust can be improved to generate better designs. Our toolchain builds every project dependency separately and then links them together. This is not ideal, as it does not allow the compiler to perform cross-crate link-time optimizations. This would probably require adjusting cargo or the Rust compiler to allow link-time optimizations when compiling to LLVM IR. The toolchain only configures the Rust compiler with the settings necessary for generating LLVM IR that Bambu can synthesize. Besides that, it uses rustc's default optimization profiles for speed and size. There are probably significant improvements possible by evaluating which optimizations are useful for HLS and which are not.
-
+The template could also be adjusted to work well with asciidoctor slides but I have not tried that yet. Thanks for reading to the end, have a nice day and a cookie 🍪.
 
 [glossary]
 == List of abbreviations
@@ -450,107 +436,13 @@ link:pass:[https://doc.rust-lang.org/stable/book/][doc.rust-lang.org/stable/book
 == Appendix
 
 
-
-.Example of a generated RustHDL struct
-[source#rust-hls-synthesized-listing.linenums.hundred_max,rust]
+.Extra long rust listing with line numbers
+[source#extra-long-rust-listing.linenums,rust]
 ----
-/// This file was generated by rust_hls. Please do not edit it manually.
-/// rust_hls hash: "fc1b10f200f5632694995e666ba00202"
-
-extern crate verilated;
-use ::rust_hdl::prelude::*;
-
-#[allow(dead_code, unused)]
-mod minmax_verilated {
-    /// Bindings to the C++ library generated by Verilator go here
-}
-
-#[derive(::std::default::Default)]
-pub struct Minmax {
-    pub clk: Signal<
-        In,
-        Clock,
-    >,
-    pub reset: Signal<In, bool>,
-    pub start_port: Signal<In, bool>,
-    pub elements: Signal<In,Bits<32usize>>,
-    pub num_elements: Signal<In,Bits<32usize>>,
-    pub m_rdata_ram: Signal<In,Bits<32usize>>,
-    pub m_data_rdy: Signal<In, bool>,
-    pub done_port: Signal<Out, bool>,
-    pub return_port: Signal<Out,Bits<64usize>,>,
-    pub mout_oe_ram: Signal<Out, bool>,
-    pub mout_we_ram: Signal<Out, bool>,
-    pub mout_addr_ram: Signal<Out,Bits<32usize>>,
-    pub mout_wdata_ram: Signal<Out,Bits<32usize>>,
-    pub mout_data_ram_size: Signal<Out,Bits<6usize>>,
-    verilated_module: Arc<Mutex<self::minmax_verilated::MinmaxVerilated>>,
-}
-unsafe impl Send for Minmax {}
-
-#[automatically_derived]
-impl Logic for Minmax {
-    fn update(&mut self) {
-        let mut verilated_module = match self.verilated_module.lock() {
-            Ok(verilated_module) => verilated_module,
-            Err(e) => panic!("Failed to aquire verilated_module lock: {}", e),
-        };
-        verilated_module.set_clk(if self.clk.val().clk { 1u8 } else { 0u8 });
-        verilated_module.set_reset(if self.reset.val() { 1u8 } else { 0u8 });
-        verilated_module.set_start_port(if self.start_port.val() { 1u8 } else { 0u8 });
-        verilated_module.set_Pd61(self.elements.val().to_u32());
-        verilated_module.set_Pd62(self.num_elements.val().to_u32());
-        verilated_module.set_M_Rdata_ram(self.m_rdata_ram.val().to_u32());
-        verilated_module.set_M_DataRdy(if self.m_data_rdy.val() { 1u8 } else { 0u8 });
-        verilated_module.eval();
-        self.done_port.next = verilated_module.done_port() != 0;
-        self
-            .return_port
-            .next = to_bits::<
-            64usize,
-        >(verilated_module.return_port() & 18446744073709551615u64);
-        self.mout_oe_ram.next = verilated_module.Mout_oe_ram() != 0;
-        self.mout_we_ram.next = verilated_module.Mout_we_ram() != 0;
-        self.mout_addr_ram.next = to_bits::<32usize,>(
-          verilated_module.Mout_addr_ram() & 4294967295u32);
-        self.mout_wdata_ram.next = to_bits::<32usize,>(
-          verilated_module.Mout_Wdata_ram() & 4294967295u32);
-        self.mout_data_ram_size.next = to_bits::<6usize,>(
-          verilated_module.Mout_data_ram_size() & 63u8);
-    }
-    fn connect(&mut self) {
-        self.done_port.connect();
-        self.return_port.connect();
-        self.mout_oe_ram.connect();
-        self.mout_we_ram.connect();
-        self.mout_addr_ram.connect();
-        self.mout_wdata_ram.connect();
-        self.mout_data_ram_size.connect();
-    }
-    fn hdl(&self) -> Verilog {
-        Verilog::Wrapper(Wrapper {
-            code: r#"minmax minmax_inst(
-                      .clk(clk), .reset(reset), .start_port(start_port),
-                      .done_port(done_port), .return_port(return_port),
-                      .Pd61(elements), .Pd62(num_elements),
-                      .M_Rdata_ram(m_rdata_ram), .M_DataRdy(m_data_rdy),
-                      .Mout_oe_ram(mout_oe_ram), .Mout_we_ram(mout_we_ram),
-                      .Mout_addr_ram(mout_addr_ram), .Mout_Wdata_ram(mout_wdata_ram),
-                      .Mout_data_ram_size(mout_data_ram_size));"#
-                .into(),
-            cores: "verilog generated by bambu ...",
-        })
-    }
-}
+include::assets/long_rust_listing.rs[]
 ----
-
-
-// Reference thesis:
-// * https://webthesis.biblio.polito.it/7573/1/tesi.pdf
-// * https://scholarworks.gvsu.edu/cgi/viewcontent.cgi?article=1754&context=theses
 
 include::scripts/trailing-scripts.adoc[]
-
 
 // Final checklist:
 // * are all abbreviations defined?
@@ -558,10 +450,9 @@ include::scripts/trailing-scripts.adoc[]
 // * are all references used?
 // * are all references linked to the correct source?
 // * are all TODOs processed?
-// * are the product names consistent? (Bambu)
-// * check for duplicate references
+// * are the names for things consistent?
 // * check for broken references
 // * archive.org all links
 // * Check for duplication of information
 // * oxford comma
-// * style code blocks
+// * You should also have read the paper at least once from top to bottom.

@@ -7,14 +7,14 @@
 :source-highlighter: highlight.js
 :highlightjs-theme: thesis
 :highlightjsdir: libraries/highlightjs
-// Enable rendering mathequations
+// Enable rendering math equations
 :stem:
-// Generate table of contents at the toc macro
-// Also disableing section numbers for now, as we only start numbering after the toc. See the macros there
+// Generate a table of contents at the toc macro
+// Also disabling section numbers for now, as we only start numbering after the toc. See the macros there
 :toc: macro
 :toclevels: 3
 :sectanchors:
-// Disable title page
+// Disable the title page
 // We will build the title page manually for maximum flexibility
 :notitle:
 :title-page: false
@@ -56,7 +56,7 @@ Second Examiner:: Prof. Dr. Another Person
 [discrete]
 == Declaration
 
-If you are writing a thesis you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class which add a nice line where you can write your name.
+Suppose you are writing a thesis; you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class, which adds a nice line where you can write your name.
 
 If you are not writing a thesis, just delete this whole section.
 
@@ -84,13 +84,13 @@ Zebreus
 
 
 // Generated with chatgpt
-This document presents the Asciidoctor.js thesis template, which offers a versatile and easily understandable alternative to traditional typesetting systems for scientific writing. The template leverages the flexibility of web technologies, allowing seamless design modifications and rendering both PDF and website versions of the thesis. The source document structure resembles markdown, enhancing its readability. This abstract provides an overview of the template's benefits, getting started instructions, toolchain details, customization options using JavaScript, integration of source code listings and syntax highlighting, philosophical considerations behind the design decisions, and a comprehensive guide to using the template's features for scientific writing. Overall, the Asciidoctor.js thesis template provides a user-friendly and efficient approach for creating scientific theses, offering enhanced readability and ease of customization compared to traditional typesetting systems.
+This document presents the Asciidoctor.js thesis template, which offers a versatile and easily understandable alternative to traditional typesetting systems for scientific writing. The template leverages the flexibility of web technologies, allowing seamless design modifications and rendering of PDF and website versions of the thesis. The source document structure resembles markdown, enhancing its readability. This abstract provides an overview of the template's benefits, getting started instructions, toolchain details, customization options using JavaScript, integration of source code listings and syntax highlighting, philosophical considerations behind the design decisions, and a comprehensive guide to using the template's features for scientific writing. Overall, the Asciidoctor.js thesis template provides a user-friendly and efficient approach for creating scientific theses, offering enhanced readability and ease of customization compared to traditional typesetting systems.
 
 // The table of contents gets inserted here.
 toc::[]
 
 // This generates the tables for listings, figures, and tables
-// If you do not need all of them, just modiy that file.
+// If you do not need all of them, just modify that file.
 
 <<<
 
@@ -109,13 +109,13 @@ toc::[]
 Scientific writing plays a vital role in conveying research findings and academic knowledge. As traditional typesetting systems for scientific documents can be complex, there is a growing interest in alternative approaches that prioritize flexibility, readability, and ease of use. The Asciidoctor.js thesis template offers a comprehensive framework for creating well-structured and visually appealing theses. By leveraging web technologies, this template allows for seamless design modifications and facilitates the generation of PDF and website versions. In this introduction, we will explore the key features, benefits, and practical considerations of the Asciidoctor.js thesis template, highlighting its potential to revolutionize scientific writing.
 // Thx chatgpt
 
-== Figures, tables and listings
+== Figures, tables, and listings
 
-Figures tables and listings are automatically numbered and added to their respective list after the table of contents.
+Figures, tables, and listings are automatically numbered and added to their respective list after the table of contents.
 
 === Using figures
 
-All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text lik <<sample-nomnoml-chart>>, by giving it an id, in this case `sample-nomnoml-chart`.
+All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text like <<sample-nomnoml-chart>>, by giving it an id, in this case, `sample-nomnoml-chart`.
 
 .Sample nomnoml chart
 [nomnoml,id=sample-nomnoml-chart]
@@ -144,7 +144,7 @@ All chart types except for vega-lite should just be used as asciidoctor-kroki ch
 .Source for the section above
 [source,asciidoc]
 ----
-All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text lik <<sample-nomnoml-chart>>, by giving it an id, in this case `sample-nomnoml-chart`.
+All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text like <<sample-nomnoml-chart>>, by giving it an id, in this case, `sample-nomnoml-chart`.
 
 .Sample nomnoml chart
 [nomnoml,id=sample-nomnoml-chart]
@@ -187,7 +187,7 @@ include::assets/keccak_clang_speed.wavejson.json[]
 ....
 ----
 
-To make the chart extend over the margins of the page, add a `slightly-oversized`, `oversized` or `completly-oversized` to the chart.
+To make the chart extend over the margins of the page, add a `slightly-oversized`, `oversized`, or `completely-oversized` to the chart.
 
 .Source for the section above
 .Sample graphviz graph
@@ -205,9 +205,9 @@ include::assets/minmax_speed_control_flow.dot[]
 ....
 ----
 
-==== Data driven charts
+==== Data-driven charts
 
-Vega-lite is the preferred way to display any data-driven charts. You use the included `vega-chart.adoc` script to include vega-lite charts. It detects if the document is currently built for a browser or as a PDF. If the document is built for a browser, it will include the chart directly via the vega javascript library. That way the chart supports tooltips and other interactive features.
+Vega-lite is the preferred way to display any data-driven charts. You use the included `vega-chart.adoc` script to include vega-lite charts. It detects if the document is currently built for a browser or as a PDF. If the document is built for a browser, it will include the chart directly via the Vega javascript library. That way, the chart supports tooltips and other interactive features.
 
 [source,asciidoc]
 ----
@@ -243,7 +243,7 @@ module Blinker (input clock, output blinker);
 endmodule
 ----
 
-<<long-rust-listing>> shows a long Rust listing. This template has a `.linenums` class that can be added to code listings to enable line numbers. The normal asciidoc `linenums` attribute is not supported.
+<<long-rust-listing>> shows a long Rust listing. This template has a `.linenums` class that can be added to code listings to enable line numbers. The normal AsciiDoc `linenums` attribute is not supported.
 
 .Long rust listing with line numbers
 [source#long-rust-listing.linenums,rust]
@@ -251,7 +251,7 @@ endmodule
 include::assets/long_rust_listing.rs[tag=function]
 ----
 
-Your code should be not wider than 80 characters. If it is try using the `oversized` classes to avoid unnecessary line breaks.
+Your code should be no wider than 80 characters. If it is, try using the `oversized` classes to avoid unnecessary line breaks.
 
 === Using tables
 
@@ -299,36 +299,36 @@ Asciidoc supports referencing other parts of the document. To reference other pa
 
 === Using abbreviations
 
-When you first use abbreviations you should introduce them like: field-programmable gate array (FPGA). You should also add them to the <<_list_of_abbreviations>>. Every abbreviation added to that list will automatically be linked when it is used in the document. 
+When you first use abbreviations, you should introduce them like field-programmable gate array (FPGA). You should also add them to the <<_list_of_abbreviations>>. Every abbreviation added to that list will automatically be linked when it is used in the document. 
 
-For example we can just use FPGA, HLS, RAII and LLVM IR in any sentence and they will be linked without any special markup.
+For example, we can just use FPGA, HLS, RAII, and LLVM IR in any sentence, and they will be linked without any special markup.
 
-I also recommend adding a link to a more detailed web source like wikipedia to every entry in the list of abbreviations. I usually have the list of abbreviations as the first section after the main content.
+I also recommend adding a link to a more detailed web source like Wikipedia to every entry in the list of abbreviations. I usually have the list of abbreviations as the first section after the main content.
 
-To see an example for a list of abbreviations, look at the source for <<_list_of_abbreviations>>.
+To see an example of a list of abbreviations, look at the source for <<_list_of_abbreviations>>.
 
 === Citations and bibliography
 
-This template uses the built-in bibliography support of asciidoctor. It is relativly basic, but I found it to work really well in practice. The Readme goes into more detail how you can structure your bibliography, alternativly you can directly look into the source of this document.
+This template uses the built-in bibliography support of Asciidoctor. It is relatively basic, but I found it to work really well in practice. The Readme goes into more detail on how you can structure your bibliography; alternatively, you can directly look into the source of this document.
 
-To cite a source just reference it like a figure, table or section. References to sources should grammatically not be a part of your sentence.
+To cite a source, just reference it like a figure, table, or section. References to sources should grammatically not be a part of your sentence.
 
 .Example
-The Rust programming language <<Kla23>> is a modern systems programming language. It is the most loved programming languag of the last years <<Sta16>> <<Sta20>> <<Sta23>>. On an unrelated note, Microsoft uses FPGAs to accelerate their Bing search engine <<Nan16>> and bambu <<Fer21>> is a framework for HLS. I dont think Microsoft uses bambu for their FPGAs, they probably use the SystemVerilog, the most common language for hardware design <<Soz22>>.
+The Rust programming language <<Kla23>> is a modern systems programming language. It is the most loved programming language of the last years <<Sta16>> <<Sta20>> <<Sta23>>. On an unrelated note, Microsoft uses FPGAs to accelerate their Bing search engine <<Nan16>>, and Bambu <<Fer21>> is a framework for HLS. I don't think Microsoft uses Bambu for their FPGAs; they probably use SystemVerilog, the most common language for hardware design <<Soz22>>.
 
 === Referencing things from the appendix
 
-Just add an extra chapter named Appendix after the references and dump your figures and whatnot there. You can reference them like any other figure. <<extra-long-rust-listing>> was banished into the appendix, because I needed to put something there as an example.
+Just add an extra chapter named Appendix after the references and dump your figures and whatnot there. You can reference them like any other figure. <<extra-long-rust-listing>> was banished into the appendix because I needed to put something there as an example.
 
 == Conclusion
 
-In conclusion, the Asciidoctor.js thesis template offers a flexible, readable, and user-friendly approach to scientific writing. By leveraging web technologies, the template enables easy customization and modification of the document's design. The inclusion of interactive figures using asciidoctor-kroki and vega-lite enhances the visual presentation of data and improves the overall reading experience. The template's support for source listings and syntax highlighting ensures clear and legible code representation. It is important to note that this section was generated with the assistance of an AI language model trained by OpenAI, because a conclusion does not really make sense in a dummy document like this. With its comprehensive documentation and practical examples, the Asciidoctor.js thesis template empowers users to create well-structured and visually appealing scientific theses. By combining the simplicity of markdown-like syntax with the power of web technologies, this template sets a new standard for scientific writing, making the process more accessible and enjoyable for researchers and students alike.
+In conclusion, the Asciidoctor.js thesis template offers a flexible, readable, and user-friendly approach to scientific writing. By leveraging web technologies, the template enables easy customization and modification of the document's design. The inclusion of interactive figures using asciidoctor-kroki and vega-lite enhances the visual presentation of data and improves the overall reading experience. The template's support for source listings and syntax highlighting ensures clear and legible code representation. It is important to note that this section was generated with an AI language model trained by OpenAI because a conclusion does not make sense in a dummy document like this. With its comprehensive documentation and practical examples, the Asciidoctor.js thesis template empowers users to create well-structured and visually appealing scientific theses. By combining the simplicity of markdown-like syntax with the power of web technologies, this template sets a new standard for scientific writing, making the process more accessible and enjoyable for researchers and students alike.
 
 == Future work
 
-This template is by no means perfect, there are still some things that could be improved. For example, the template does not support footnotes, because I dont need them. Images are also untested, but should work exactly like figures. Admonitions look acceptable, but could definitly be fancier. But who uses admonitions in scientific writing anyway? There are probably more asciidoc features I dont use that may not work properly. As the default stylesheets are included in the template, most should still look fine. I also do not like blue links maybe I should style them differently.
+This template is by no means perfect; there are still some things that could be improved. For example, the template does not support footnotes because I don't need them. Images are also untested but should work exactly like figures. Admonitions look acceptable but could definitely be fancier. But who uses admonitions in scientific writing anyway? There are probably more AsciiDoc features I don't use that may not work properly. As the default stylesheets are included in the template, most should still look fine. I also do not like blue links. Maybe I should style them differently.
 
-The template could also be adjusted to work well with asciidoctor slides but I have not tried that yet. Thanks for reading to the end, have a nice day and a cookie 🍪.
+The template could also be adjusted to work well with Asciidoctor slides, but I have not tried that yet. Thanks for reading to the end, have a nice day and a cookie 🍪.
 
 [glossary]
 == List of abbreviations
@@ -345,7 +345,7 @@ The template could also be adjusted to work well with asciidoctor slides but I h
 == References
 
 // Citation style:
-// Line 1: All authors full first and last names. Authors seperated by commas.
+// Line 1: All authors' full first and last names. Commas separate Authors.
 // Line 2: Title in italics.
 // Line 3: Journal/Conference name or any other information about what gives the source credibility.
 // Line 4: doi with attached hyperlink. For digital editions, also link the PDF with a 📁 icon
@@ -455,4 +455,4 @@ include::scripts/trailing-scripts.adoc[]
 // * archive.org all links
 // * Check for duplication of information
 // * oxford comma
-// * You should also have read the paper at least once from top to bottom.
+// * You should have read the paper at least once from top to bottom.

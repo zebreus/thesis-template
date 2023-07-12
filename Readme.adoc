@@ -1,29 +1,30 @@
 = Asciidoctor.js thesis template
 
-I recently wrote my bachelors thesis in asciidoc. The biggest reason for doing so was that I wanted to use a typesetting system that I can actually understand. Asciidoc is also far easier to read than documents written in the common typesetting system for scientific writing.
+I recently wrote my bachelor's thesis in AsciiDoc. The biggest reason for doing so was that I wanted to use a typesetting system that I could actually understand. AsciiDoc is also far easier to read and write than documents written in the common typesetting system for scientific writing.
 
 .Benefits:
-* Flexible; If you can design it in a browser you can also do it here
+* Flexible; You get a PDF and a website
 * Website and PDF; Your PDF can also be viewed as a website
-* Easily readable source document; Basically markdown.
-
+* Easily readable source document; Basically markdown
+* Easy to adjust; If you know HTML and CSS, you can restyle everything
+* Easy to learn
 
 == Getting started
 
-If you just want to start writing, you can go ahead and start in `paper.adoc`. To get a pdf use `make pdf`, to preview the pdf in a browser use `make preview`. You can also generate a website using `make index.html`. You need to have asciidoctor-web-pdf and make and some other things. The easiest way to get them on Linux or Mac is by using the nix package manager and type `nix develop` in the root of this repo.
+If you just want to start writing, you can go ahead and start in `paper.adoc`. To get a pdf, use `make pdf`; to preview the pdf in a browser, use `make preview`. You can also generate a website using `make index.html`. You need to have asciidoctor-web-pdf and make and some other things. The easiest way to get them on Linux or Mac is by using the nix package manager and typing `nix develop` in the root of this repo.
 
 I recommend using vscode for editing, as it has a good extension for live previewing.
 
-This document focuses on the template and not on general asciidoc syntax. Asciidoc is quite similar to markdown, so you can probably figure it out by looking at the source of this document. I recommend the https://docs.asciidoctor.org/asciidoc/latest/[asciidoc language documentation]. There you can find info on features like https://docs.asciidoctor.org/asciidoc/latest/tables/build-a-basic-table/[tables], https://docs.asciidoctor.org/asciidoc/latest/macros/images/[images] and more.
+This document focuses on the template and not on general AsciiDoc syntax. AsciiDoc is quite similar to markdown, so you can probably figure it out by looking at the source of this document. I recommend https://docs.asciidoctor.org/asciidoc/latest/[the AsciiDoc language documentation]. There you can find info on features like https://docs.asciidoctor.org/asciidoc/latest/tables/build-a-basic-table/[tables], https://docs.asciidoctor.org/asciidoc/latest/macros/images/[images] and more.
 
 === Setup
 
-After cloning this repo you can use `nix develop` to enter a shell with all neccessary tools. You should use vscode as your editor, as that has really good support for asciidoc and the settings are preconfigured in this repo. After you open this project in vscode, some extensions will be suggested to you. Install them. They add support for live preview and asciidoc syntax highlighting.
+After cloning this repo, you can use `nix develop` to enter a shell with all the necessary tools. You should use vscode as your editor, as that has really good support for AsciiDoc, and the settings are preconfigured in this repo. After you open this project in vscode, some extensions will be suggested to you. Install them. They add support for live preview and AsciiDoc syntax highlighting.
 
-.Install deps without nix
+.Install dependencies without nix
 [%collapsible]
 ====
-If you dont use the nix package manager I recommend installing it. That way you are guaranteed to have the same versions of things that were used to create the template. Alternativly you can also install the dependencies manually. You need the following things:
+If you don't use the nix package manager, I recommend installing it. That way you are guaranteed to have the same versions of things that were used to create the template. Alternatively, you can also install the dependencies manually. You need the following things:
 
 * asciidoctor-js
 * asciidoctor-web-pdf
@@ -36,55 +37,55 @@ If you dont use the nix package manager I recommend installing it. That way you 
 
 === Toolchain
 
-This template is completly based on web technologies, so modifying the template is as easy as modifying any other HTML/CSS website. This is a big 
+This template is completely based on web technologies, so modifying the template is as easy as modifying any other HTML/CSS website. This is a big 
 
 === Custom scripts
 
-To add the features that are missing in asciidoc this template uses javascript in `<script>` tags. The javascript gets executed when the PDF is rendered. For the web version it is executed in the browser. I recommend using the snippets feature of chrome for for developing or modifying the scripts (devtool>sources>snippets). Dont be afraid to modify, delete or create new scripts, they are already quite hacky. 
+To add features that AsciiDoc does not support, this template uses javascript in `<script>` tags. The javascript gets executed when the PDF is rendered. For the web version, it is executed in the browser. I recommend using the snippets feature of Chrome for developing or modifying the scripts (devtool>sources>snippets). Don't be afraid to modify, delete or create new scripts; they are already quite hacky. 
 
-All scripts are bundled in the `scripts/trailing-scripts.adoc` file which is inserted at the end of the document.
+All scripts are bundled in the `scripts/trailing-scripts.adoc` file, which gets inserted at the end of the document.
 
-Most of the scripts are quite short and just do one thing like linking glossary entries to the glossary.
+Most of the scripts are quite short and just do one thing, like linking glossary entries to the glossary.
 
-The scripts in trailing-scripts are executed while the browser is parsing the document. If you want to execute script a bit later or earlier, you can wait for the event that indicates when the browser is done. You can also execute scripts directly before and after pagedjs. See `scripts/included/fixPagebreaksInListings.adoc` for an example.
+The scripts in `trailing-scripts.adoc` are executed while the browser is parsing the document. If you want to execute the script a bit later or earlier, you can wait for the event that indicates when the browser is done. You can also execute scripts directly before and after pagedjs. See `scripts/included/fixPagebreaksInListings.adoc` for an example.
 
-=== Source code lisitings
+=== Source code listings
 
-This template uses highlight.js for syntax highlighting code blocks in different languages. It brings a custom stylesheet, so the style of the text matches the rest of the paper.
+This template uses highlight.js for syntax, highlighting code blocks in different languages. It brings a custom stylesheet, so the style of the text matches the rest of the paper.
 
-To be able to use a custom stylesheet with highlightjs we need to include highlightjs with the template. The included version supports syntax highlighting for most common languages, but not all. If you need more, go to https://highlightjs.org/download/[the highlightjs download page], check the languages you need and download the file. Then you replace *only* `highlightjs/highlight.min.js` with the `highlight.min.js` from the downloaded archive.
+To be able to use a custom stylesheet with highlightjs, we need to include highlightjs with the template. The included version supports syntax highlighting for most common languages but not all. If you need more, go to https://highlightjs.org/download/[the highlightjs download page], check the languages you need, and download the file. Then you replace *only* `highlightjs/highlight.min.js` with the `highlight.min.js` from the downloaded archive.
 
-This is basically the same as described in the https://docs.asciidoctor.org/asciidoctor/latest/syntax-highlighting/highlightjs/#use-a-custom-highlight-js-library[asciidoctor documentation].
+This is basically the same as described in the https://docs.asciidoctor.org/asciidoctor/latest/syntax-highlighting/highlightjs/#use-a-custom-highlight-js-library[Asciidoctor documentation].
 
-PagedJS has a lot of trouble with breaking source listings over multiple pages. To mitigate this issue, this template includes a script that adjusts the `<code>` tags generated by asciidoctor. If you want to learn more about this problem read the comment in `scripts/included/fixPagebreaksInListings.adoc`.
+PagedJS has a lot of trouble with breaking source listings over multiple pages. To mitigate this issue, this template includes a script that adjusts the `<code>` tags generated by Asciidoctor. If you want to learn more about this problem, read the comment in `scripts/included/fixPagebreaksInListings.adoc`.
 
 === Directory structure
 
-The main file for your writings lives in the root of the repo and is called `paper.adoc`. All of the content execept for big charts or listings goes here. There are subdirectories for some things. I recommend putting your file only in the root dir or one directory deeper. The second-level subdirectories (`scripts/included`, `styles/default`) are mostly used for included scripts and stylesheets. You can modify the files in there, but you should not add new files, because you will lose track of which files are specific to your document and which are not. At least I do.
+The main file for your writings lives in the root of the repo and is called `paper.adoc`. All of the content except for big charts or listings goes here. There are subdirectories for some things. I recommend putting your file only in the root dir or one directory deeper. The second-level subdirectories (`scripts/included`, `styles/default`) are mostly used for included scripts and stylesheets. You can modify the files in there, but you should not add new files because you will lose track of which files are specific to your document and which are not. At least I do.
 
 CAUTION: You can modify files in second-level subdirectories  (`scripts/included`, `styles/default`, ...), but *you should not add new files there*. You will lose track of which files are specific to your document and which are not. At least I do.
 
-The `scripts` directory contains all the scripts that are used to build the document. Your scripts should go directly into the `scripts` directory, or in the trailing scripts file. Some scripts included with the template are store in the `included` directory. I dont recommend creating additional directories there, the included scripts are just there so they dont clutter your scripts in the scripts directory.
+The `scripts` directory contains all the scripts that are used to build the document. Your scripts should go directly into the `scripts` directory or the trailing scripts file. Some scripts included with the template are stored in the `included` directory. I don't recommend creating additional directories there; the included scripts are just there, so they don't clutter your scripts in the scripts directory.
 
-The `styles` directory contains the CSS files that are used to style the document. `paper.scss` is the main file, that imports all other scripts. It will be compiled with sass during the make process into a single big scss file. If you want to add some classes just put them directly in that file. `default` contains basic styles for everything, print these that are specific to print. If you modify them, you should consider contributing your changes back to the template repo.
+The `styles` directory contains the CSS files that are used to style the document. `paper.scss` is the main file that imports all other scripts. It will be compiled with sass during the `make` process into a single big SCSS file. If you want to add some classes, just put them directly in that file. `default` contains basic styles for everything, print these that are specific to print. If you modify them, you should consider contributing your changes back to the template repo.
 
-The `assets` directory contains everything else that is content of your document, but too long for the main document. Probably just images, figures and long code listings. Short figures and code listings (less than 10 lines) should probably be in your main document.
+The `assets` directory contains everything else that is the content of your document, but too long for the main document. Probably just images, figures, and long code listings. Short figures and code listings (less than ten lines) should probably be in your main document.
 
-The `libraries` directory contains things that are included in the template and required at runtime (except styles and scripts). For now it just contains highlightjs, but other libraries might also be placed here. vega-lite is currently loaded from a CDN but if it were included it would also go here. Maybe this should just be `assets/included`, but I am not sure about that yet.
+The `libraries` directory contains things that are included in the template and required at runtime (except styles and scripts). It only contains highlightjs for now, but other libraries might also be placed here. Vega-lite is currently loaded from a CDN, but it would also go here if it were included. Maybe this should just be `assets/included`, but I am not sure about that yet.
 
 == Philosophical questions
 
 I want to explain a few of the decisions I made for this template.
 
-Most graphical design decisions were inspired by the https://github.com/mbredel/thesis-template[latex thesis template of my university] which is seems to be based on https://ctan.org/pkg/classicthesis?lang=en[classicthesis]. If you are creating a thesis for h_da this template should fulfill all stylistic requirements.
+Most graphical design decisions were inspired by the https://github.com/mbredel/thesis-template[latex thesis template of my university], which seems to be based on https://ctan.org/pkg/classicthesis?lang=en[classicthesis]. If you are creating a thesis for h_da, this template should fulfill all stylistic requirements.
 
-This template also puts all content into a single file. I strongly believe that this makes working with large documents easier. Asciidoc also suits itself particularily well for this because it has nearly no boilerplate. I recommend using sticky scroll and word wrap, they should already be configured by the vscode workspace settings. Side-by-side view can also be useful, if you are working on two parts simultaneously. A mouse with forward and back buttons is also really useful.
+This template also puts all content into a single file. I strongly believe that this makes working with large documents easier. AsciiDoc also suits itself particularly well for this because it has nearly no boilerplate. I recommend using sticky scroll and word wrap. The vscode workspace settings should already configure them. Side-by-side view can also be helpful if you are working on two parts simultaneously. A mouse with forward and back buttons is also really useful.
 
-I already explicitly decided against using bibtex for citations because that makes the whole setup less usable. I pratice I found the default asciidoctor glossary to works really well. Comments for each entry can be added as comments and links to the papers can just be included in the text. This is one of the decisions that worked out really well.
+I already explicitly decided against using Bibtex for citations because that makes the whole setup less usable. In practice, I found the default Asciidoctor glossary to work really well. Comments for each entry can be added as comments, and links to the papers can just be included in the text. This is one of the decisions that worked out really well.
 
 == Content
 
-This section is aimed at giving practical examples of how you can do things that are commonly done in scientific writing. For most of them you should be able to find examples in paper.adoc, but I will try to go into more detail here. I will go through my thesis from the start to finish and will explain all the things that are unusual. You should be familiar with asciidoc syntax in general, I recommend skimming the first few chapters of documentation <https://docs.asciidoctor.org/asciidoc/latest/>
+This section is aimed at giving practical examples of how you can do things that are commonly done in scientific writing. For most of them, you should be able to find examples in the paper. adoc, but I will try to go into more detail here. I will go through my thesis from start to finish and explain all the unusual things. You should be familiar with AsciiDoc syntax in general. I recommend skimming the first few chapters of documentation <https://docs.asciidoctor.org/asciidoc/latest/>
 
 === Settings
 
@@ -92,15 +93,15 @@ The document starts with a few attribute definitions. This is the biggest block 
 
 === Title page
 
-The settings in the previous sections disabled a titlepage generated by asciidoctor, so we have to style it manually. In the template I just defined a few CSS classes (`university`, `faculty`, `presented-by`, ...) and applied them to the elements. Then I opened the document in preview mode and fiddled with the CSS until everything was arranged to my liking. I then copied my CSS to the paper.css stylesheet in the styles directory.
+The settings in the previous sections disabled a title page generated by Asciidoctor, so we have to style it manually. In the template, I just defined a few CSS classes (`university`, `faculty`, `presented-by`, ...) and applied them to the elements. Then I opened the document in preview mode and fiddled with the CSS until everything was arranged to my liking. I then copied my CSS to the paper.css stylesheet in the styles directory.
 
-After the titlepage a `<<<` is inserted to force a new page
+After the title page, a `<<<` is inserted to force a new page
 
-The title is also marked as `discrete` which means that it is ommitted from the table of contents.
+The title is also marked as `discrete`, which means that it is omitted from the table of contents.
 
 === Declaration
 
-If you are writing a thesis you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class which add a nice line where you can write your name.
+Suppose you are writing a thesis; you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class, which adds a nice line where you can write your name.
 
 === Abstract
 
@@ -108,23 +109,23 @@ The abstract is just a normal section with the exception of it being marked as `
 
 === Table of contents, figures, tables, listings
 
-`toc::[]` gets replaced with the table of contents by asciidoctor.
+`toc::[]` gets replaced with the table of contents by Asciidoctor.
 
-This template includes a script to generate indices for figures, tables, listings. By default it is enabled, to deactivate it, uncomment it in scripts/trailing-scripts.adoc .
+This template includes a script to generate figures, tables, and listings indices. By default, it is enabled. To deactivate it, uncomment it in scripts/trailing-scripts.adoc .
 
-=== Numbering sections, figures, tables and listings
+=== Numbering sections, figures, tables, and listings
 
-Asciidoctor can number sections, figures, tables and listings automatically. This template uses that feature.
+Asciidoctor can number sections, figures, tables, and listings automatically. This template uses that feature.
 
 === Figures
 
-`asciidoctor-kroki` is used for figures. On https://kroki.io you can interactivly try out all diagram types that are available. The diagrams are inserted as inline SVGs, this way they can be styled with CSS. This way figures can have the same font as the rest of the document.
+`asciidoctor-kroki` is used for figures. On https://kroki.io, you can interactively try out all diagram types that are available. The diagrams are inserted as inline SVGs; this way, they can be styled with CSS. This way, figures can have the same font as the rest of the document.
 
 If you want to insert a figure that is not supported by kroki, just use an image.
 
 ==== Vega-lite
 
-The template includes a special script for vega-lite figures. It renders them with vega-embed when building a web version and uses kroki for PDFs. This way the figures in the web version are interactive. 
+The template includes a special script for vega-lite figures. It renders them with vega-embed when building a web version and uses kroki for PDFs. This way, the figures in the web version are interactive. 
 
 .Using vega-lite figures
 [source,asciidoc]
@@ -134,25 +135,25 @@ The template includes a special script for vega-lite figures. It renders them wi
 \include::vega-chart.adoc[]
 ----
 
-The makefile also inlines csv data into vega-lite charts. The recommended workflow for charts with CSV data is as follows:
+The makefile also inlines CSV data into vega-lite charts. The recommended workflow for charts with CSV data is as follows:
 
 1. Place your CSV data in the `assets` directory
 2. Create a vega-lite chart with the data in the `assets` directory as a `.vl.json` file
 3. Use the vscode extension for vega-lite to design the chart with a preview
 4. Include the chart as shown above in your document. Important to use the `processed-assets` directory and not the `assets` directory.
-5. When you `make` the document, CSV will be inlined and the file will be placed in processed-assets
+5. When you `make` the document, CSV will be inlined, and the file will be placed in processed-assets
 
 ==== Troubleshooting figures
 
-The main problem with figures is handling page breaks. If they are to big for a single page, layouting will fail. To mitigate this problem you can explicitly limit the maximum width of a figure by setting width to something like 15cm.
+The main problem with figures is handling page breaks. If they are too big for a single page, layouting will fail. To mitigate this problem, you can explicitly limit the maximum width of a figure by setting the width to something like 15cm.
 
-Even if you dont limit the width, the figures cannot be wider than the page without margins. To make a figure, table or image wider the stylesheet includes the classes `slightly-oversized`, `oversized` and `completly-oversized`. They extend the margins for the element by 1/4, 1/2 and 3/4 of the page width respectively.
+Even if you don't limit the width, the figures cannot be wider than the page without margins. To make a figure, table, or image wider, the stylesheet includes the classes `slightly-oversized`, `oversized`, and `completly-oversized`. They extend the margins for the element by 1/4, 1/2, and 3/4 of the page width, respectively.
 
 === Code listings
 
-Asciidoc supports source listings with syntax highlighting. The template is configured to use highlightjs for syntax highlighting.
+AsciiDoc supports source listings with syntax highlighting. The template is configured to use highlightjs for syntax highlighting.
 
-Asciidoctor does not support linenumbers when using highlighjs. The template has a `linenums` class that adds linenumbers with CSS and javascript. You can use it like this:
+Asciidoctor does not support line numbers when using highlighjs. The template has a `linenums` class that adds line numbers with CSS and javascript. You can use it like this:
 
 [source,asciidoc]
 -----
@@ -162,27 +163,27 @@ Asciidoctor does not support linenumbers when using highlighjs. The template has
 ----
 -----
 
-The template also converts code blocks from whitespace-preserving html blocks to divs with explicit linebreaks (`<br>`) and spaces. This mitigates the problem, that pagedjs has trouble with breaking whitespace preserving blocks over multiple pages.
+The template also converts code blocks from whitespace-preserving HTML blocks to divs with explicit linebreaks (`<br>`) and spaces. This mitigates the problem that pagedjs has trouble with breaking whitespace preserving blocks over multiple pages.
 
-The monospace font that is used for code listings currently only supports ascii characters, unicode is not monospace.
+The monospace font that is used for code listings currently only supports ASCII characters; Unicode is not monospace.
 
-Your code should be not wider than 80 characters. If it is try using the `oversized` classes to avoid unnecessary line breaks.
+Your code should be no wider than 80 characters. If it is, try using the `oversized` classes to avoid unnecessary line breaks.
 
 === Tables
 
-Asciidoctor supports tables. If you need a table that is wider than the page, you can use the `oversized` classes to extend the margins, as with figures, images and code listings.
+Asciidoctor supports tables. If you need a table that is wider than the page, you can use the `oversized` classes to extend the margins, as with figures, images, and code listings.
 
 === References
 
-When you reference a section, table, figure or listing, by id (like `<<dummy-figure>>`) it gets replaced by the type of reference and its number (like `Figure 1`). If you want to reference sections you dont need to give them an id manually, you can just use the https://docs.asciidoctor.org/asciidoc/latest/sections/auto-ids/[autogenerated ids] (`Cool Section title` has the id `_cool_section_title`).
+When you reference a section, table, figure, or listing by id (like `<<dummy-figure>>`) it gets replaced by the type of reference and its number (like `Figure 1`). If you want to reference sections, you don't need to give them an id manually. You can just use the https://docs.asciidoctor.org/asciidoc/latest/sections/auto-ids/[autogenerated ids] (`Cool Section title` has the id `_cool_section_title`).
 
 === Glossary / List of abbreviations
 
-I suggest you use a glossary where you expand all your abbreviations. The glossary uses the normal asciidoctor syntax for a glossary. You still need to define the abbreviations when you first use them in the text.
+I suggest you use a glossary where you expand all your abbreviations. The glossary uses the normal Asciidoctor syntax for a glossary. You still need to define the abbreviations when you first use them in the text.
 
 Abbreviations that are defined there will automatically be detected in the document and converted to links to the glossary. They will only be underlined in light grey and not styled like other references.
 
-You can add links to external sources with more detailed explainations in the glossary.
+You can add links to external sources with more detailed explanations in the glossary.
 
 The glossary should be the first section after the main text.
 
@@ -201,17 +202,17 @@ The glossary should be the first section after the main text.
 
 === Bibliography
 
-This template uses the https://docs.asciidoctor.org/asciidoc/latest/sections/bibliography/[built-in bibliography support] of asciidoctor. It is relativly basic, but I found it to work really well in practice.
+This template uses the https://docs.asciidoctor.org/asciidoc/latest/sections/bibliography/[built-in bibliography support] of Asciidoctor. It is relatively basic, but I found it to work really well in practice.
 
-The bibliography is basically a normal list in a special bibliography section. The first thing in each entry is the citation key, which is used to reference the entry in the text. You are free to choose any string. I prefer the three letters of the main authors surname followed by the year of publication.
+The bibliography is basically a normal list in a special bibliography section. The first thing in each entry is the citation key, which is used to reference the entry in the text. You are free to choose any string. I prefer the three letters of the main author's surname followed by the year of publication.
 
-For scientific publications I put the full names of all authors, seperated by commas into the first line. In the second line I add the title of the paper in italics. In the third line I add the journal or conference name or any other information about what gives the source credibility. In the fourth line I add the doi with an attached hyperlink to `doi.org`. After the doi a 📁 icon with a link to the unpaywalled PDF is added. If there is no unpaywalled PDF, the 📁 icon is omitted.
+For scientific publications, I put the full names of all authors, separated by commas into the first line. In the second line, I add the title of the paper in italics. In the third line, I add the journal, conference name, or any other information about what gives the source credibility. In the fourth line, I added the doi with an attached hyperlink to `doi.org`. After the doi, a 📁 icon with a link to the unpaywalled PDF is added. If there is no unpaywalled PDF, the 📁 icon is omitted.
 
-For internet sources without a doi, the journal line is replaced with information about when the site was accessed. The doi line is replaced with a link to the website. The autors are more freestyle for internet sources, I try to find the real author on the website, but if I cant find one I just use the name of the website. It would probably be smart to link a archive.org version of the source instead of the live website.
+For internet sources without a doi, the journal line is replaced with information about when the site was accessed. The doi line is replaced with a link to the website. The authors are more freestyle for internet sources. I try to find the real author on the website, but if I can't find one, I just use the name of the website. It would probably be smart to link to an archive.org version of the source instead of the live website.
 
-When using vscode you can ctrl+click on the links in your editor to get to the source. I usually add all the facts that are I am referencing from a source into a comment above the bibliography entry. This way I can quickly check if I am referencing the correct source.
+When using vscode, you can ctrl+click on the links in your editor to get to the source. I usually add all the facts I am referencing from a source into a comment above the bibliography entry. This way, I can quickly check if I am referencing the correct source.
 
-The bibliography sections goes after the glossary.
+The bibliography section goes after the glossary.
 
 .Bibliography example
 [source,asciidoc]
@@ -247,4 +248,4 @@ You can cite the bibliography entries just like references to sections or figure
 
 === Footnotes
 
-We dont do them.
+We don't do footnotes.

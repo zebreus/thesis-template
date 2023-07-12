@@ -2,12 +2,16 @@
 
 I recently wrote my bachelor's thesis in AsciiDoc. The biggest reason for doing so was that I wanted to use a typesetting system that I could actually understand. AsciiDoc is also far easier to read and write than documents written in the common typesetting system for scientific writing.
 
+It also creates nice looking documents. link:./paper.pdf[PDF generated from this repo]
+
 .Benefits:
 * Flexible; You get a PDF and a website
 * Website and PDF; Your PDF can also be viewed as a website
 * Easily readable source document; Basically markdown
 * Easy to adjust; If you know HTML and CSS, you can restyle everything
 * Easy to learn
+
+
 
 == Getting started
 

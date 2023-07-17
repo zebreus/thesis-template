@@ -1,0 +1,7 @@
+* text eol=auto
+*.sh text eol=lf
+*.nix text eol=lf
+*.lock text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+*.dot text eol=lf

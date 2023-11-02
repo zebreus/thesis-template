@@ -1,6 +1,7 @@
 PWD = $(shell pwd)
 ASCIIDOCTOR     = asciidoctor -r asciidoctor-kroki
 ASCIIDOCTOR_WEB_PDF = asciidoctor-web-pdf -r asciidoctor-kroki
+PYTHON = python3
 
 TARGETS += $(TARGETS_WITHOUT_HTML) index.html
 TARGETS_WITHOUT_HTML += $(PROCESSED_CHARTS) $(wildcard scripts/*.adoc)
@@ -12,20 +13,24 @@ PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 .EXTRA_PREREQS:=Makefile
 .PHONY: all pdf preview
 all: paper.pdf
-pdf: paper.pdf
-preview: paper.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
-	$(ASCIIDOCTOR_WEB_PDF) paper.adoc -o paper.pdf --preview
+preview: paper-preview
 
 SCSS_FILES = $(wildcard styles/*.scss) $(wildcard styles/*/*.scss) $(wildcard styles/*/*/*.scss)
 
 paper.css: $(SCSS_FILES)
 	cd styles ; sass --update --sourcemap=none paper.scss:../paper.css
 
-index.html: paper.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
-	$(ASCIIDOCTOR) -S unsafe paper.adoc -o index.html
+%.html: %.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
+	$(ASCIIDOCTOR) -S unsafe $< -o $@
 
-paper.pdf: paper.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
-	$(ASCIIDOCTOR_WEB_PDF) paper.adoc -o paper.pdf
+%-web-preview: %.html
+	$(PYTHON) scripts/serve.py $<
+
+%.pdf: %.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
+	$(ASCIIDOCTOR_WEB_PDF) $< -o $@
+
+%-preview: %.adoc paper.css $(TARGETS_WITHOUT_HTML) $(PROCESSED_CHARTS)
+	$(ASCIIDOCTOR_WEB_PDF) --preview $<
 
 # Preprocess vega charts
 process-charts: $(PROCESSED_CHARTS)

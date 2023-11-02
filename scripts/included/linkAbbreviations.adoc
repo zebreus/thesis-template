@@ -61,15 +61,15 @@ function escapeRegExp(string) {
 const getGlossaryMap = () => {
     const glossary = document.querySelector(".dlist.glossary") || undefined
     if (!glossary) {
-        console.err("No glossary found")
-        return
+        console.error("No glossary found")
+        return []
     }
     const glossaryEntriesArray = [...glossary.querySelectorAll("dt")]
     let glossaryEntries =  glossaryEntriesArray.map((glossaryEntry ) => {
             const link = glossaryEntry.querySelector("a") || undefined
         
             if (!link) {
-                console.err("Found glossary entry without link")
+                console.error("Found glossary entry without link")
                 return
             }
             const abbreviation = link?.nextSibling?.textContent || link.id;

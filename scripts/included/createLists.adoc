@@ -33,7 +33,7 @@ const insertTableEntry = ({id,title,number} , type) => {
 }
 
 let toc = document.querySelector("#toc")
-let afterToc = toc.nextSibling
+let afterToc = toc?.nextSibling
 
 // Generate list of listings
 let listingInfos = [...document.querySelectorAll(".listingblock")].map(listing => {
@@ -46,7 +46,7 @@ let listingInfos = [...document.querySelectorAll(".listingblock")].map(listing =
 
 if (listingInfos.length) {
 let listOfListings = createTocLookalike("List of Listings", "ul-of-listings")
-toc.parentNode.insertBefore(listOfListings, afterToc)
+toc?.parentNode.insertBefore(listOfListings, afterToc)
 listingInfos.forEach(listing => insertTableEntry(listing, "listing"))
 }
 
@@ -61,7 +61,7 @@ let figureInfos = [...document.querySelectorAll(".imageblock")].map(listing => {
 
 if (figureInfos.length){
 let listOfFigures = createTocLookalike("List of Figures", "ul-of-figures")
-toc.parentNode.insertBefore(listOfFigures, afterToc)
+toc?.parentNode.insertBefore(listOfFigures, afterToc)
 figureInfos.forEach(figure => insertTableEntry(figure, "figure"))
 }
 // Generate list of tables
@@ -75,7 +75,7 @@ let tableInfos = [...document.querySelectorAll(".tableblock")].map(listing => {
 
 if (tableInfos.length){
 let listOfTables = createTocLookalike("List of Tables", "ul-of-tables")
-toc.parentNode.insertBefore(listOfTables, afterToc)
+toc?.parentNode.insertBefore(listOfTables, afterToc)
 tableInfos.forEach(table => insertTableEntry(table, "table"))
 }
 </script>

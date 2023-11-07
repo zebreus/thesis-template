@@ -1,26 +1,29 @@
 // Defines how elements should break across pages.
 // Mostly copied from asciidoctor default styles and asciidoctor-web-pdf styles.
 
-body.book #preamble,
-body.book #toc,
-body.book .sect1>h2,
-body.book h1.sect0 {
+// Break before headings
+#preamble,
+.toc,
+h2,
+h1.sect0 {
     break-before: always;
     page-break-before: always;
 }
 
+// Break after the cover
 #cover,
 .page-break {
     break-after: page;
     page-break-after: page
 }
 
+// Titles below things
 .listingblock .title {
     break-before: avoid;
     page-break-before: avoid;
 }
 
-.listingblock .title,
+// Titles above things
 .tableblock .title,
 #toctitle,
 .sidebarblock>.content>.title,
@@ -34,6 +37,7 @@ h6 {
     page-break-after: avoid
 }
 
+// Avoid breaking inside things that should not get broken
 table,
 tr,
 div.unbreakable,
@@ -44,4 +48,12 @@ svg,
 .imageblock {
     page-break-inside: avoid;
     break-inside: avoid;
+}
+
+// No extra pagebreak directly after the preamble
+#preamble + .sect1 > {
+    h2:first-child {
+        break-before: avoid;
+        page-break-before: avoid;
+    }
 }

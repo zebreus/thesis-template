@@ -51,8 +51,6 @@ by +
 First Examiner:: Prof. Dr. Some Person
 Second Examiner:: Prof. Dr. Another Person
 
-<<<
-
 [discrete]
 == Declaration
 
@@ -64,8 +62,6 @@ _Darmstadt, 5.7.2023_
 
 [.signature-required]
 Zebreus
-
-<<<
 
 [discrete]
 == Abstract
@@ -91,8 +87,6 @@ toc::[]
 
 // This generates the tables for listings, figures, and tables
 // If you do not need all of them, just modify that file.
-
-<<<
 
 // Start with section and part numbering
 :part-signifier: Part

@@ -20,7 +20,7 @@ while read -r line; do
     if [[ $line == *'"url":'* ]]; then
         FILENAME=$CHART_DIR/$(echo $line | grep -Po '"url": "\K[^"]*')
         echo '"values": '
-        cat "$FILENAME" | python -c 'import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin, quoting=csv.QUOTE_NONNUMERIC)]))' | jq
+        cat "$FILENAME" | python -c 'import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin, quoting=csv.QUOTE_MINIMAL)]))' | jq
     else
         echo "$line"
     fi

@@ -7,10 +7,10 @@ TARGETS += $(TARGETS_WITHOUT_HTML) index.html
 TARGETS_WITHOUT_HTML += $(PROCESSED_CHARTS) $(wildcard scripts/*.adoc)
 
 VEGA_CHART_FILES = $(shell find assets -name '*.vl.json')
-VEGA_DATA_FILES = $(addprefix assets/,$(shell grep -Poh "[^\"]+.csv" $(VEGA_CHART_FILES) /dev/null | sort | uniq))
+VEGA_DATA_FILES = $(addprefix assets/,$(shell grep -Poh "[^\"]+.csv" $(VEGA_CHART_FILES) /dev/null | sort | sed 's/^\.\///' | uniq))
 PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 
-.EXTRA_PREREQS:=Makefile
+# .EXTRA_PREREQS:=Makefile
 .PHONY: all pdf preview
 all: paper.pdf
 preview: paper-preview

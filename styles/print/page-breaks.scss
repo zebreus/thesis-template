@@ -17,13 +17,10 @@ h1.sect0 {
     page-break-after: page
 }
 
-// Titles below things
-.listingblock .title {
-    break-before: avoid;
-    page-break-before: avoid;
-}
+
 
 // Titles above things
+.listingblock .title,
 .tableblock .title,
 #toctitle,
 .sidebarblock>.content>.title,
@@ -35,6 +32,14 @@ h5,
 h6 {
     break-after: avoid;
     page-break-after: avoid
+}
+
+// Diagrams (imageblock) have their titles below.
+// Listingblocks require this too because otherwise listings that are longer than the rest of the page will always start on the next page
+.listingblock .title,
+.imageblock .title {
+    break-before: avoid;
+    page-break-before: avoid;
 }
 
 // Avoid breaking inside things that should not get broken

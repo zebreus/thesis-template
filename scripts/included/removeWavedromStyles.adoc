@@ -6,7 +6,8 @@
     [
         ...document.querySelectorAll(".WaveDrom")
     ].forEach(wavedrom => {
-        const style = wavedrom.querySelector("style"); style.remove();
+        const style = wavedrom.querySelector("style");
+        style?.remove();
     })
 </script>
 ++++

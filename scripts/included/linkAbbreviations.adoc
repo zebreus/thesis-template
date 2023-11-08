@@ -61,7 +61,10 @@ function escapeRegExp(string) {
 const getGlossaryMap = () => {
     const glossary = document.querySelector(".dlist.glossary") || undefined
     if (!glossary) {
-        console.error("No glossary found")
+        const otherGlossary = document.querySelector(".glossary") || undefined
+        if(otherGlossary){
+            console.error("INFO: No glossary found, but something that looks like a glossary. Please check if this is correct.")
+        }
         return []
     }
     const glossaryEntriesArray = [...glossary.querySelectorAll("dt")]

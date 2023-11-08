@@ -5,8 +5,8 @@
 <script>
 const getFigureTitle = (id) => {
     const element = document.querySelector("#" + id)
-    const title = element.querySelector(".title")
-    const textContent = title.textContent
+    const title = element?.querySelector(".title")
+    const textContent = (title?.textContent ?? "")
       .replace(/^{figure-caption} [0-9.]+ */,"")
       .replace(/^{listing-caption} [0-9.]+ */,"")
       .replace(/^{table-caption} [0-9.]+ */,"")
@@ -19,7 +19,7 @@ const getFigureTitle = (id) => {
 }
 const getSectionTitle = (id) => {
     const element = document.querySelector("#" + id)
-    const textContent = element.childNodes[1].textContent
+    const textContent = element?.childNodes[1]?.textContent
     if (!textContent) {
         console.error("No section title found for " + id)
         throw "No section title found for " + id

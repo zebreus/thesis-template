@@ -72,6 +72,11 @@ refs.forEach(ref => {
     
     parent.innerHTML = parent.innerHTML.replace(/\[[^\]]+\]/, "")
     let newRef = parent.querySelector("a")
+
+    if (!newRef) {
+        console.error("No link found in bibliography entry", label)
+        return
+    }
     
     if(BIBLIOGRAPHY_REF_LABEL) {
         let displayLabel = BIBLIOGRAPHY_REF_LABEL({number: refNumbers[ref.id], label: label, parent: newRef})

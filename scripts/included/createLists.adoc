@@ -29,7 +29,7 @@ const insertTableEntry = ({id,title,number} , type) => {
     newA.appendChild(newSpan)
     newA.appendChild(document.createTextNode(title))
     newLi.appendChild(newA)
-    target.appendChild(newLi)
+    target?.appendChild(newLi)
 }
 
 let toc = document.querySelector("#toc")

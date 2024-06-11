@@ -35,406 +35,76 @@ Darmstadt University of Applied Sciences
 Faculty of Computer Science
 
 [discrete#main-title]
-= Writing a scientific paper in AsciiDoc
+= Protokoll Zellulare Netze Termin 1
 
 [.description.text-center]
-Submitted in partial fulfillment of the requirements for the degree of +
-Bachelor of Science (B.Sc.)
+Gruppe Bluetooth, 13.11.2023
 
 [.presented-by.text-center]
-by +
-*Zebreus* +
-[small]+Matriculation number: XXXXXX+ +
+*Lukas Kohl* + 
+*Lennart Eichhorn*
 
-
-[.other-people]
-First Examiner:: Prof. Dr. Some Person
-Second Examiner:: Prof. Dr. Another Person
-
-[discrete]
-== Declaration
-
-Suppose you are writing a thesis; you probably need this bit to confirm that you wrote it all by yourself. This template adds the `signature-required` CSS class, which adds a nice line where you can write your name.
-
-If you are not writing a thesis, just delete this whole section.
-
-_Darmstadt, 5.7.2023_
-
-[.signature-required]
-Zebreus
-
-[discrete]
-== Abstract
-// A summary of the contents in English of about one page. The following
-// points should be addressed in particular:
-
-// * Motivation: Why did this work come about? Why is the topic of the
-// work interesting (for the general public)? The motivation should be
-// abstracted as far as possible from the specific tasks that may be given
-// by a company.
-// * Content: What is the content of this thesis? What exactly is covered in
-// the thesis? The methodology and working method should be briefly
-// discussed here.
-// * Results: What are the results of this work? A brief overview of the
-// Most actual results as a teaser to read the complete thesis.
-
-
-// Generated with chatgpt
-This document presents the Asciidoctor.js thesis template, which offers a versatile and easily understandable alternative to traditional typesetting systems for scientific writing. The template leverages the flexibility of web technologies, allowing seamless design modifications and rendering of PDF and website versions of the thesis. The source document structure resembles markdown, enhancing its readability. This abstract provides an overview of the template's benefits, getting started instructions, toolchain details, customization options using JavaScript, integration of source code listings and syntax highlighting, philosophical considerations behind the design decisions, and a comprehensive guide to using the template's features for scientific writing. Overall, the Asciidoctor.js thesis template provides a user-friendly and efficient approach for creating scientific theses, offering enhanced readability and ease of customization compared to traditional typesetting systems.
-
-// The table of contents gets inserted here.
-toc::[]
-
-// This generates the tables for listings, figures, and tables
-// If you do not need all of them, just modify that file.
-
-// Start with section and part numbering
 :part-signifier: Part
-:sectnums:
 :listing-caption: Listing
-:partnums:
-
-// Main part starts here
-[.reset-pages]
-= Thesis
-
-== Introduction
-
-Scientific writing plays a vital role in conveying research findings and academic knowledge. As traditional typesetting systems for scientific documents can be complex, there is a growing interest in alternative approaches that prioritize flexibility, readability, and ease of use. The Asciidoctor.js thesis template offers a comprehensive framework for creating well-structured and visually appealing theses. By leveraging web technologies, this template allows for seamless design modifications and facilitates the generation of PDF and website versions. In this introduction, we will explore the key features, benefits, and practical considerations of the Asciidoctor.js thesis template, highlighting its potential to revolutionize scientific writing.
-// Thx chatgpt
-
-== Figures, tables, and listings
-
-Figures, tables, and listings are automatically numbered and added to their respective list after the table of contents.
-
-=== Using figures
-
-All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text like <<sample-nomnoml-chart>>, by giving it an id, in this case, `sample-nomnoml-chart`.
-
-.Sample nomnoml chart
-[nomnoml,id=sample-nomnoml-chart]
-....
-[<actor>Jolly;Sailor]
-[Jolly;Sailor]->[Pirate]
-[Jolly;Sailor]->[rum]
-
-[Pirate|
-  [beard]--[parrot]
-  [beard]-:>[foul mouth]
-]
-[Pirate]-> *[rum|tastiness: int|swig()]
-[<abstract>Marauder]<:--[Pirate]
-
-[<table>mischief| bawl | sing || yell | drink ]
-[Pirate] - 0..7[mischief]
-
-#gutter: 10
-#lineWidth: 1.25
-#stroke: #000000
-#font: Spectral
-#fill: #f7f8f7; #ffffff; #f7f8f7; #ffffff; #f7f8f7; #ffffff
-....
-
-.Source for the section above
-[source,asciidoc]
-----
-All chart types except for vega-lite should just be used as asciidoctor-kroki charts. You can reference your chart in the text like <<sample-nomnoml-chart>>, by giving it an id, in this case, `sample-nomnoml-chart`.
-
-.Sample nomnoml chart
-[nomnoml,id=sample-nomnoml-chart]
-....
-[<actor>Jolly;Sailor]
-[Jolly;Sailor]->[Pirate]
-[Jolly;Sailor]->[rum]
-
-[Pirate|
-  [beard]--[parrot]
-  [beard]-:>[foul mouth]
-]
-[Pirate]-> *[rum|tastiness: int|swig()]
-[<abstract>Marauder]<:--[Pirate]
-
-[<table>mischief| bawl | sing || yell | drink ]
-[Pirate] - 0..7[mischief]
-
-#gutter: 10
-#lineWidth: 1.25
-#stroke: #000000
-#font: Spectral
-#fill: #f7f8f7; #ffffff; #f7f8f7; #ffffff; #f7f8f7; #ffffff
-....
-----
-
-.Sample wavedrom chart
-[wavedrom,id=sample-wavedrom-chart]
-....
-include::assets/keccak_clang_speed.wavejson.json[]
-....
-
-.Source for the wavedrom chart
-[source,asciidoc]
-----
-.Sample wavedrom chart
-[wavedrom,id=sample-wavedrom-chart]
-....
-\include::assets/keccak_clang_speed.wavejson.json[]
-....
-----
-
-To make the chart extend over the margins of the page, add a `slightly-oversized`, `oversized`, or `completely-oversized` to the chart.
-
-.Source for the section above
-.Sample graphviz graph
-[graphviz.slightly-oversized,id=minmax-speed-cfg,width=570px]
-....
-include::assets/minmax_speed_control_flow.dot[]
-....
-
-[source,asciidoc]
-----
-.Sample graphviz graph
-[graphviz.slightly-oversized,id=minmax-speed-cfg,width=570px]
-....
-\include::assets/minmax_speed_control_flow.dot[]
-....
-----
+:figure-caption: Diagramm
 
-==== Data-driven charts
+== 1. Praktikumstermin
 
-Vega-lite is the preferred way to display any data-driven charts. You use the included `vega-chart.adoc` script to include vega-lite charts. It detects if the document is currently built for a browser or as a PDF. If the document is built for a browser, it will include the chart directly via the Vega javascript library. That way, the chart supports tooltips and other interactive features.
+=== Versuchsbeschreibung
+Ziel ist es, über die Messung von Signalstärke auf unterschiedlichen Distanzen das Alpha für den Path-Loss Graphen zu finden. 
 
-[source,asciidoc]
-----
-.Sample vega-lite chart
-:chart-id: id=minmax-area
-:vega-lite-filename: processed-assets/minmax_overview_area.vl.json
-\include::scripts/vega-chart.adoc[]
-----
+=== Versuchsaufbau
+Für die Messung der Signalstärken wurden die Distanzen: _0.25m_, _0.5m_, _1m_, _2m_, _5m_, _10m_, _20m_ gewählt. Die Messumgebung war dabei ein schmaler Flur. Dabei wurde der Sender und Empfänger jeweils auf einen Stuhl gestellt, damit diese nicht direkt auf dem Boden liegen, da bei Bodenlage das Signal deutlich schwächer war. Zusätzlich wurde die Antenne des Empfängers ausgetauscht, da die eigentlich bereitgestellte Antenne ab bereits _5m_ ein nicht mehr wirklich von Grundrauschen unterscheidbares Signal lieferte. Es wurden pro Distanz 5 Messungen gemacht, wobei jede Messung das Grundrauschen und den maximalen Wert (Max hold) geliefert hat.
 
-.Sample vega-lite chart
-:chart-id: id=minmax-area
-:vega-lite-filename: processed-assets/minmax_overview_area.vl.json
-include::scripts/vega-chart.adoc[]
+=== Berechnung der Signalstärke
+Um die Signalstärke zu berechnen, wurde pro Messung das Grundrauschen vom Maximalwert abgezogen. Werden nun alle Messpunkte aufaddiert (Integral der Funktion) so ergibt das die empfangene Signalstärke Pr. Da bei den Messungen andere Geräte direkt neben dem genutzten Bluetooth Frequenzband gesendet haben, wurde nur ein Recht schmaler Ausschnitt des Bandes für die Integralberechnung genutzt (_2,40125 GHz bis 2,40275 GHz_). 
 
-=== Using source listings
+=== Link Budget
+Für die Path-Loss Berechnung wurde das Link Budget genutzt. Dabei wurde die Formel nach dem Path-Loss umgestellt und negiert, um den Path-Loss als Faktor zu nutzen:
 
-Asciidoc also supports source listings. A short verilog listing is shown in <<short-verilog-listing>>.
+stem:[PL^(dB) = -(P_t^(db)+G_t^(db)+G_r^(db)-P_r^(db))]
 
-.Short Verilog listing
-[source#short-verilog-listing,verilog]
-----
-module Blinker (input clock, output blinker);
-  reg [6:0] counter = 0;
-  reg state = 0;
-  always @(posedge clock) begin
-    counter <= counter + 1;
-    if (counter == 9) begin
-      state   <= ~state;
-      counter <= 0;
-    end
-  end
-  assign blinker = state;
-endmodule
-----
+Dafür wurden folgende Werte genutzt:
 
-<<long-rust-listing>> shows a long Rust listing. This template has a `.linenums` class that can be added to code listings to enable line numbers. The normal AsciiDoc `linenums` attribute is not supported.
+- stem:[G_t^(dB) = 1dBi]
+- stem:[G_r^(dB) = 5dBi]
+- stem:[P_t^(dB) = -16dBi]
 
-.Long rust listing with line numbers
-[source#long-rust-listing.linenums,rust]
-----
-include::assets/long_rust_listing.rs[tag=function]
-----
+Für die Berechnung des Path-Loss für die unterschiedlichen Distanzen wurde jeweils der Mittelwert der 5 Messungen gebildet.
 
-Your code should be no wider than 80 characters. If it is, try using the `oversized` classes to avoid unnecessary line breaks.
+=== Fitten der Funktion
+Mit dem zuvor beschriebenen Link Budget können nun für die 7 Distanzen die Path-Loss Werte berechnet werden. Von besonderem Interesse ist dabei der PL Wert der Distanz stem:[1m(d_0)] welcher als Referenz dient. Um die Funktion zu bestimmen, wie die Distanz in Relation zum Path-Loss steht, wird folgendes Funktionsgerüst genutzt:
 
-=== Using tables
+stem:[PL(d)=PL(d_0)-alpha*10*log_10(d/d_0)]
 
-Asciidoc supports tables. A simple table is shown in <<somewhat-complex-table>>.
+Dabei gibt stem:[PL(d)] den Path-Loss für eine beliebige Distanz stem:[d] an, während stem:[PL(d_0)] unsere Referenzgröße bei stem:[1m(d_0)] ist. Alpha ist dabei die Unbekannte, die ermittelt werden muss. Dafür werden Alpha Werte von 1 bis 10 in 0.001er-Schritten durchprobiert. Um zu ermitteln, wie gut ein einzelner Alpha wert ist, wird die Differenz zwischen dem PL der Funktion und dem PL des Link-Budgets berechnet. Dafür wird der MSE genutzt:
 
-.Somewhat complex table
-[#somewhat-complex-table,cols="1,1,3"]
-|===
-|Port |Size per channel in bits |Description
+stem:[MSE= 1/n sum_(i=1)^N (y_i-x_i)^2]
 
-|`Mout_oe_ram`
-|stem:[1]
-|Set to 1 to read from the channel.
+Der Alpha Wert der dabei den geringsten MSE aufzeigte ist stem:[1,373].
 
-|`Mout_we_ram`
-|stem:[1]
-|Set to 1 to write to the channel.
+Wir haben zusätzlich die ein Path-Loss Modell mit stem:[alpha] und stem:[K] als Parameter gefittet.
 
-|`Mout_data_ram_size`
-|stem:[log_2("dataWidth") + 1]
-|Set the width of bits that should be written to the memory. It can be a value between 0 and the width of your data.
+stem:[PL(d)=K-alpha*10*log_10(d/d_0)]
 
-|`Mout_addr_ram`
-|stem:["addressWidth"]
-|Select the address this channel should operate on.
-
-|`M_Wdata_ram`
-|stem:["dataWidth"]
-|Contains the data that will be written to memory if `Mout_we_ram` is set.
-
-|`M_Rdata_ram`
-|stem:["dataWidth"]
-|Contains the data that was read from memory if `Mout_oe_ram` was set in the last cycle.
-
-|`M_DataRdy`
-|stem:[1]
-|Nonzero if the memory is not ready.
-
-|===
-
-== Referencing other parts of the document
-
-Asciidoc supports referencing other parts of the document. To reference other parts of the document, you can use the `<<id>>` syntax. The template styles them like this:
-<<somewhat-complex-table>> and <<short-verilog-listing>> and <<sample-wavedrom-chart>> and <<_using_figures>> and <<invalid-reference>>
-
-=== Using abbreviations
-
-When you first use abbreviations, you should introduce them like field-programmable gate array (FPGA). You should also add them to the <<_list_of_abbreviations>>. Every abbreviation added to that list will automatically be linked when it is used in the document. 
-
-For example, we can just use FPGA, HLS, RAII, and LLVM IR in any sentence, and they will be linked without any special markup.
-
-I also recommend adding a link to a more detailed web source like Wikipedia to every entry in the list of abbreviations. I usually have the list of abbreviations as the first section after the main content.
-
-To see an example of a list of abbreviations, look at the source for <<_list_of_abbreviations>>.
-
-=== Citations and bibliography
-
-This template uses the built-in bibliography support of Asciidoctor. It is relatively basic, but I found it to work really well in practice. The Readme goes into more detail on how you can structure your bibliography; alternatively, you can directly look into the source of this document.
-
-To cite a source, just reference it like a figure, table, or section. References to sources should grammatically not be a part of your sentence.
-
-.Example
-The Rust programming language <<Kla23>> is a modern systems programming language. It is the most loved programming language of the last years <<Sta16>> <<Sta20>> <<Sta23>>. On an unrelated note, Microsoft uses FPGAs to accelerate their Bing search engine <<Nan16>>, and Bambu <<Fer21>> is a framework for HLS. I don't think Microsoft uses Bambu for their FPGAs; they probably use SystemVerilog, the most common language for hardware design <<Soz22>>.
-
-=== Referencing things from the appendix
-
-Just add an extra chapter named Appendix after the references and dump your figures and whatnot there. You can reference them like any other figure. <<extra-long-rust-listing>> was banished into the appendix because I needed to put something there as an example.
-
-== Conclusion
-
-In conclusion, the Asciidoctor.js thesis template offers a flexible, readable, and user-friendly approach to scientific writing. By leveraging web technologies, the template enables easy customization and modification of the document's design. The inclusion of interactive figures using asciidoctor-kroki and vega-lite enhances the visual presentation of data and improves the overall reading experience. The template's support for source listings and syntax highlighting ensures clear and legible code representation. It is important to note that this section was generated with an AI language model trained by OpenAI because a conclusion does not make sense in a dummy document like this. With its comprehensive documentation and practical examples, the Asciidoctor.js thesis template empowers users to create well-structured and visually appealing scientific theses. By combining the simplicity of markdown-like syntax with the power of web technologies, this template sets a new standard for scientific writing, making the process more accessible and enjoyable for researchers and students alike.
-
-== Future work
-
-This template is by no means perfect; there are still some things that could be improved. For example, the template does not support footnotes because I don't need them. Images are also untested but should work exactly like figures. Admonitions look acceptable but could definitely be fancier. But who uses admonitions in scientific writing anyway? There are probably more AsciiDoc features I don't use that may not work properly. As the default stylesheets are included in the template, most should still look fine. I also do not like blue links. Maybe I should style them differently.
-
-The template could also be adjusted to work well with Asciidoctor slides, but I have not tried that yet. Thanks for reading to the end, have a nice day and a cookie 🍪.
-
-[glossary]
-== List of abbreviations
-// Abbreviations from here will automatically be linked to the document
-
-// Abbreviations in random order and links to read more about them
-[glossary]
-[[FPGA]]FPGA:: Field-Programmable Gate Array link:pass:[https://en.wikipedia.org/wiki/Field-programmable_gate_array][🔗^]
-[[HLS]]HLS:: High-Level Synthesis link:pass:[https://en.wikipedia.org/wiki/High-level_synthesis][🔗^]
-[[LLVM_IR]]LLVM IR:: LLVM Intermediate Representation link:pass:[https://en.wikipedia.org/wiki/LLVM#Intermediate_representation][🔗^]
-[[RAII]]RAII:: Resource Acquisition Is Initialization / Scope-Bound Resource Management link:pass:[https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization][🔗^]
-
-[bibliography]
-== References
-
-// Citation style:
-// Line 1: All authors' full first and last names. Commas separate Authors.
-// Line 2: Title in italics.
-// Line 3: Journal/Conference name or any other information about what gives the source credibility.
-// Line 4: doi with attached hyperlink. For digital editions, also link the PDF with a 📁 icon
-// +Authors seperated by commas+
-
-// Multiple HLS tools use LLVM
-// C/Cpp are the most popular languages for HLS
-// NOTE: I focused on FPGA descriptions
-// Clock frequency scaling in CPU stalled around 2005
-// A alternative approach for high-throughput and energy-efficient processing is to use specific accelerators
-// Specialized accelerators are hard to design and program
-// RTL requires advanced hardware expertise
-// RTL specifies cycle-by-cycle behavior explicitly
-// RTL is a low-level abstraction
-// RTL leads to longer development times
-// FPGAs with HLS can reduce that.
-// FPGAs are configurable integrated circuits
-// Most FPGAs are reconfigurable
-// FPGA vendors provide toolchains to synthesize HTL to bitstream
-// bitstream gets programmed to the FPGA
-// HLS tools start from an HLL and automatically produce a circuit specification in RTL
-// HLS offers to enable software engineers to benefit from the performance and energy efficiency of hardware without having hardware expertise
-// HLS tools enable hardware engineers to design systems faster
-// HLS tools enable hardware engineers to explore the design space rapidly
-// Microsoft uses FPGAs to accelerate Bing search
-* [[[Nan16]]]
-+Razvan Nane, Vlad-Mihai Sima, Christian Pilato, Jongsok Choi, Blair Fort, Andrew Canis, Yu Ting Chen, Hsuan Hsiao, Stephen Brown, Fabrizio Ferrandi, Jason Anderson, Koen Bertels+ +
-_A Survey and Evaluation of FPGA High-Level Synthesis Tools_ +
-IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems +
-link:pass:[https://doi.org/10.1109/tcad.2015.2513673][10.1109/tcad.2015.2513673^]
-link:pass:[https://sci-hub.st/10.1109/tcad.2015.2513673][📁^]
-
-// Bambu provides a research environment to experiment with new ideas across HLS, high-level verification, and debugging.
-// Bambu input: standard C/{cpp} specifications, LLVM IR, IRs from GCC
-// Includes many optimizations
-// Makes it easy to integrate new transformations and optimizations
-// Is open-source
-// Bambu is a command line tool
-// Supports most C/{cpp} constructs
-// Bambu has three phases. frontend, middleend and backend
-// Frontend: Uses Clang or gcc
-// Uses a compiler plugin for both extracting the call graph and control flow information
-// Builds its own static single assignment IR
-// This decouples the compiler front end from the rest of the HLS process.
-// Vivado HLS has a frontend based on Clang
-* [[[Fer21]]]
-+Fabrizio Ferrandi, Vito Giovanni Castellana, Serena Curzel, Pietro Fezzardi, Michele Fiorito, Marco Lattuada, Marco Minutoli, Christian Pilato, Antonino Tumeo+ +
-_Invited: Bambu: an Open-Source Research Framework for the High-Level Synthesis of Complex Applications_ +
-ACM/IEEE Design Automation Conference +
-link:pass:[https://doi.org/10.1109/DAC18074.2021.9586110][10.1109/DAC18074.2021.9586110^]
-link:pass:[https://re.public.polimi.it/retrieve/668507/dac21_bambu.pdf][📁^]
-
-// SystemVerilog is the de facto standard for RTL design
-* [[[Soz22]]]
-+Emanuele Del Sozzo, Davide Conficconi, Alberto Zeni, Mirko Salaris, Donatella Sciuto, Marco D. Santambrogio+ +
-_Pushing the level of abstraction of digital system design: A survey on how to program FPGAs_ +
-ACM Computing Surveys +
-link:pass:[https://doi.org/10.1145/3532989][10.1145/3532989^]
-link:pass:[https://re.public.polimi.it/retrieve/e3b8d0bb-125b-4457-9780-250f72ef7a02/Survey_FPGA_CSUR.pdf][📁^]
-
-// Rust is the most loved language of 2016
-* [[[Sta16]]]
-+Stack Overflow+ +
-_Stack Overflow Developer Survey 2016_ +
-[Online; accessed 5.7.23] +
-link:pass:[https://insights.stackoverflow.com/survey/2016/][insights.stackoverflow.com/survey/2016^]
-
-// Rust is the most loved language of 2020
-* [[[Sta20]]]
-+Stack Overflow+ +
-_Stack Overflow Developer Survey 2020_ +
-[Online; accessed 5.7.23] +
-link:pass:[https://insights.stackoverflow.com/survey/2020/][insights.stackoverflow.com/survey/2020^]
-
-// Rust is the most loved language of 2023
-* [[[Sta23]]]
-+Stack Overflow+ +
-_Stack Overflow Developer Survey 2023_ +
-[Online; accessed 5.7.23] +
-link:pass:[https://survey.stackoverflow.co/2023/][survey.stackoverflow.co/2023^]
-
-* [[[Kla23]]]
-+Steve Klabnik, Carol Nichols+ +
-_The Rust programming language_ +
-[Online; accessed 5.7.23] +
-link:pass:[https://doc.rust-lang.org/stable/book/][doc.rust-lang.org/stable/book^]
-
-== Appendix
-
-
-.Extra long rust listing with line numbers
-[source#extra-long-rust-listing.linenums,rust]
-----
-include::assets/long_rust_listing.rs[]
-----
+Dabei haben wir stem:[alpha=1.083] und stem:[K=-123,48] als am besten passende Parameter gefunden
+
+
+=== Graphen
+In <<fit-alpha>> sieht man die Messwerte inklusive gefitteter Funktion und einer Referenzfunktion mit stem:[alpha=2].
+
+.Fit for stem:[alpha]
+[#fit-alpha]
+image::../assets/image6.png[]
+
+<<fit-alpha-k>> zeigt die Messwerte, die Funktion mit gefittetem stem:[alpha] und stem:[K] und eine Referenzfunktion mit stem:[alpha=2] und stem:[K=PL(d_0)].
+
+.Fit for stem:[alpha] and stem:[K]
+[#fit-alpha-k]
+image::../assets/image7.png[]
+
+=== Diskussion
+Der Versuch zeigte gut die Schwierigkeiten solcher Messungen auf, da sehr große Schwankungen bei kleinsten Bewegungen zu sehen waren. Außerdem ist das berechnete stem:[alpha] deutlich kleiner als zuvor erwartet wurde. So wurde erwartet, dass ein Wert größer 2 herauskommen sollte. Eine mögliche Erklärung hierfür könnte sein, dass der Flur dafür gesorgt hat, dass die Signale gerichtet in Richtung unseres Empfängers geschickt wurden und somit ein kleinerer als quadratischer Abfall zu sehen war. Als andere Möglichkeit bleiben auch Ungenauigkeiten bei der Messung. Wir haben immer mindestens drei Pulse abgewartet, damit sich der Maximalwert stabilisiert, haben aber bei manchen Messung auch deutlich mehr Pulse gemessen. Ausserdem könnte durch das Verschieben des Senders, dessen Antenne anders ausgerichtet worden sein. Das könnte einen veränderten Antennen Gain bewirkt haben.
 
 include::scripts/trailing-scripts.adoc[]
 
